@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "WGvncQkNZ1Y=",
+  "dgSpecHash": "ODAn4wFWlG8=",
   "success": true,
-  "projectFilePath": "D:\\ITI\\Graduation Project ITI\\Back-End\\TravelBookingSystem\\TravelBooking.APIs\\TravelBooking.Service\\TravelBooking.Service.csproj",
+  "projectFilePath": "D:\\ITI\\Graduation Project ITI\\Back-End\\TravelBookingSystem\\TravelBookingAPIs\\TravelBooking.Service\\TravelBooking.Service.csproj",
   "expectedPackageFiles": [],
   "logs": []
 }

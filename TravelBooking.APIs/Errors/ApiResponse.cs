@@ -10,7 +10,6 @@ namespace TalabatAPIs.Errors
             StatusCode = statusCode;
             Message = message ?? GetDefaultMessageForStatusCode(statusCode);
         }
-        
 private string? GetDefaultMessageForStatusCode(int statusCode)
         {
            return statusCode switch
@@ -18,7 +17,7 @@ private string? GetDefaultMessageForStatusCode(int statusCode)
                400 => "A Bad Request, you have made",
                401 => "Authorized, you are not",
                404 => "Resource Found, it was not",
-               500 => "Internal Server Error, something went wrong",
+               500 => "Internal Server Error, something went wrong", 
                _ => null
            };
         }
