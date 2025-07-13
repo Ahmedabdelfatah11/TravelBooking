@@ -10,7 +10,9 @@
         "dependencies": {
           "Microsoft.AspNetCore.OpenApi": "9.0.1",
           "Swashbuckle.AspNetCore": "9.0.3",
-          "TravelBooking.Repository": "1.0.0"
+          "TravelBooking.Core": "1.0.0",
+          "TravelBooking.Repository": "1.0.0",
+          "TravelBooking.Service": "1.0.0"
         },
         "runtime": {
           "TravelBooking.APIs.dll": {}
@@ -650,7 +652,7 @@
       "TravelBooking.Core/1.0.0": {
         "runtime": {
           "TravelBooking.Core.dll": {
-            "assemblyVersion": "1.0.0",
+            "assemblyVersion": "1.0.0.0",
             "fileVersion": "1.0.0.0"
           }
         }
@@ -662,7 +664,19 @@
         },
         "runtime": {
           "TravelBooking.Repository.dll": {
-            "assemblyVersion": "1.0.0",
+            "assemblyVersion": "1.0.0.0",
+            "fileVersion": "1.0.0.0"
+          }
+        }
+      },
+      "TravelBooking.Service/1.0.0": {
+        "dependencies": {
+          "TravelBooking.Core": "1.0.0",
+          "TravelBooking.Repository": "1.0.0"
+        },
+        "runtime": {
+          "TravelBooking.Service.dll": {
+            "assemblyVersion": "1.0.0.0",
             "fileVersion": "1.0.0.0"
           }
         }
@@ -1115,6 +1129,11 @@
       "sha512": ""
     },
     "TravelBooking.Repository/1.0.0": {
+      "type": "project",
+      "serviceable": false,
+      "sha512": ""
+    },
+    "TravelBooking.Service/1.0.0": {
       "type": "project",
       "serviceable": false,
       "sha512": ""

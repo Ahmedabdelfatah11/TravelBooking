@@ -12,7 +12,9 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\TravelBooking.Core\TravelBooking.Core.csproj" />
     <ProjectReference Include="..\TravelBooking.Repository\TravelBooking.Repository.csproj" />
+    <ProjectReference Include="..\TravelBooking.Service\TravelBooking.Service.csproj" />
   </ItemGroup>
 
 </Project>
