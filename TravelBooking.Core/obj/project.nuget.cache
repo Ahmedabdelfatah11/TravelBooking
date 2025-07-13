@@ -1,8 +1,18 @@
 {
   "version": 2,
-  "dgSpecHash": "tBVOlXNFLBU=",
+  "dgSpecHash": "Ei76rfsnUik=",
   "success": true,
-  "projectFilePath": "E:\\ITI Diploma\\Final Project\\TravelBooking.Core\\TravelBooking.Core.csproj",
+  "projectFilePath": "E:\\ITI\\Graduation Project\\Implementation\\TravelBooking.Core\\TravelBooking.Core.csproj",
   "expectedPackageFiles": [],
-  "logs": []
+  "logs": [
+    {
+      "code": "Undefined",
+      "level": "Warning",
+      "message": "Problem reading the cache file E:\\ITI\\Graduation Project\\Implementation\\TravelBooking.Core\\obj\\project.nuget.cache : '<' is an invalid start of a property name. Expected a '\"'. Path: $ | LineNumber: 2 | BytePositionInLine: 0.",
+      "projectPath": "E:\\ITI\\Graduation Project\\Implementation\\TravelBooking.Core\\TravelBooking.Core.csproj",
+      "warningLevel": 1,
+      "filePath": "E:\\ITI\\Graduation Project\\Implementation\\TravelBooking.Core\\TravelBooking.Core.csproj",
+      "targetGraphs": []
+    }
+  ]
 }

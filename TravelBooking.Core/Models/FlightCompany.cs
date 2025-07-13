@@ -14,5 +14,7 @@ namespace TravelBooking.Core.Models
         public string ImageUrl { get; set; } // URL to the company's logo or image
         public String Location { get; set; } // Location of the flight company, e.g., "New York, USA"
         public string Rating { get; set; } // Rating out of 5 or a descriptive rating like "Excellent", "Good", etc.
+
+        public ICollection<Flight>? Flights { get; set; }
     } 
 }

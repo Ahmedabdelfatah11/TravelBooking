@@ -13,6 +13,9 @@ namespace TravelBooking.Core.Models
         public string Location { get; set; } // Location of the hotel company, e.g., "Paris, France"
         public int Rating { get; set; }
 
+        public ICollection<Room> Rooms { get; set; }
+
+
 
     }
 }

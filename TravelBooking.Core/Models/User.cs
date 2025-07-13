@@ -13,5 +13,7 @@ namespace TravelBooking.Core.Models
         public string Email { get; set; } 
         public string Password{ get; set; } 
         public string Phone { get; set; } 
+
+        public ICollection<Booking> bookings { get; set; }
     } 
 }
