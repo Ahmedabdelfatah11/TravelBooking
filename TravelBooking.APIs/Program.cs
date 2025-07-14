@@ -9,7 +9,7 @@ namespace TravelBooking.APIs
 {
     public class Program
     {
-        public static void Main(string[] args)
+        public static async Task Main(string[] args)
         {
             var webApplicationbuilder = WebApplication.CreateBuilder(args);
 
@@ -34,13 +34,13 @@ namespace TravelBooking.APIs
 
             var Services = scope.ServiceProvider;
 
-            //var _dbcontext = Services.GetRequiredService<StoreContext>();
+            var _dbcontext = Services.GetRequiredService<AppDbContext>();
 
             var logger = Services.GetRequiredService<ILogger<Program>>();
             try
             {
                 //await StoredContextSeed.SeedAsync(_dbcontext);
-                //await _dbcontext.Database.MigrateAsync();
+                await _dbcontext.Database.MigrateAsync();
 
             }
             catch (Exception ex)
