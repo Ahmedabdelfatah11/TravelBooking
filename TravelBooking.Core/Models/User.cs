@@ -6,21 +6,13 @@ using System.Threading.Tasks;
 
 namespace TravelBooking.Core.Models
 {
-    public class User:BaseEntity
+    public class User : BaseEntity
     {
-        public string FirstName { get; set; } 
-        public string LastName { get; set; } 
-        public string Email { get; set; } 
-<<<<<<< HEAD
-        public string Password{ get; set; }   
+        public string FirstName { get; set; }
+        public string LastName { get; set; }
+        public string Email { get; set; }
+        public string Password { get; set; }
         public string Phone { get; set; }
-
-        public ICollection<Booking> bookings { get; set; } = new List<Booking>(); 
-=======
-        public string Password{ get; set; } 
-        public string Phone { get; set; } 
-
-        public ICollection<Booking> bookings { get; set; }
->>>>>>> 5058d87932f09652166bfc11440e8e2ddc8faf2e
-    } 
+        public ICollection<Booking> bookings { get; set; } = new List<Booking>();
+    }
 }

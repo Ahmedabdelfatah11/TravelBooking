@@ -55,6 +55,14 @@ nunit-*.xml
 [Rr]eleasePS/
 obj/
 bin/
+bin/
+*.dll
+*.exe
+*.pdb
+*.json
+*.runtimeconfig.json
+*.deps.json
+*.staticwebassets.endpoints.json
 *.dll
 *.exe
 *.cache

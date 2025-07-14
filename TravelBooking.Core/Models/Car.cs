@@ -7,25 +7,18 @@ using System.Threading.Tasks;
 
 namespace TravelBooking.Core.Models
 {
-    public class Car:BaseEntity
+    public class Car : BaseEntity
     {
         public String Model { get; set; }
         public decimal Price { get; set; }
         public string Description { get; set; }
         public bool IsAvailable { get; set; }
-        public string Location {get; set; } // Location where the car is available for rent 
+        public string Location { get; set; } // Location where the car is available for rent 
         public string ImageUrl { get; set; }
         public int Capacity { get; set; } // Number of passengers the car can accommodate
-<<<<<<< HEAD
         [ForeignKey("RentalCompany")]
         public int RentalCompanyId { get; set; } // Foreign key to CarRentalCompany
         public CarRentalCompany RentalCompany { get; set; } // Navigation property to CarRentalCompany
-=======
-        [ForeignKey("CarRentalCompany")]
-        public int? CompanyID {  get; set; }
-        public CarRentalCompany? CarRentalCompany { get; set; }
-        public ICollection<Booking>? bookings { get; set; }
->>>>>>> 5058d87932f09652166bfc11440e8e2ddc8faf2e
 
 
     }

@@ -1,5 +1,4 @@
-<<<<<<< HEAD
-﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.ChangeTracking.Internal;
 using System;
 using System.Collections.Generic;
@@ -11,9 +10,9 @@ using TravelBooking.Core.Models;
 
 namespace TravelBooking.Repository.Data
 {
-    public class AppDbContext: DbContext
+    public class AppDbContext : DbContext
     {
-        public AppDbContext(DbContextOptions<AppDbContext> options): base(options)
+        public AppDbContext(DbContextOptions<AppDbContext> options) : base(options)
         {
         }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -26,7 +25,7 @@ namespace TravelBooking.Repository.Data
         public DbSet<Booking> Bookings { get; set; }
         public DbSet<Car> Cars { get; set; }
         public DbSet<CarRentalCompany> CarRentalCompanies { get; set; }
-        public DbSet<Flight> Flights { get; set; } 
+        public DbSet<Flight> Flights { get; set; }
         public DbSet<FlightCompany> FlightCompanies { get; set; }
         public DbSet<Room> Rooms { get; set; }
         public DbSet<HotelCompany> HotelCompanies { get; set; }
@@ -35,24 +34,5 @@ namespace TravelBooking.Repository.Data
         public DbSet<TourCompany> Tours { get; set; }
         public DbSet<User> Users { get; set; }
 
-=======
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.ChangeTracking.Internal;
-
-namespace TravelBooking.Repository.Data
-{
-    internal class AppDbContext: DbContext
-    {
-        protected override void OnModelCreating(ModelBuilder modelBuilder)
-        {
-            
-            base.OnModelCreating(modelBuilder);
-        }
->>>>>>> 5058d87932f09652166bfc11440e8e2ddc8faf2e
     }
 }

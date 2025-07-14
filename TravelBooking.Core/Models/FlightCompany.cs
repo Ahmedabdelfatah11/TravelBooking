@@ -7,18 +7,13 @@ using System.Threading.Tasks;
 
 namespace TravelBooking.Core.Models
 {
-    public class FlightCompany:BaseEntity
+    public class FlightCompany : BaseEntity
     {
-        public string Name { get; set; } 
+        public string Name { get; set; }
         public string Description { get; set; } // Description of the flight company
         public string ImageUrl { get; set; } // URL to the company's logo or image
         public String Location { get; set; } // Location of the flight company, e.g., "New York, USA"
         public string Rating { get; set; } // Rating out of 5 or a descriptive rating like "Excellent", "Good", etc.
-<<<<<<< HEAD
         public ICollection<Flight> Flights { get; set; } // Navigation property for related flights
-=======
-
-        public ICollection<Flight>? Flights { get; set; }
->>>>>>> 5058d87932f09652166bfc11440e8e2ddc8faf2e
-    } 
+    }
 }
