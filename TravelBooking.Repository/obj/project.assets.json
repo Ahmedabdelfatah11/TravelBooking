@@ -2762,23 +2762,23 @@
     ]
   },
   "packageFolders": {
-    "C:\\Users\\Home\\.nuget\\packages\\": {},
+    "C:\\Users\\GRAPHICS\\.nuget\\packages\\": {},
     "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "E:\\ITI\\Graduation Project\\imp2\\TravelBooking.Repository\\TravelBooking.Repository.csproj",
+      "projectUniqueName": "C:\\Users\\GRAPHICS\\Desktop\\imp2\\TravelBooking.Repository\\TravelBooking.Repository.csproj",
       "projectName": "TravelBooking.Repository",
-      "projectPath": "E:\\ITI\\Graduation Project\\imp2\\TravelBooking.Repository\\TravelBooking.Repository.csproj",
-      "packagesPath": "C:\\Users\\Home\\.nuget\\packages\\",
-      "outputPath": "E:\\ITI\\Graduation Project\\imp2\\TravelBooking.Repository\\obj\\",
+      "projectPath": "C:\\Users\\GRAPHICS\\Desktop\\imp2\\TravelBooking.Repository\\TravelBooking.Repository.csproj",
+      "packagesPath": "C:\\Users\\GRAPHICS\\.nuget\\packages\\",
+      "outputPath": "C:\\Users\\GRAPHICS\\Desktop\\imp2\\TravelBooking.Repository\\obj\\",
       "projectStyle": "PackageReference",
       "fallbackFolders": [
         "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
       ],
       "configFilePaths": [
-        "C:\\Users\\Home\\AppData\\Roaming\\NuGet\\NuGet.Config",
+        "C:\\Users\\GRAPHICS\\AppData\\Roaming\\NuGet\\NuGet.Config",
         "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
         "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
       ],
@@ -2794,8 +2794,8 @@
         "net9.0": {
           "targetAlias": "net9.0",
           "projectReferences": {
-            "E:\\ITI\\Graduation Project\\imp2\\TravelBooking.Core\\TravelBooking.Core.csproj": {
-              "projectPath": "E:\\ITI\\Graduation Project\\imp2\\TravelBooking.Core\\TravelBooking.Core.csproj"
+            "C:\\Users\\GRAPHICS\\Desktop\\imp2\\TravelBooking.Core\\TravelBooking.Core.csproj": {
+              "projectPath": "C:\\Users\\GRAPHICS\\Desktop\\imp2\\TravelBooking.Core\\TravelBooking.Core.csproj"
             }
           }
         }
@@ -2837,8 +2837,16 @@
             "privateAssets": "all"
           }
         },
-        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\9.0.302/PortableRuntimeIdentifierGraph.json"
+        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\9.0.300/PortableRuntimeIdentifierGraph.json"
       }
     }
-  }
+  },
+  "logs": [
+    {
+      "code": "Undefined",
+      "level": "Warning",
+      "warningLevel": 1,
+      "message": "Problem reading the cache file C:\\Users\\GRAPHICS\\Desktop\\imp2\\TravelBooking.Repository\\obj\\project.nuget.cache : '<' is an invalid start of a property name. Expected a '\"'. Path: $ | LineNumber: 2 | BytePositionInLine: 0."
+    }
+  ]
 }
