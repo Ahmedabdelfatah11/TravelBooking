@@ -2768,11 +2768,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "E:\\ITI\\Graduation Project\\Implementation\\TravelBooking.Repository\\TravelBooking.Repository.csproj",
+      "projectUniqueName": "E:\\ITI\\Graduation Project\\imp2\\TravelBooking.Repository\\TravelBooking.Repository.csproj",
       "projectName": "TravelBooking.Repository",
-      "projectPath": "E:\\ITI\\Graduation Project\\Implementation\\TravelBooking.Repository\\TravelBooking.Repository.csproj",
+      "projectPath": "E:\\ITI\\Graduation Project\\imp2\\TravelBooking.Repository\\TravelBooking.Repository.csproj",
       "packagesPath": "C:\\Users\\Home\\.nuget\\packages\\",
-      "outputPath": "E:\\ITI\\Graduation Project\\Implementation\\TravelBooking.Repository\\obj\\",
+      "outputPath": "E:\\ITI\\Graduation Project\\imp2\\TravelBooking.Repository\\obj\\",
       "projectStyle": "PackageReference",
       "fallbackFolders": [
         "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
@@ -2794,8 +2794,8 @@
         "net9.0": {
           "targetAlias": "net9.0",
           "projectReferences": {
-            "E:\\ITI\\Graduation Project\\Implementation\\TravelBooking.Core\\TravelBooking.Core.csproj": {
-              "projectPath": "E:\\ITI\\Graduation Project\\Implementation\\TravelBooking.Core\\TravelBooking.Core.csproj"
+            "E:\\ITI\\Graduation Project\\imp2\\TravelBooking.Core\\TravelBooking.Core.csproj": {
+              "projectPath": "E:\\ITI\\Graduation Project\\imp2\\TravelBooking.Core\\TravelBooking.Core.csproj"
             }
           }
         }
@@ -2840,13 +2840,5 @@
         "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\9.0.302/PortableRuntimeIdentifierGraph.json"
       }
     }
-  },
-  "logs": [
-    {
-      "code": "Undefined",
-      "level": "Warning",
-      "warningLevel": 1,
-      "message": "Problem reading the cache file E:\\ITI\\Graduation Project\\Implementation\\TravelBooking.Repository\\obj\\project.nuget.cache : '<' is an invalid start of a property name. Expected a '\"'. Path: $ | LineNumber: 2 | BytePositionInLine: 0."
-    }
-  ]
+  }
 }
