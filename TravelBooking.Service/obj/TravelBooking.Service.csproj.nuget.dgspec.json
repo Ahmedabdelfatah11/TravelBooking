@@ -1,23 +1,23 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\GRAPHICS\\Desktop\\imp2\\TravelBooking.Service\\TravelBooking.Service.csproj": {}
+    "D:\\ITI\\Graduation Project ITI\\Back-End\\TravelBookingSystem\\TravelBookingAPIs\\TravelBooking.Service\\TravelBooking.Service.csproj": {}
   },
   "projects": {
-    "C:\\Users\\GRAPHICS\\Desktop\\imp2\\TravelBooking.Core\\TravelBooking.Core.csproj": {
+    "D:\\ITI\\Graduation Project ITI\\Back-End\\TravelBookingSystem\\TravelBookingAPIs\\TravelBooking.Core\\TravelBooking.Core.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\GRAPHICS\\Desktop\\imp2\\TravelBooking.Core\\TravelBooking.Core.csproj",
+        "projectUniqueName": "D:\\ITI\\Graduation Project ITI\\Back-End\\TravelBookingSystem\\TravelBookingAPIs\\TravelBooking.Core\\TravelBooking.Core.csproj",
         "projectName": "TravelBooking.Core",
-        "projectPath": "C:\\Users\\GRAPHICS\\Desktop\\imp2\\TravelBooking.Core\\TravelBooking.Core.csproj",
-        "packagesPath": "C:\\Users\\GRAPHICS\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\GRAPHICS\\Desktop\\imp2\\TravelBooking.Core\\obj\\",
+        "projectPath": "D:\\ITI\\Graduation Project ITI\\Back-End\\TravelBookingSystem\\TravelBookingAPIs\\TravelBooking.Core\\TravelBooking.Core.csproj",
+        "packagesPath": "C:\\Users\\Ahmed Mohamed\\.nuget\\packages\\",
+        "outputPath": "D:\\ITI\\Graduation Project ITI\\Back-End\\TravelBookingSystem\\TravelBookingAPIs\\TravelBooking.Core\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
         ],
         "configFilePaths": [
-          "C:\\Users\\GRAPHICS\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Users\\Ahmed Mohamed\\AppData\\Roaming\\NuGet\\NuGet.Config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
@@ -45,7 +45,7 @@
           "auditLevel": "low",
           "auditMode": "direct"
         },
-        "SdkAnalysisLevel": "9.0.300"
+        "SdkAnalysisLevel": "9.0.100"
       },
       "frameworks": {
         "net9.0": {
@@ -66,24 +66,24 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\9.0.300/PortableRuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\9.0.102/PortableRuntimeIdentifierGraph.json"
         }
       }
     },
-    "C:\\Users\\GRAPHICS\\Desktop\\imp2\\TravelBooking.Repository\\TravelBooking.Repository.csproj": {
+    "D:\\ITI\\Graduation Project ITI\\Back-End\\TravelBookingSystem\\TravelBookingAPIs\\TravelBooking.Repository\\TravelBooking.Repository.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\GRAPHICS\\Desktop\\imp2\\TravelBooking.Repository\\TravelBooking.Repository.csproj",
+        "projectUniqueName": "D:\\ITI\\Graduation Project ITI\\Back-End\\TravelBookingSystem\\TravelBookingAPIs\\TravelBooking.Repository\\TravelBooking.Repository.csproj",
         "projectName": "TravelBooking.Repository",
-        "projectPath": "C:\\Users\\GRAPHICS\\Desktop\\imp2\\TravelBooking.Repository\\TravelBooking.Repository.csproj",
-        "packagesPath": "C:\\Users\\GRAPHICS\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\GRAPHICS\\Desktop\\imp2\\TravelBooking.Repository\\obj\\",
+        "projectPath": "D:\\ITI\\Graduation Project ITI\\Back-End\\TravelBookingSystem\\TravelBookingAPIs\\TravelBooking.Repository\\TravelBooking.Repository.csproj",
+        "packagesPath": "C:\\Users\\Ahmed Mohamed\\.nuget\\packages\\",
+        "outputPath": "D:\\ITI\\Graduation Project ITI\\Back-End\\TravelBookingSystem\\TravelBookingAPIs\\TravelBooking.Repository\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
         ],
         "configFilePaths": [
-          "C:\\Users\\GRAPHICS\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Users\\Ahmed Mohamed\\AppData\\Roaming\\NuGet\\NuGet.Config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
@@ -99,8 +99,8 @@
           "net9.0": {
             "targetAlias": "net9.0",
             "projectReferences": {
-              "C:\\Users\\GRAPHICS\\Desktop\\imp2\\TravelBooking.Core\\TravelBooking.Core.csproj": {
-                "projectPath": "C:\\Users\\GRAPHICS\\Desktop\\imp2\\TravelBooking.Core\\TravelBooking.Core.csproj"
+              "D:\\ITI\\Graduation Project ITI\\Back-End\\TravelBookingSystem\\TravelBookingAPIs\\TravelBooking.Core\\TravelBooking.Core.csproj": {
+                "projectPath": "D:\\ITI\\Graduation Project ITI\\Back-End\\TravelBookingSystem\\TravelBookingAPIs\\TravelBooking.Core\\TravelBooking.Core.csproj"
               }
             }
           }
@@ -115,7 +115,7 @@
           "auditLevel": "low",
           "auditMode": "direct"
         },
-        "SdkAnalysisLevel": "9.0.300"
+        "SdkAnalysisLevel": "9.0.100"
       },
       "frameworks": {
         "net9.0": {
@@ -142,24 +142,24 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\9.0.300/PortableRuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\9.0.102/PortableRuntimeIdentifierGraph.json"
         }
       }
     },
-    "C:\\Users\\GRAPHICS\\Desktop\\imp2\\TravelBooking.Service\\TravelBooking.Service.csproj": {
+    "D:\\ITI\\Graduation Project ITI\\Back-End\\TravelBookingSystem\\TravelBookingAPIs\\TravelBooking.Service\\TravelBooking.Service.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\GRAPHICS\\Desktop\\imp2\\TravelBooking.Service\\TravelBooking.Service.csproj",
+        "projectUniqueName": "D:\\ITI\\Graduation Project ITI\\Back-End\\TravelBookingSystem\\TravelBookingAPIs\\TravelBooking.Service\\TravelBooking.Service.csproj",
         "projectName": "TravelBooking.Service",
-        "projectPath": "C:\\Users\\GRAPHICS\\Desktop\\imp2\\TravelBooking.Service\\TravelBooking.Service.csproj",
-        "packagesPath": "C:\\Users\\GRAPHICS\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\GRAPHICS\\Desktop\\imp2\\TravelBooking.Service\\obj\\",
+        "projectPath": "D:\\ITI\\Graduation Project ITI\\Back-End\\TravelBookingSystem\\TravelBookingAPIs\\TravelBooking.Service\\TravelBooking.Service.csproj",
+        "packagesPath": "C:\\Users\\Ahmed Mohamed\\.nuget\\packages\\",
+        "outputPath": "D:\\ITI\\Graduation Project ITI\\Back-End\\TravelBookingSystem\\TravelBookingAPIs\\TravelBooking.Service\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
         ],
         "configFilePaths": [
-          "C:\\Users\\GRAPHICS\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Users\\Ahmed Mohamed\\AppData\\Roaming\\NuGet\\NuGet.Config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
@@ -175,11 +175,11 @@
           "net9.0": {
             "targetAlias": "net9.0",
             "projectReferences": {
-              "C:\\Users\\GRAPHICS\\Desktop\\imp2\\TravelBooking.Core\\TravelBooking.Core.csproj": {
-                "projectPath": "C:\\Users\\GRAPHICS\\Desktop\\imp2\\TravelBooking.Core\\TravelBooking.Core.csproj"
+              "D:\\ITI\\Graduation Project ITI\\Back-End\\TravelBookingSystem\\TravelBookingAPIs\\TravelBooking.Core\\TravelBooking.Core.csproj": {
+                "projectPath": "D:\\ITI\\Graduation Project ITI\\Back-End\\TravelBookingSystem\\TravelBookingAPIs\\TravelBooking.Core\\TravelBooking.Core.csproj"
               },
-              "C:\\Users\\GRAPHICS\\Desktop\\imp2\\TravelBooking.Repository\\TravelBooking.Repository.csproj": {
-                "projectPath": "C:\\Users\\GRAPHICS\\Desktop\\imp2\\TravelBooking.Repository\\TravelBooking.Repository.csproj"
+              "D:\\ITI\\Graduation Project ITI\\Back-End\\TravelBookingSystem\\TravelBookingAPIs\\TravelBooking.Repository\\TravelBooking.Repository.csproj": {
+                "projectPath": "D:\\ITI\\Graduation Project ITI\\Back-End\\TravelBookingSystem\\TravelBookingAPIs\\TravelBooking.Repository\\TravelBooking.Repository.csproj"
               }
             }
           }
@@ -194,7 +194,7 @@
           "auditLevel": "low",
           "auditMode": "direct"
         },
-        "SdkAnalysisLevel": "9.0.300"
+        "SdkAnalysisLevel": "9.0.100"
       },
       "frameworks": {
         "net9.0": {
@@ -215,7 +215,7 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\9.0.300/PortableRuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\9.0.102/PortableRuntimeIdentifierGraph.json"
         }
       }
     }
