@@ -4,5 +4,15 @@
   "success": true,
   "projectFilePath": "C:\\Users\\GRAPHICS\\Desktop\\imp2\\TravelBooking.Core\\TravelBooking.Core.csproj",
   "expectedPackageFiles": [],
-  "logs": []
+  "logs": [
+    {
+      "code": "Undefined",
+      "level": "Warning",
+      "message": "Problem reading the cache file C:\\Users\\GRAPHICS\\Desktop\\imp2\\TravelBooking.Core\\obj\\project.nuget.cache : '<' is an invalid start of a property name. Expected a '\"'. Path: $ | LineNumber: 2 | BytePositionInLine: 0.",
+      "projectPath": "C:\\Users\\GRAPHICS\\Desktop\\imp2\\TravelBooking.Core\\TravelBooking.Core.csproj",
+      "warningLevel": 1,
+      "filePath": "C:\\Users\\GRAPHICS\\Desktop\\imp2\\TravelBooking.Core\\TravelBooking.Core.csproj",
+      "targetGraphs": []
+    }
+  ]
 }
