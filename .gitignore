@@ -53,6 +53,12 @@ nunit-*.xml
 # Build Results of an ATL Project
 [Dd]ebugPS/
 [Rr]eleasePS/
+obj/
+bin/
+*.dll
+*.exe
+*.cache
+
 dlldata.c
 
 # Benchmark Results
