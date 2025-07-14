@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.ChangeTracking.Internal;
 using System;
@@ -34,5 +35,24 @@ namespace TravelBooking.Repository.Data
         public DbSet<TourCompany> Tours { get; set; }
         public DbSet<User> Users { get; set; }
 
+=======
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.ChangeTracking.Internal;
+
+namespace TravelBooking.Repository.Data
+{
+    internal class AppDbContext: DbContext
+    {
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            
+            base.OnModelCreating(modelBuilder);
+        }
+>>>>>>> 5058d87932f09652166bfc11440e8e2ddc8faf2e
     }
 }
