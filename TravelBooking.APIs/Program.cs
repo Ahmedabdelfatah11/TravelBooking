@@ -1,7 +1,9 @@
 
 using Microsoft.AspNetCore.Builder;
+using Microsoft.EntityFrameworkCore;
 using TalabatAPIs.Extensions;
 using TravelBooking.Extensions;
+using TravelBooking.Repository.Data;
 
 namespace TravelBooking.APIs
 {
@@ -17,12 +19,12 @@ namespace TravelBooking.APIs
             // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
             webApplicationbuilder.Services.AddOpenApi();
             webApplicationbuilder.Services.AddSwaggerServices();
-         
-            
-            //webApplicationbuilder.Services.AddDbContext<StoreContext>(options =>
-            //{
-            //    options.UseSqlServer(webApplicationbuilder.Configuration.GetConnectionString("DefaultConnection"));
-            //});
+
+
+            webApplicationbuilder.Services.AddDbContext<AppDbContext>(options =>
+            {
+                options.UseSqlServer(webApplicationbuilder.Configuration.GetConnectionString("DefaultConnection"));
+            });
 
             webApplicationbuilder.Services.AddApplicationServices();
             var app = webApplicationbuilder.Build();
