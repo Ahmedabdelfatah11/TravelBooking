@@ -7,12 +7,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-<<<<<<< HEAD
     <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="9.0.7" />
-=======
-    <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="9.0.7" />
-    <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="9.0.1" />
->>>>>>> 5058d87932f09652166bfc11440e8e2ddc8faf2e
     <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="9.0.7">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
@@ -21,9 +16,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\TravelBooking.Core\TravelBooking.Core.csproj" />
     <ProjectReference Include="..\TravelBooking.Repository\TravelBooking.Repository.csproj" />
-    <ProjectReference Include="..\TravelBooking.Service\TravelBooking.Service.csproj" />
   </ItemGroup>
 
 </Project>
