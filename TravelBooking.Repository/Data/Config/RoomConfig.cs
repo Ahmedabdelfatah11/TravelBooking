@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
+using System.Reflection.Emit;
 using TravelBooking.Core.Models;
 
 namespace TravelBooking.Core.Configurations
@@ -19,6 +20,8 @@ namespace TravelBooking.Core.Configurations
                    .WithMany(h => h.Rooms)
                    .HasForeignKey(r => r.HotelId)
                    .OnDelete(DeleteBehavior.Cascade); // Cascade delete if HotelCompany is deleted
+
+          
 
         }
     }
