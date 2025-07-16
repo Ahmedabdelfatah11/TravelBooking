@@ -21,6 +21,6 @@ namespace TravelBooking.Core.Models
         public string Location { get; set; } // Location of the tour company, e.g., "Rome, Italy"
         public string rating { get; set; } // Rating out of 5 or a descriptive rating like "Excellent", "Good", etc.
         public string ImageUrl { get; set; } // URL to the company's logo or image
-        public ICollection<Trip> Trips { get; set; } = new List<Trip>(); // Collection of trips offered by the tour company
+        public ICollection<Trip>? Trips { get; set; } = new List<Trip>(); // Collection of trips offered by the tour company
     }
 }
