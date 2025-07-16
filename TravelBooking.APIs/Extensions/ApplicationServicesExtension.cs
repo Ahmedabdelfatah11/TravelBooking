@@ -1,17 +1,17 @@
-﻿using Microsoft.AspNetCore.Builder;
-using Microsoft.AspNetCore.Mvc;
-using TalabatAPIs.Errors;
+﻿
+using Microsoft.AspNetCore.Mvc; 
+using TravelBooking.Errors;
 
-namespace TalabatAPIs.Extensions
+namespace TravelBooking.Extensions
 {
     public static class ApplicationServicesExtension
     {
-        public static IServiceCollection AddApplicationServices(this IServiceCollection services)
+        public static IServiceCollection AddApplicationServices(this IServiceCollection Services)
         {
 
             /// Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
             ///builder.Services.AddOpenApi();
-            services.Configure<ApiBehaviorOptions>(options =>
+            Services.Configure<ApiBehaviorOptions>(options =>
             {
                 options.InvalidModelStateResponseFactory = (actionContext) =>
                 {
@@ -25,9 +25,9 @@ namespace TalabatAPIs.Extensions
                     };
                     return new BadRequestObjectResult(errorResponse);
                 };
-            }
+            } 
             );
-            return services;
+            return Services;
         }
     }
 }

@@ -1,4 +1,6 @@
-﻿namespace TalabatAPIs.Errors
+﻿using TalabatAPIs.Errors;
+
+namespace TravelBooking.Errors
 {
     public class ApiValidationErrorResponse : ApiResponse
     {
