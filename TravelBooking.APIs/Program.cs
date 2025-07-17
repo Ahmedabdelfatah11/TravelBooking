@@ -1,19 +1,18 @@
 
 using Jwt.Helper;
-using TravelBooking.Models;
-using Microsoft.IdentityModel.Tokens;
 using Jwt.Settings;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Authentication.JwtBearer; 
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
 using System.Text;
-using TravelBooking.Core.Services;
-using TravelBooking.Extensions;
-using TravelBooking.Repository.Data;
 using TravelBooking.Core.Models.Services;
-using TravelBooking.Core.Settings;
+using TravelBooking.Core.Services;
+using TravelBooking.Core.Settings; 
+using TravelBooking.Extensions;
+using TravelBooking.Models;
+using TravelBooking.Repository.Data;
 
 namespace TravelBooking.APIs
 {
@@ -50,11 +49,11 @@ namespace TravelBooking.APIs
            webApplicationbuilder.Services.AddIdentity<ApplicationUser, IdentityRole>()
                 .AddEntityFrameworkStores<AppDbContext>()
                 .AddDefaultTokenProviders();
-            //adding Email service
+            //adding Email service 
            webApplicationbuilder.Services.Configure<MailSettings>(webApplicationbuilder.Configuration.GetSection(nameof(MailSettings)));
 
             // adding AutoMapper 
-           webApplicationbuilder.Services.AddAutoMapper(cfg => cfg.AddMaps(typeof(Program).Assembly));
+            webApplicationbuilder.Services.AddAutoMapper(cfg => cfg.AddMaps(typeof(Program).Assembly));
 
             // Configure JWT authentication
            webApplicationbuilder.Services.AddAuthentication(options =>
@@ -90,7 +89,7 @@ namespace TravelBooking.APIs
                 options.Lockout.MaxFailedAccessAttempts = 5;
             });
             // adding Email service
-           //webApplicationbuilder.Services.AddTransient<IEmailSender, EmailService>();
+           webApplicationbuilder.Services.AddTransient<IEmailSender, EmailService>(); 
 
             webApplicationbuilder.Services.AddApplicationServices();
             var app = webApplicationbuilder.Build();

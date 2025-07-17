@@ -17,6 +17,7 @@ using TravelBooking.Core.Settings;
 using TravelBooking.EmailBuilderbody;
 
 
+
 namespace TravelBooking.Core.Models.Services
 {
     public class AuthService : IAuthService
@@ -31,8 +32,10 @@ namespace TravelBooking.Core.Models.Services
         private readonly IEmailSender _emailSender;
 
 
-        public AuthService(UserManager<ApplicationUser> userManager, IMapper mapper, IOptions<JWT> jwt, RoleManager<IdentityRole> roleManager, ILogger<AuthService> logger
-            , SignInManager<ApplicationUser> signInManager, IHttpContextAccessor httpAccessor)
+        public AuthService(UserManager<ApplicationUser> userManager, IMapper mapper, 
+             IOptions<JWT> jwt, RoleManager<IdentityRole> roleManager, ILogger<AuthService> logger
+            , SignInManager<ApplicationUser> signInManager, IHttpContextAccessor httpAccessor,
+             IEmailSender emailSender)
         {
             _userManager = userManager;
             _mapper = mapper;
@@ -41,6 +44,7 @@ namespace TravelBooking.Core.Models.Services
             _logger = logger;
             _signInManager = signInManager;
             _httpAccessor = httpAccessor;
+            _emailSender = emailSender;
         }
 
         public async Task<string> AddRole(AddRole role)
@@ -149,7 +153,7 @@ namespace TravelBooking.Core.Models.Services
                 _logger.LogInformation($"User {user.UserName} registered with email confirmation code: {code}");
 
                 //TODO: Implement email sending logic here
-                //await SendConfirmationEmail(user, code);
+                await SendConfirmationEmail(user, code);
 
                 return new AuthModel
                 {
@@ -182,7 +186,7 @@ namespace TravelBooking.Core.Models.Services
 
             //TODO: Implement email sending logic here
 
-            //await SendConfirmationEmail(user, code);
+            await SendConfirmationEmail(user, code);
 
             return new AuthModel
             {
@@ -204,7 +208,7 @@ namespace TravelBooking.Core.Models.Services
 
             _logger.LogInformation($"Password reset token generated for user {user.UserName}: {token}");
 
-            // TODO: Implement email sending logic here 
+            await SendResetPasswordEmail(user, token);  
 
             return new AuthModel
             {
@@ -212,6 +216,7 @@ namespace TravelBooking.Core.Models.Services
                 IsAuthenticated = false
             };
         }
+
 
         public async Task<AuthModel> ResetPassword(ResetPasswordModel model)
         {
@@ -243,22 +248,38 @@ namespace TravelBooking.Core.Models.Services
                 Message = "Password has been reset successfully.",
                 IsAuthenticated = true
             };
+        } 
+        private async Task SendConfirmationEmail(ApplicationUser user, string code)
+        {
+            var request = _httpAccessor.HttpContext?.Request;
+            var origin = $"{request?.Scheme}://{request?.Host}";// Get the origin URL from the request  //GET from frontend 
+
+            var emailBody = EmailBodyBuilder.BuildEmailBody("EmailConfirmation",
+                new Dictionary<string, string>
+                {
+                    { "{{name}}", user.FirstName },
+                    { "{{action_url}}", $"{origin}/auth/emailConfirmation?userId={user.Id}&code={code}" }
+                  
+                });
+
+            await _emailSender.SendEmailAsync(user.Email!, "Travel Booking: Email Confirmation", emailBody);
+        }
+        private async Task SendResetPasswordEmail(ApplicationUser user, string token)
+        {
+            var request = _httpAccessor.HttpContext?.Request;
+            var origin = $"{request?.Scheme}://{request?.Host}"; // Get the origin URL from the request
+
+            var emailBody = EmailBodyBuilder.BuildEmailBody("ResetPassword",
+                new Dictionary<string, string>
+                {
+                    { "{{name}}", user.FirstName },
+                    { "{{reset_url}}", $"{origin}/auth/resetPassword?email={user.Email}&token={token}" }
+                });
+
+            await _emailSender.SendEmailAsync(user.Email!, "Travel Booking: Reset Password", emailBody);
         }
 
-        //private async Task SendConfirmationEmail(ApplicationUser user, string code)
-        //{
-        //    var origin = _httpAccessor.HttpContext?.Request.Headers.Origin;
 
-        //    var emailBody = EmailBodyBuilder.BuildEmailBody("EmailConfirmation",
-        //        templeteModel: new Dictionary<string, string>
-        //        {
-        //            { "{{name}}", user.FirstName },
-        //            { "{{action_url}}", $"{origin}/auth/emailConfirmation?userId={user.Id}&code={code}" }
-        //        }
-        //    );
-
-        //    await _emailSender.SendEmailAsync(user.Email!, "Travel Booking: Email Confirmation", emailBody);
-        //}
         private async Task<JwtSecurityToken> CreateJwtToken(ApplicationUser user)
         {
             var userClaims = await _userManager.GetClaimsAsync(user);

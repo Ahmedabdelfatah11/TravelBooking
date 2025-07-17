@@ -22,4 +22,13 @@
     <ProjectReference Include="..\TravelBooking.Service\TravelBooking.Service.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <None Update="Templates\EmailConfirmation.html">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="Templates\ResetPassword.html">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+
 </Project>
