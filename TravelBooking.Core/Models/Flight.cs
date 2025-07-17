@@ -25,7 +25,7 @@ namespace TravelBooking.Core.Models
         [Required(ErrorMessage = "Standard seats are required.")]
         [Range(0, int.MaxValue, ErrorMessage = "Available standard seats cannot be negative.")]
         public int AvailableSeats { get; set; }
-
+        
         //[Required(ErrorMessage = "Business class seats are required.")]
         //[Range(0, int.MaxValue, ErrorMessage = "Available business class seats cannot be negative.")]
         //public int AvailableBusinessSeats { get; set; }
@@ -43,7 +43,7 @@ namespace TravelBooking.Core.Models
         public string ArrivalAirport { get; set; } = string.Empty;
 
         [ForeignKey("FlightCompany")]
-        public int? FlightId { get; set; }
+        public int FlightId { get; set; }
         public FlightCompany? FlightCompany { get; set; }
     }
 }

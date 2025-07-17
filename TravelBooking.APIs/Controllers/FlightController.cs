@@ -31,6 +31,10 @@ namespace TravelBooking.APIs.Controllers
             {
                 return NotFound("No flights found.");
             }
+            foreach (var flight in flights)
+            {
+                Console.WriteLine(flight.FlightCompany?.Name); // null ولا موجود؟
+            }
             var flightDTOs = mapper.Map<IReadOnlyList<FlightDTO>>(flights);
             var countSpec = new FlightCountSpec(specParams);
             var totalCount = await flightRepository.GetCountAsync(countSpec);
@@ -38,7 +42,7 @@ namespace TravelBooking.APIs.Controllers
         }
         // GET: FlightController/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<Flight>> GetFlight( int id )
+        public async Task<ActionResult<FlightDetialsDTO>> GetFlight( int id )
         {
             var spec = new FlightSpecs(id);
             var flight = await flightRepository.GetWithSpecAsync(spec);
@@ -46,8 +50,8 @@ namespace TravelBooking.APIs.Controllers
             {
                 return NotFound($"Flight with ID {id} not found.");
             }
-            //var flightDTO = mapper.Map<FlightDTO>(flight);
-            return Ok(flight);
+            var flightDTO = mapper.Map<FlightDetialsDTO>(flight);
+            return Ok(flightDTO);
         }
         [HttpPost]
         public async Task<ActionResult<Flight>> AddFlight(Flight flight)

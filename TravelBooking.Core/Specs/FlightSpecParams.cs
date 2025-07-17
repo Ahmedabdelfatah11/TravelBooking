@@ -21,7 +21,10 @@ namespace TravelBooking.Core.Specs
         public int PageIndex { get; set; } = 1;
         public string? Sort { get; set; }
 
+
+        public string? DepartureAirport { get; set; }
         public string? ArrivalAirport { get; set; }
+       
         public DateTime? DepatureTime { get; set; }
         public DateTime? ArrivalTime { get; set; }
     }

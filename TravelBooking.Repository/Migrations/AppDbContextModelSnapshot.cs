@@ -173,7 +173,7 @@ namespace TravelBooking.Repository.Migrations
                     b.Property<DateTime>("DepartureTime")
                         .HasColumnType("datetime2");
 
-                    b.Property<int?>("FlightId")
+                    b.Property<int>("FlightId")
                         .HasColumnType("int");
 
                     b.Property<decimal>("Price")
@@ -486,7 +486,9 @@ namespace TravelBooking.Repository.Migrations
                 {
                     b.HasOne("TravelBooking.Core.Models.FlightCompany", "FlightCompany")
                         .WithMany("Flights")
-                        .HasForeignKey("FlightId");
+                        .HasForeignKey("FlightId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.Navigation("FlightCompany");
                 });

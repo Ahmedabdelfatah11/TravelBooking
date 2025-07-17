@@ -1,5 +1,7 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using AutoMapper;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using TravelBooking.APIs.DTOs;
 using TravelBooking.Core.Models;
 using TravelBooking.Core.Repository.Contract;
 using TravelBooking.Core.Specs;
@@ -11,26 +13,34 @@ namespace TravelBooking.APIs.Controllers
     public class FlightCompanyController : ControllerBase
     {
         private readonly IGenericRepository<FlightCompany> flightComRepository;
+        private readonly IMapper mapper;
 
-        public FlightCompanyController(IGenericRepository<FlightCompany> flightComRepository)
+        public FlightCompanyController(IGenericRepository<FlightCompany> flightComRepository,IMapper mapper)
         {
             this.flightComRepository = flightComRepository;
+            this.mapper = mapper;
         }
 
         // GET: FlightCompanyController
         [HttpGet]
-        public async Task<ActionResult<IReadOnlyList<FlightCompany>>> GetAllCompanies()
+        public async Task<ActionResult<IReadOnlyList<FlightCompanyDTO>>> GetAllCompanies()
         {
             var spec = new FlightWithCompanySpecs();
             var Companies = await flightComRepository.GetAllWithSpecAsync(spec);
-            return Ok(Companies);
+            if (Companies == null || !Companies.Any())
+            {
+                return NotFound("No flight companies found.");
+            }
+            var companyDTOs = mapper.Map<IReadOnlyList<FlightCompanyDTO>>(Companies);
+            return Ok(companyDTOs);
         }
         [HttpGet("{id}")]
-        public async Task<ActionResult<FlightCompany>> GetCompany(int id)
+        public async Task<ActionResult<FlightCompanyDetailsDTO>> GetCompany(int id)
         {
             var spec = new FlightWithCompanySpecs(id);
-            var Company = await flightComRepository.GetAllWithSpecAsync(spec);
-            return Ok(Company);
+            var Company = await flightComRepository.GetWithSpecAsync(spec);
+            var companyDTO = mapper.Map<FlightCompanyDetailsDTO>(Company);
+            return Ok(companyDTO);
         }
         [HttpPost]
         public async Task<ActionResult<FlightCompany>> AddCompany(FlightCompany flight)

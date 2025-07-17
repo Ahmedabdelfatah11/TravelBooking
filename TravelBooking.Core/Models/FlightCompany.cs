@@ -21,8 +21,8 @@ namespace TravelBooking.Core.Models
         public string? Description { get; set; } 
 
        
-        [RegularExpression(@"^(https?:\/\/).*\.(jpg|jpeg|png|gif|bmp|webp)$",
-            ErrorMessage = "Invalid image URL format. Must be a valid image URL ending with .jpg, .jpeg, .png, .gif, .bmp, or .webp.")]
+        //[RegularExpression(@"^(https?:\/\/).*\.(jpg|jpeg|png|gif|bmp|webp)$",
+        //    ErrorMessage = "Invalid image URL format. Must be a valid image URL ending with .jpg, .jpeg, .png, .gif, .bmp, or .webp.")]
         [Display(Name = "Image URL")]
         public string? ImageUrl { get; set; } = string.Empty;
 
@@ -31,6 +31,6 @@ namespace TravelBooking.Core.Models
         public string? Location { get; set; } = string.Empty;
  
         public string? Rating { get; set; } // Rating out of 5 or a descriptive rating like "Excellent", "Good", etc.
-        public ICollection<Flight>? Flights { get; set; } // Navigation property for related flights
+        public virtual ICollection<Flight> Flights { get; set; } = new List<Flight>(); // Navigation property for related flights
     }
 }
