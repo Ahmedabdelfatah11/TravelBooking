@@ -15,5 +15,10 @@ namespace TravelBooking.Core.Repository.Contract
         Task<IReadOnlyList<T>> GetAllWithSpecAsync(ISpecifications<T> spec);
         Task<T?> GetWithSpecAsync(ISpecifications<T> spec);
         Task<int> GetCountAsync(ISpecifications<T> spec);
+        Task<T> AddAsync(T entity);
+
+        Task UpdateAsync(T entity);
+
+        Task DeleteAsync(int id);
     }
 }
