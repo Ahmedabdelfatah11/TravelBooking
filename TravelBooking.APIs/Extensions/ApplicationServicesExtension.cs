@@ -1,6 +1,11 @@
 ﻿using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.DependencyInjection;
 using TalabatAPIs.Errors;
+using TravelBooking.Core.Models;
+using TravelBooking.Core.Repository.Contract;
+using TravelBooking.Helper;
+using TravelBooking.Repository;
 
 namespace TalabatAPIs.Extensions
 {
@@ -8,11 +13,20 @@ namespace TalabatAPIs.Extensions
     {
         public static IServiceCollection AddApplicationServices(this IServiceCollection services)
         {
+            services.AddScoped(typeof(IGenericRepository<>), typeof(GenericRepository<>));
+            services.AddAutoMapper(configuration =>
+            {
+                configuration.AddMaps(AppDomain.CurrentDomain.GetAssemblies());
+            });
+
 
             /// Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
             ///builder.Services.AddOpenApi();
             services.Configure<ApiBehaviorOptions>(options =>
             {
+
+              
+
                 options.InvalidModelStateResponseFactory = (actionContext) =>
                 {
                     var errors = actionContext.ModelState
