@@ -21,21 +21,10 @@ namespace TravelBooking.Repository
         }
         public async Task<IReadOnlyList<T>> GetAllAsync()
         {
-            //if(typeof(T) == typeof(Product))
-            //{
-            //    return (IEnumerable<T>)await  _dbContext.Set<Product>().Include(p => p.Brand).Include(p => p.Category).ToListAsync();
-            //}
             return await _dbContext.Set<T>().ToListAsync();
         }
-
-      
-
         public async Task<T?> GetAsync(int id)
         {
-            //if(typeof(T) == typeof(Product))
-            //{
-            //    return  await _dbContext.Set<Product>().Where(P=>P.Id==id).Include(p => p.Brand).Include(p => p.Category).FirstOrDefaultAsync() as T;
-            //}
             return await _dbContext.Set<T>().FindAsync(id);
         }
 
@@ -55,6 +44,24 @@ namespace TravelBooking.Repository
         public async Task<int> GetCountAsync(ISpecifications<T> spec)
         {
            return await ApplySpecifications(spec).CountAsync();
+        }
+
+        public async Task<T> AddAsync(T entity)
+        {
+           await _dbContext.Set<T>().AddAsync(entity);
+           await _dbContext.SaveChangesAsync();
+            return entity;
+        }
+        public async Task Update(T entity)
+        {
+            _dbContext.Set<T>().Update(entity);
+            await _dbContext.SaveChangesAsync();
+        }
+
+        public async Task Delete(T entity)
+        {
+            _dbContext.Set<T>().Remove(entity);
+            await _dbContext.SaveChangesAsync();
         }
     }
 

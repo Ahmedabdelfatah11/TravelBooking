@@ -4,9 +4,9 @@ using TravelBooking.Core.Models;
 
 namespace TravelBooking.Core.Configurations
 {
-    public class TripConfig: BaseEntityConfiguration<Trip>
+    public class TourConfig: BaseEntityConfiguration<Tour>
     {
-        public override void Configure(EntityTypeBuilder<Trip> builder)
+        public override void Configure(EntityTypeBuilder<Tour> builder)
         {
             base.Configure(builder);
 
@@ -18,7 +18,7 @@ namespace TravelBooking.Core.Configurations
 
             // one-to-many with TourCompany
             builder.HasOne(t => t.TourCompany)
-                   .WithMany(tc => tc.Trips)
+                   .WithMany(tc => tc.Tours)
                    .HasForeignKey(t => t.TourCompanyId)
                    .OnDelete(DeleteBehavior.Restrict);
         }
