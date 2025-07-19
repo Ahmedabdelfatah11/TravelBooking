@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using TravelBooking.Core.Models;
 
 namespace TravelBooking.Core.Specifications.TourSpecs
 {
@@ -40,7 +41,7 @@ namespace TravelBooking.Core.Specifications.TourSpecs
             get { return destination; }
             set { destination = value?.ToLower(); }
         }
-        public string? Category { get; set; }
+        public TourCategory? Category { get; set; }
         public decimal Price { get; set; }
         public decimal? MinPrice { get; set; }
         public decimal? MaxPrice { get; set; }

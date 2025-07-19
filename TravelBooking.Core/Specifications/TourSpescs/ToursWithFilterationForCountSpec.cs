@@ -13,7 +13,7 @@ namespace TravelBooking.Core.Specifications.TourSpecs
         :base(x =>
              (string.IsNullOrEmpty(specParams.Search) || x.Name.ToLower().Contains(specParams.Search)) &&
                 (string.IsNullOrEmpty(specParams.Destination) || x.Destination.ToLower() == specParams.Destination) &&
-                (string.IsNullOrEmpty(specParams.Category) || x.Category.ToString().ToLower() == specParams.Category.ToLower()) &&
+                (string.IsNullOrEmpty(specParams.Category.ToString()) || x.Category.ToString().ToLower() == specParams.Category.ToString().ToLower()) &&
             (!specParams.MinPrice.HasValue || x.Price >= specParams.MinPrice.Value) &&
             (!specParams.MaxPrice.HasValue || x.Price <= specParams.MaxPrice.Value)
 

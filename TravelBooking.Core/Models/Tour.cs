@@ -7,6 +7,14 @@ using System.Threading.Tasks;
 
 namespace TravelBooking.Core.Models
 {
+    public enum TourCategory
+    {
+        Adventure,
+        Relaxation,
+        Cultural,
+        Nature,
+        Historical
+    }
     public class Tour : BaseEntity
     {
         public string Name { get; set; }

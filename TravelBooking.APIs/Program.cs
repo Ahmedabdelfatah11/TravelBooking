@@ -1,6 +1,7 @@
 
 using Microsoft.AspNetCore.Builder;
 using Microsoft.EntityFrameworkCore;
+using System.Text.Json.Serialization;
 using TalabatAPIs.Extensions;
 using TravelBooking.Core.Repository.Contract;
 using TravelBooking.Extensions;
@@ -33,7 +34,26 @@ namespace TravelBooking.APIs
             });
             webApplicationbuilder.Services.AddScoped(typeof(IGenericRepository<>), typeof(GenericRepository<>));
             webApplicationbuilder.Services.AddAutoMapper(typeof(Program).Assembly);
+
+            webApplicationbuilder.Services.AddControllers()
+                .AddJsonOptions(options =>
+                {
+                    options.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter());
+                });
+                            //webApplicationbuilder.Services.AddControllers()
+                //.AddJsonOptions(options =>
+                //{
+                //    options.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.Preserve;
+                //});
+            webApplicationbuilder.Services.AddControllers().AddJsonOptions(options =>
+            {
+                options.JsonSerializerOptions.ReferenceHandler = null; // or ReferenceHandler.IgnoreCycles
+            });
+
+
             webApplicationbuilder.Services.AddApplicationServices();
+       
+
             var app = webApplicationbuilder.Build();
 
             app.UseStatusCodePagesWithReExecute("/errors/{0}");
@@ -46,8 +66,9 @@ namespace TravelBooking.APIs
             var logger = Services.GetRequiredService<ILogger<Program>>();
             try
             {
-                //await StoredContextSeed.SeedAsync(_dbcontext);
                 await _dbcontext.Database.MigrateAsync();
+                await TravelContextSeed.SeedAsync(_dbcontext);
+                
 
             }
             catch (Exception ex)

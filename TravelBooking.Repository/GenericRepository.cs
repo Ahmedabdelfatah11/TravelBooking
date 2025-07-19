@@ -63,13 +63,5 @@ namespace TravelBooking.Repository
             _dbContext.Set<T>().Remove(entity);
             await _dbContext.SaveChangesAsync();
         }
-
-        //public async Task DeleteAsync(int id)
-        //{
-        //    var entity = await _dbContext.Set<T>().FindAsync(id);
-        //    if (entity == null) throw new KeyNotFoundException($"{typeof(T).Name} not found");
-
-        //}
     }
 }
-    

@@ -23,7 +23,7 @@ namespace TravelBooking.APIs.Controllers
 
         // GET: FlightCompanyController
         [HttpGet]
-        public async Task<ActionResult<IReadOnlyList<FlightCompanyDTO>>> GetAllCompanies()
+        public async Task<ActionResult<IReadOnlyList<FlightCompanyDTO>>> GetAllFlightsCompanies()
         {
             var spec = new FlightWithCompanySpecs();
             var Companies = await _flightComRepository.GetAllWithSpecAsync(spec);
@@ -35,7 +35,7 @@ namespace TravelBooking.APIs.Controllers
             return Ok(companyDTOs);
         }
         [HttpGet("{id}")]
-        public async Task<ActionResult<FlightCompanyDetailsDTO>> GetCompany(int id)
+        public async Task<ActionResult<FlightCompanyDetailsDTO>> GetFlightCompany(int id)
         {
             var spec = new FlightWithCompanySpecs(id);
             var Company = await _flightComRepository.GetWithSpecAsync(spec);
@@ -43,13 +43,13 @@ namespace TravelBooking.APIs.Controllers
             return Ok(companyDTO);
         }
         [HttpPost]
-        public async Task<ActionResult<FlightCompany>> AddCompany(FlightCompany flight)
+        public async Task<ActionResult<FlightCompany>> AddFlightCompany(FlightCompany flight)
         {
             var newCompany = await _flightComRepository.AddAsync(flight);
             return Ok(newCompany);
         }
         [HttpPut("{id}")]
-        public async Task<IActionResult> Update(int id, FlightCompany company)
+        public async Task<IActionResult> UpdateFlightCompany(int id, FlightCompany company)
         {
             if (company.Id != id) return BadRequest("ID mismatch");
 
@@ -58,7 +58,7 @@ namespace TravelBooking.APIs.Controllers
         }
 
         [HttpDelete("{id}")]
-        public async Task<IActionResult> Delete(int id)
+        public async Task<IActionResult> DeleteFlightCompany(int id)
         {
             var existing = await _flightComRepository.GetAsync(id);
             if (existing == null) return NotFound();
