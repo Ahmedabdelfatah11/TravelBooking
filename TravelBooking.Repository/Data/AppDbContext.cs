@@ -30,9 +30,9 @@ namespace TravelBooking.Repository.Data
         public DbSet<Room> Rooms { get; set; }
         public DbSet<HotelCompany> HotelCompanies { get; set; }
         public DbSet<Payment> Payments { get; set; }
-        public DbSet<Trip> Trips { get; set; }
-        public DbSet<TourCompany> Tours { get; set; }
+        public DbSet<Tour> Tours { get; set; }
+        public DbSet<TourCompany> TourCompany { get; set; }
         public DbSet<User> Users { get; set; }
-
+        public DbSet<TourImage> TourImages { get; set; }
     }
 }

@@ -2,7 +2,9 @@
 using Microsoft.AspNetCore.Builder;
 using Microsoft.EntityFrameworkCore;
 using TalabatAPIs.Extensions;
+using TravelBooking.Core.Repository.Contract;
 using TravelBooking.Extensions;
+using TravelBooking.Repository;
 using TravelBooking.Repository.Data;
 
 namespace TravelBooking.APIs
@@ -25,7 +27,8 @@ namespace TravelBooking.APIs
             {
                 options.UseSqlServer(webApplicationbuilder.Configuration.GetConnectionString("DefaultConnection"));
             });
-
+            webApplicationbuilder.Services.AddScoped(typeof(IGenericRepository<>), typeof(GenericRepository<>));
+            webApplicationbuilder.Services.AddAutoMapper(typeof(Program).Assembly);
             webApplicationbuilder.Services.AddApplicationServices();
             var app = webApplicationbuilder.Build();
 

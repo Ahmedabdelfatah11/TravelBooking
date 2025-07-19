@@ -1,12 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
 namespace TravelBooking.Core.Models
 {
-    public enum TripCategory
+    public enum TourCategory
     {
         Adventure,
         Relaxation,
@@ -17,10 +18,11 @@ namespace TravelBooking.Core.Models
     public class TourCompany : BaseEntity
     {
         public string Name { get; set; }
-        public string Description { get; set; }
-        public string Location { get; set; } // Location of the tour company, e.g., "Rome, Italy"
-        public string rating { get; set; } // Rating out of 5 or a descriptive rating like "Excellent", "Good", etc.
-        public string ImageUrl { get; set; } // URL to the company's logo or image
-        public ICollection<Trip>? Trips { get; set; } = new List<Trip>(); // Collection of trips offered by the tour company
+        public string? Description { get; set; }
+        public string? ImageUrl { get; set; }
+        public string? Location { get; set; } // Location of the tour company, e.g., "Rome, Italy"
+        public string? rating { get; set; } // Rating out of 5 or a descriptive rating like "Excellent", "Good", etc.
+
+        public ICollection<Tour>? Tours { get; set; } = new List<Tour>(); 
     }
 }

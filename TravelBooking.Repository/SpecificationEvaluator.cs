@@ -32,7 +32,8 @@ namespace TravelBooking.Repository
                 query = query.Skip(spec.Skip).Take(spec.Take);
             }
 
-            spec.Includes.Aggregate(query, (current, include) => current.Include(include));
+            query = spec.Includes.Aggregate(query, (current, include) => current.Include(include));
+
             return query;
         }
     }
