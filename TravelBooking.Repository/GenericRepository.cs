@@ -11,7 +11,7 @@ using TravelBooking.Repository.Data;
 
 namespace TravelBooking.Repository
 {
-    public class GenericRepository<T> : IGenericRepository<T> where T: BaseEntity
+    public class GenericRepository<T> : IGenericRepository<T> where T : BaseEntity
     {
         private readonly AppDbContext _dbContext;
 
@@ -30,26 +30,26 @@ namespace TravelBooking.Repository
 
         public async Task<IReadOnlyList<T>> GetAllWithSpecAsync(ISpecifications<T> spec)
         {
-           return await ApplySpecifications(spec).AsNoTracking().ToListAsync();
+            return await ApplySpecifications(spec).AsNoTracking().ToListAsync();
         }
         public async Task<T?> GetWithSpecAsync(ISpecifications<T> spec)
         {
             return await ApplySpecifications(spec).FirstOrDefaultAsync();
         }
-        private  IQueryable<T> ApplySpecifications(ISpecifications<T> spec)
+        private IQueryable<T> ApplySpecifications(ISpecifications<T> spec)
         {
-            return  SpecificationEvaluator<T>.GetQuery(_dbContext.Set<T>(), spec);
+            return SpecificationEvaluator<T>.GetQuery(_dbContext.Set<T>(), spec);
         }
 
         public async Task<int> GetCountAsync(ISpecifications<T> spec)
         {
-           return await ApplySpecifications(spec).CountAsync();
+            return await ApplySpecifications(spec).CountAsync();
         }
 
         public async Task<T> AddAsync(T entity)
         {
-           await _dbContext.Set<T>().AddAsync(entity);
-           await _dbContext.SaveChangesAsync();
+            await _dbContext.Set<T>().AddAsync(entity);
+            await _dbContext.SaveChangesAsync();
             return entity;
         }
         public async Task Update(T entity)
@@ -63,6 +63,13 @@ namespace TravelBooking.Repository
             _dbContext.Set<T>().Remove(entity);
             await _dbContext.SaveChangesAsync();
         }
-    }
 
+        //public async Task DeleteAsync(int id)
+        //{
+        //    var entity = await _dbContext.Set<T>().FindAsync(id);
+        //    if (entity == null) throw new KeyNotFoundException($"{typeof(T).Name} not found");
+
+        //}
+    }
 }
+    

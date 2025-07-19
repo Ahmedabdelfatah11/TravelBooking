@@ -162,13 +162,7 @@ namespace TravelBooking.Repository.Migrations
                     b.Property<DateTime>("ArrivalTime")
                         .HasColumnType("datetime2");
 
-                    b.Property<int>("AvailableBusinessSeats")
-                        .HasColumnType("int");
-
-                    b.Property<int>("AvailableFirstClassSeats")
-                        .HasColumnType("int");
-
-                    b.Property<int>("AvailableStanderedSeats")
+                    b.Property<int>("AvailableSeats")
                         .HasColumnType("int");
 
                     b.Property<string>("DepartureAirport")
@@ -179,7 +173,7 @@ namespace TravelBooking.Repository.Migrations
                     b.Property<DateTime>("DepartureTime")
                         .HasColumnType("datetime2");
 
-                    b.Property<int?>("FlightId")
+                    b.Property<int>("FlightId")
                         .HasColumnType("int");
 
                     b.Property<decimal>("Price")
@@ -201,17 +195,14 @@ namespace TravelBooking.Repository.Migrations
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<string>("Description")
-                        .IsRequired()
                         .HasMaxLength(1000)
                         .HasColumnType("nvarchar(1000)");
 
                     b.Property<string>("ImageUrl")
-                        .IsRequired()
                         .HasMaxLength(500)
                         .HasColumnType("nvarchar(500)");
 
                     b.Property<string>("Location")
-                        .IsRequired()
                         .HasMaxLength(100)
                         .HasColumnType("nvarchar(100)");
 
@@ -221,7 +212,6 @@ namespace TravelBooking.Repository.Migrations
                         .HasColumnType("nvarchar(100)");
 
                     b.Property<string>("Rating")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
@@ -521,7 +511,9 @@ namespace TravelBooking.Repository.Migrations
                 {
                     b.HasOne("TravelBooking.Core.Models.FlightCompany", "FlightCompany")
                         .WithMany("Flights")
-                        .HasForeignKey("FlightId");
+                        .HasForeignKey("FlightId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.Navigation("FlightCompany");
                 });

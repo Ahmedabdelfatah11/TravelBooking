@@ -4,6 +4,10 @@ using Microsoft.EntityFrameworkCore;
 using TalabatAPIs.Extensions;
 using TravelBooking.Core.Repository.Contract;
 using TravelBooking.Extensions;
+using TravelBooking.APIs.Helper;
+using TravelBooking.Core.Repository.Contract;
+using TravelBooking.Extensions;
+using TravelBooking.Helper;
 using TravelBooking.Repository;
 using TravelBooking.Repository.Data;
 
@@ -16,12 +20,12 @@ namespace TravelBooking.APIs
             var webApplicationbuilder = WebApplication.CreateBuilder(args);
 
             // Add services to the container.
+            webApplicationbuilder.Services.AddAutoMapper(typeof(MappingProfiles));
 
             webApplicationbuilder.Services.AddControllers();
             // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
             webApplicationbuilder.Services.AddOpenApi();
             webApplicationbuilder.Services.AddSwaggerServices();
-
 
             webApplicationbuilder.Services.AddDbContext<AppDbContext>(options =>
             {
