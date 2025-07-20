@@ -25,7 +25,17 @@ namespace TravelBooking.APIs
             webApplicationbuilder.Services.AddOpenApi();
             webApplicationbuilder.Services.AddSwaggerServices();
             webApplicationbuilder.Services.AddScoped(typeof(IGenericRepository<>), typeof(GenericRepository<>));
-
+            webApplicationbuilder.Services.AddCors(op =>
+            {
+                op.AddPolicy("AllowAnyUSer", policy =>
+                {
+                    policy.AllowAnyOrigin().AllowAnyHeader().AllowAnyMethod();
+                });
+                op.AddPolicy("SpetialUser", policy =>
+                {
+                    policy.WithOrigins("127.1.2.0", "128.2.1.1").WithHeaders("token", "role").WithMethods("get");
+                });
+            });
             webApplicationbuilder.Services.AddDbContext<AppDbContext>(options =>
             {
                 options.UseSqlServer(webApplicationbuilder.Configuration.GetConnectionString("DefaultConnection"));
@@ -38,7 +48,7 @@ namespace TravelBooking.APIs
             using var scope = app.Services.CreateScope();
 
             var Services = scope.ServiceProvider;
-
+            
             var _dbcontext = Services.GetRequiredService<AppDbContext>();
 
             var logger = Services.GetRequiredService<ILogger<Program>>();
@@ -61,8 +71,9 @@ namespace TravelBooking.APIs
             app.UseHttpsRedirection();
             app.UseStaticFiles();
 
+            app.UseCors("AllowAnyUSer");
+            app.UseAuthentication();
             app.UseAuthorization();
-
 
 
             app.MapControllers();

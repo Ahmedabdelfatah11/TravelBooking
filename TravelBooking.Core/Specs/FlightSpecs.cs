@@ -11,8 +11,8 @@ namespace TravelBooking.Core.Specs
     public class FlightSpecs : BaseSpecifications<Flight>
     {
         public FlightSpecs( FlightSpecParams specParams) : base(f =>
-            (string.IsNullOrEmpty(specParams.DepartureAirport) || f.DepartureAirport == specParams.DepartureAirport) &&
-            (string.IsNullOrEmpty(specParams.ArrivalAirport) || f.ArrivalAirport == specParams.ArrivalAirport) &&
+            (string.IsNullOrEmpty(specParams.DepartureAirport) || f.DepartureAirport.ToLower().Contains(specParams.DepartureAirport)) &&
+            (string.IsNullOrEmpty(specParams.ArrivalAirport) || f.ArrivalAirport.ToLower().Contains(specParams.ArrivalAirport)) &&
             (!specParams.DepatureTime.HasValue || f.DepartureTime.Date == specParams.DepatureTime.Value.Date) &&
             (!specParams.ArrivalTime.HasValue || f.ArrivalTime.Date == specParams.ArrivalTime.Value.Date))
         {

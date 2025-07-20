@@ -14,6 +14,8 @@ namespace TravelBooking.APIs.DTOs
         public decimal Price { get; set; } // Price of the flight ticket
         public string AirlineName { get; set; } // Name of the airline operating the flight
         public string ImageUrl { get; set; } // URL to an image representing the flight or airline
+
+        public string rating { get; set; } // descriptive rating like "Excellent", "Good", etc.
         //public int count { get; set; } // Num of Flights
     }
 }

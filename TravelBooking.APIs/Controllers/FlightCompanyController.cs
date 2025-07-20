@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using TravelBooking.APIs.DTOs;
@@ -9,7 +10,7 @@ namespace TravelBooking.APIs.Controllers
 {
     [Route("[controller]")]
     [ApiController]
-
+    [EnableCors("AllowAnyUSer")]
     public class FlightCompanyController : ControllerBase
     {
         private readonly IGenericRepository<FlightCompany> flightComRepository;

@@ -24,11 +24,13 @@ namespace TravelBooking.APIs.Helper
                     {
                         dest.AirlineName = src.FlightCompany.Name;
                         dest.ImageUrl = src.FlightCompany.ImageUrl;
+                        dest.rating = src.FlightCompany.Rating; // Assuming FlightCompany has a Rating property
                     }
                     else
                     {
                         dest.AirlineName = null;
                         dest.ImageUrl = null;
+                        dest.rating = null; // Set to null if FlightCompany is not available
                     }
                 })
                     ;
