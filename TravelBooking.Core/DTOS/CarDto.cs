@@ -10,6 +10,7 @@ namespace TravelBooking.Service.Dto
 {
     public class CarDto
     {
+        public int id { get; set; }
         public string? Model { get; set; }
         public decimal? Price { get; set; }
         public string? Description { get; set; }
@@ -17,7 +18,7 @@ namespace TravelBooking.Service.Dto
         public string? Location { get; set; } // Location where the car is available for rent 
         public string? ImageUrl { get; set; }
         public int Capacity { get; set; } // Number of passengers the car can accommodate
-        public CarRentalCompany? RentalCompany { get; set; } // Navigation property to CarRentalCompany
-
+        
+        public string? companyName { get; set; }
     }
 }

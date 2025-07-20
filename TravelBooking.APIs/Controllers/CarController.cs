@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using TravelBooking.Core;
+using TravelBooking.Core.DTOS;
 using TravelBooking.Core.Models;
 using TravelBooking.Core.Params;
 using TravelBooking.Core.Repository.Contract;
@@ -15,28 +16,33 @@ namespace TravelBooking.APIs.Controllers
     [ApiController]
     public class CarController : ControllerBase
     {
-        private readonly IGenericRepository<Car> _carRepo;
+        private readonly IGenericRepository<CarDTO> _carRepo;
         private readonly IMapper _mapper;
 
-        public CarController(IGenericRepository<Car> carRepo, IMapper mapper)
+        public CarController(IGenericRepository<CarDTO> carRepo, IMapper mapper)
         {
             _carRepo = carRepo;
             _mapper = mapper;
         }
 
         [HttpGet]
-        public async Task<ActionResult<IReadOnlyList<CarDto>>> GetCars([FromQuery] CarSpecParams specParams)
+        public async Task<ActionResult<Pagination<CarDTO>>> GetCars([FromQuery] CarSpecParams specParams)
         {
             var spec = new CarsWithFilterSpecification(specParams);
             var cars = await _carRepo.GetAllWithSpecAsync(spec);
             var data = _mapper.Map<IReadOnlyList<CarDto>>(cars);
-            return Ok(data);
+            var spec_count = new CarCountspec(specParams);
+            var count = await _carRepo.GetCountAsync(spec_count);
+            return Ok(new Pagination<CarDto>(specParams.PageIndex,specParams.PageSize,count,data));
+
+
+
         }
 
         [HttpGet("{id}")]
         public async Task<ActionResult<CarDto>> GetCar(int id)
         {
-            var spec = new BaseSpecifications<Car>(c => c.Id == id);
+            var spec = new CarsWithFilterSpecification(id);
             var car = await _carRepo.GetWithSpecAsync(spec);
             if (car == null) return NotFound();
             return Ok(_mapper.Map<CarDto>(car));
@@ -46,7 +52,7 @@ namespace TravelBooking.APIs.Controllers
         [HttpPost]
         public async Task<ActionResult> CreateCar(CarCreateUpdateDto dto)
         {
-            var car = _mapper.Map<Car>(dto);
+            var car = _mapper.Map<CarDTO>(dto);
             await _carRepo.AddAsync(car);
             await _carRepo.SaveChangesAsync(); // or CompleteAsync()
             return CreatedAtAction(nameof(GetCar), new { id = car.Id }, _mapper.Map<CarDto>(car));

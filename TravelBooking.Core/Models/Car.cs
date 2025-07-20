@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace TravelBooking.Core.Models
 {
-    public class Car : BaseEntity
+    public class CarDTO : BaseEntity
     {
         public string? Model { get; set; }
         public decimal? Price { get; set; }

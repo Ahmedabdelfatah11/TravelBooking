@@ -4,9 +4,9 @@ using TravelBooking.Core.Models;
 
 namespace TravelBooking.Core.Configurations
 {
-    public class CarConfig : BaseEntityConfiguration<Car>
+    public class CarConfig : BaseEntityConfiguration<CarDTO>
     {
-        public override void Configure(EntityTypeBuilder<Car> builder)
+        public override void Configure(EntityTypeBuilder<CarDTO> builder)
         {
             base.Configure(builder);
 

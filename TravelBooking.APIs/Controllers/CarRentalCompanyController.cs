@@ -29,23 +29,23 @@ namespace TravelBooking.APIs.Controllers
         }
 
         [HttpGet]
-        public async Task<ActionResult<IReadOnlyList<CarRentalWithCarsDto>>> GetPagedRentals(
+        public async Task<ActionResult<IReadOnlyList<CarRentalDto>>> GetPagedRentals(
             [FromQuery] int pageIndex = 1,
             [FromQuery] int pageSize = 10)
         {
             var spec = new SpecificationWithCars(pageIndex, pageSize);
             var rentals = await _carRentalRepo.GetAllWithSpecAsync(spec);
-            return Ok(_mapper.Map<IReadOnlyList<CarRentalWithCarsDto>>(rentals));
+            return Ok(_mapper.Map<IReadOnlyList<CarRentalDto>>(rentals));
         }
 
         [HttpGet("{id}")]
-        public async Task<ActionResult<CarRentalWithCarsDto>> GetRentalWithCars(int id)
+        public async Task<ActionResult<CarRentalDto>> GetRentalWithCars(int id)
         {
             var spec = new SpecificationWithCars(id);
             var rental = await _carRentalRepo.GetWithSpecAsync(spec);
             if (rental == null) return NotFound();
 
-            return Ok(_mapper.Map<CarRentalWithCarsDto>(rental));
+            return Ok(_mapper.Map<CarRentalDto>(rental));
         }
 
         [HttpPost]

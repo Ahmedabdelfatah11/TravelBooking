@@ -23,7 +23,7 @@ namespace TravelBooking.Repository.Data
             modelBuilder.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly());
         }
         public DbSet<Booking> Bookings { get; set; }
-        public DbSet<Car> Cars { get; set; }
+        public DbSet<CarDTO> Cars { get; set; }
         public DbSet<CarRentalCompany> CarRentalCompanies { get; set; }
         public DbSet<Flight> Flights { get; set; }
         public DbSet<FlightCompany> FlightCompanies { get; set; }

@@ -9,8 +9,8 @@ namespace TravelBooking.Core.Params
     
         public class CarSpecParams
         {
-            public int? PageIndex { get; set; } = 1;
-            public int? PageSize { get; set; } = 10;
+            public int PageIndex { get; set; } = 1;
+            public int PageSize { get; set; } = 10;
 
             public string? Model { get; set; }
             public decimal? MinPrice { get; set; }

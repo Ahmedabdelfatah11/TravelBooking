@@ -8,26 +8,16 @@ using TravelBooking.Core.Params;
 
 namespace TravelBooking.Core.Specifications
 {
-    public class CarsWithFilterSpecification : BaseSpecifications<CarDTO>
+    public class CarCountspec : BaseSpecifications<CarDTO>
     {
-        public CarsWithFilterSpecification(CarSpecParams carParams)
-            : base(c =>
+
+        public CarCountspec(CarSpecParams carParams) : base(c =>
                 (string.IsNullOrEmpty(carParams.Model) || c.Model.ToLower().Contains(carParams.Model.ToLower())) &&
                 (!carParams.MinPrice.HasValue || c.Price >= carParams.MinPrice.Value) &&
                 (!carParams.MaxPrice.HasValue || c.Price <= carParams.MaxPrice.Value)
             )
         {
-            Includes.Add(c => c.RentalCompany);
-            // ApplyPagination((carParams.PageIndex - 1) * carParams.PageSize, carParams.PageSize);
-            ApplyPagination((carParams.PageIndex - 1) * carParams.PageSize, carParams.PageSize);
-
+             
         }
-        public CarsWithFilterSpecification(int id) : base(c=>c.Id==id) 
-        {
-            Includes.Add(c => c.RentalCompany);
-        }
-
-
     }
-
 }

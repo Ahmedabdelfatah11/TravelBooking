@@ -13,7 +13,7 @@ namespace TravelBooking.Core.Models
         public string? Location { get; set; } // Location of the car rental company, e.g., "Los Angeles, USA"
         public string ?ImageUrl { get; set; } // URL to the company's logo or image
         public string? Rating { get; set; } // Rating out of 5 or a descriptive rating like "Excellent", "Good", etc.
-        public ICollection<Car>? Cars { get; set; } // Navigation property for related cars
+        public ICollection<CarDTO>? Cars { get; set; } // Navigation property for related cars
 
     }
 }

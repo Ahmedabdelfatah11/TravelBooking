@@ -9,14 +9,26 @@ namespace TravelBooking.Helper
     {
         public MappingProfiles()
         {
-            CreateMap<Car, CarDto>().ReverseMap();
-            CreateMap<CarCreateUpdateDto, Car>();
-            CreateMap<CarRentalCompany, CarRentalDto>().ReverseMap();
+            CreateMap<CarDTO, CarDto>()
+                .ForMember(dest => dest.id, opt => opt.MapFrom(src => src.Id))
+                .ForMember(dest => dest.Price, opt => opt.MapFrom(src => src.Price))
+                .ForMember(dest => dest.IsAvailable, opt => opt.MapFrom(src => src.IsAvailable))
+                .ForMember(dest => dest.Capacity, opt => opt.MapFrom(src => src.Capacity))
+                .ForMember(dest => dest.Description, opt => opt.MapFrom(src => src.Description))
+                .AfterMap((src,dest) =>
+                {
+                    dest.companyName = src.RentalCompany.Name;
+                });
+            CreateMap<CarCreateUpdateDto, CarDTO>();
+            //CreateMap<CarRentalCompany, CarRentalDto>().ReverseMap();
 
-            CreateMap<CarRentalCompany, CarRentalWithCarsDto>()
+            CreateMap<CarRentalCompany, CarRentalDto>()
+                .ForMember(dest => dest.Name, opt => opt.MapFrom(src => src.Name))
                 .ForMember(dest => dest.Cars, opt => opt.MapFrom(src => src.Cars));
 
-            CreateMap<SaveCarRentalDto, CarRentalCompany>();
+
+
+            //CreateMap<SaveCarRentalDto, CarRentalCompany>();
 
         }
     }

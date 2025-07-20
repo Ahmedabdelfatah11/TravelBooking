@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using TravelBooking.Core.Models;
+using TravelBooking.Service.Dto;
 
 namespace TravelBooking.Core.DTOS
 {
@@ -14,7 +15,7 @@ namespace TravelBooking.Core.DTOS
         public string? Location { get; set; } // Location of the car rental company, e.g., "Los Angeles, USA"
         public string? ImageUrl { get; set; } // URL to the company's logo or image
         public string? Rating { get; set; } // Rating out of 5 or a descriptive rating like "Excellent", "Good", etc.
-        public ICollection<Car>? Cars { get; set; } // Navigation property for related ca
+        public List<CarDto>? Cars { get; set; } // Navigation property for related ca
 
     }
 }
