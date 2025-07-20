@@ -3,7 +3,6 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
-using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using TravelBooking.Repository.Data;
 
@@ -12,16 +11,9 @@ using TravelBooking.Repository.Data;
 namespace TravelBooking.Repository.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-<<<<<<<< HEAD:TravelBooking.Repository/Migrations/20250720125634_Initial Creation.Designer.cs
-    [Migration("20250720125634_Initial Creation")]
-    partial class InitialCreation
-========
-    [Migration("20250714134417_InitialCreate")]
-    partial class InitialCreate
->>>>>>>> ayman:TravelBooking.Repository/Migrations/20250714134417_InitialCreate.Designer.cs
+    partial class AppDbContextModelSnapshot : ModelSnapshot
     {
-        /// <inheritdoc />
-        protected override void BuildTargetModel(ModelBuilder modelBuilder)
+        protected override void BuildModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -80,18 +72,10 @@ namespace TravelBooking.Repository.Migrations
                         .HasDefaultValue(5);
 
                     b.Property<string>("Description")
-<<<<<<<< HEAD:TravelBooking.Repository/Migrations/20250720125634_Initial Creation.Designer.cs
-========
-                        .IsRequired()
->>>>>>>> ayman:TravelBooking.Repository/Migrations/20250714134417_InitialCreate.Designer.cs
                         .HasMaxLength(1000)
                         .HasColumnType("nvarchar(1000)");
 
                     b.Property<string>("ImageUrl")
-<<<<<<<< HEAD:TravelBooking.Repository/Migrations/20250720125634_Initial Creation.Designer.cs
-========
-                        .IsRequired()
->>>>>>>> ayman:TravelBooking.Repository/Migrations/20250714134417_InitialCreate.Designer.cs
                         .HasMaxLength(500)
                         .HasColumnType("nvarchar(500)");
 
@@ -101,10 +85,6 @@ namespace TravelBooking.Repository.Migrations
                         .HasDefaultValue(true);
 
                     b.Property<string>("Location")
-<<<<<<<< HEAD:TravelBooking.Repository/Migrations/20250720125634_Initial Creation.Designer.cs
-========
-                        .IsRequired()
->>>>>>>> ayman:TravelBooking.Repository/Migrations/20250714134417_InitialCreate.Designer.cs
                         .HasMaxLength(100)
                         .HasColumnType("nvarchar(100)");
 
@@ -113,17 +93,10 @@ namespace TravelBooking.Repository.Migrations
                         .HasMaxLength(100)
                         .HasColumnType("nvarchar(100)");
 
-<<<<<<<< HEAD:TravelBooking.Repository/Migrations/20250720125634_Initial Creation.Designer.cs
                     b.Property<decimal?>("Price")
                         .HasColumnType("decimal(18,2)");
 
                     b.Property<int?>("RentalCompanyId")
-========
-                    b.Property<decimal>("Price")
-                        .HasColumnType("decimal(18,2)");
-
-                    b.Property<int>("RentalCompanyId")
->>>>>>>> ayman:TravelBooking.Repository/Migrations/20250714134417_InitialCreate.Designer.cs
                         .HasColumnType("int");
 
                     b.HasKey("Id");
@@ -142,18 +115,10 @@ namespace TravelBooking.Repository.Migrations
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<string>("ImageUrl")
-<<<<<<<< HEAD:TravelBooking.Repository/Migrations/20250720125634_Initial Creation.Designer.cs
-========
-                        .IsRequired()
->>>>>>>> ayman:TravelBooking.Repository/Migrations/20250714134417_InitialCreate.Designer.cs
                         .HasMaxLength(500)
                         .HasColumnType("nvarchar(500)");
 
                     b.Property<string>("Location")
-<<<<<<<< HEAD:TravelBooking.Repository/Migrations/20250720125634_Initial Creation.Designer.cs
-========
-                        .IsRequired()
->>>>>>>> ayman:TravelBooking.Repository/Migrations/20250714134417_InitialCreate.Designer.cs
                         .HasMaxLength(100)
                         .HasColumnType("nvarchar(100)");
 
@@ -163,17 +128,9 @@ namespace TravelBooking.Repository.Migrations
                         .HasColumnType("nvarchar(100)");
 
                     b.Property<string>("Rating")
-<<<<<<<< HEAD:TravelBooking.Repository/Migrations/20250720125634_Initial Creation.Designer.cs
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("description")
-========
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("description")
-                        .IsRequired()
->>>>>>>> ayman:TravelBooking.Repository/Migrations/20250714134417_InitialCreate.Designer.cs
                         .HasMaxLength(1000)
                         .HasColumnType("nvarchar(1000)");
 
@@ -198,17 +155,7 @@ namespace TravelBooking.Repository.Migrations
                     b.Property<DateTime>("ArrivalTime")
                         .HasColumnType("datetime2");
 
-<<<<<<<< HEAD:TravelBooking.Repository/Migrations/20250720125634_Initial Creation.Designer.cs
                     b.Property<int>("AvailableSeats")
-========
-                    b.Property<int>("AvailableBusinessSeats")
-                        .HasColumnType("int");
-
-                    b.Property<int>("AvailableFirstClassSeats")
-                        .HasColumnType("int");
-
-                    b.Property<int>("AvailableStanderedSeats")
->>>>>>>> ayman:TravelBooking.Repository/Migrations/20250714134417_InitialCreate.Designer.cs
                         .HasColumnType("int");
 
                     b.Property<string>("DepartureAirport")
@@ -219,11 +166,7 @@ namespace TravelBooking.Repository.Migrations
                     b.Property<DateTime>("DepartureTime")
                         .HasColumnType("datetime2");
 
-<<<<<<<< HEAD:TravelBooking.Repository/Migrations/20250720125634_Initial Creation.Designer.cs
                     b.Property<int>("FlightId")
-========
-                    b.Property<int?>("FlightId")
->>>>>>>> ayman:TravelBooking.Repository/Migrations/20250714134417_InitialCreate.Designer.cs
                         .HasColumnType("int");
 
                     b.Property<decimal>("Price")
@@ -245,26 +188,14 @@ namespace TravelBooking.Repository.Migrations
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<string>("Description")
-<<<<<<<< HEAD:TravelBooking.Repository/Migrations/20250720125634_Initial Creation.Designer.cs
-========
-                        .IsRequired()
->>>>>>>> ayman:TravelBooking.Repository/Migrations/20250714134417_InitialCreate.Designer.cs
                         .HasMaxLength(1000)
                         .HasColumnType("nvarchar(1000)");
 
                     b.Property<string>("ImageUrl")
-<<<<<<<< HEAD:TravelBooking.Repository/Migrations/20250720125634_Initial Creation.Designer.cs
-========
-                        .IsRequired()
->>>>>>>> ayman:TravelBooking.Repository/Migrations/20250714134417_InitialCreate.Designer.cs
                         .HasMaxLength(500)
                         .HasColumnType("nvarchar(500)");
 
                     b.Property<string>("Location")
-<<<<<<<< HEAD:TravelBooking.Repository/Migrations/20250720125634_Initial Creation.Designer.cs
-========
-                        .IsRequired()
->>>>>>>> ayman:TravelBooking.Repository/Migrations/20250714134417_InitialCreate.Designer.cs
                         .HasMaxLength(100)
                         .HasColumnType("nvarchar(100)");
 
@@ -274,10 +205,6 @@ namespace TravelBooking.Repository.Migrations
                         .HasColumnType("nvarchar(100)");
 
                     b.Property<string>("Rating")
-<<<<<<<< HEAD:TravelBooking.Repository/Migrations/20250720125634_Initial Creation.Designer.cs
-========
-                        .IsRequired()
->>>>>>>> ayman:TravelBooking.Repository/Migrations/20250714134417_InitialCreate.Designer.cs
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
@@ -298,13 +225,10 @@ namespace TravelBooking.Repository.Migrations
                         .HasMaxLength(1000)
                         .HasColumnType("nvarchar(1000)");
 
-<<<<<<<< HEAD:TravelBooking.Repository/Migrations/20250720125634_Initial Creation.Designer.cs
                     b.Property<string>("ImageUrl")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-========
->>>>>>>> ayman:TravelBooking.Repository/Migrations/20250714134417_InitialCreate.Designer.cs
                     b.Property<string>("Location")
                         .IsRequired()
                         .HasMaxLength(100)
@@ -315,14 +239,9 @@ namespace TravelBooking.Repository.Migrations
                         .HasMaxLength(100)
                         .HasColumnType("nvarchar(100)");
 
-<<<<<<<< HEAD:TravelBooking.Repository/Migrations/20250720125634_Initial Creation.Designer.cs
                     b.Property<string>("Rating")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
-========
-                    b.Property<int>("Rating")
-                        .HasColumnType("int");
->>>>>>>> ayman:TravelBooking.Repository/Migrations/20250714134417_InitialCreate.Designer.cs
 
                     b.HasKey("Id");
 
@@ -340,11 +259,7 @@ namespace TravelBooking.Repository.Migrations
                     b.Property<decimal>("Amount")
                         .HasColumnType("decimal(18,2)");
 
-<<<<<<<< HEAD:TravelBooking.Repository/Migrations/20250720125634_Initial Creation.Designer.cs
                     b.Property<int?>("BookingId")
-========
-                    b.Property<int>("BookingId")
->>>>>>>> ayman:TravelBooking.Repository/Migrations/20250714134417_InitialCreate.Designer.cs
                         .HasColumnType("int");
 
                     b.Property<DateTime>("PaymentDate")
@@ -366,12 +281,8 @@ namespace TravelBooking.Repository.Migrations
                     b.HasKey("Id");
 
                     b.HasIndex("BookingId")
-<<<<<<<< HEAD:TravelBooking.Repository/Migrations/20250720125634_Initial Creation.Designer.cs
                         .IsUnique()
                         .HasFilter("[BookingId] IS NOT NULL");
-========
-                        .IsUnique();
->>>>>>>> ayman:TravelBooking.Repository/Migrations/20250714134417_InitialCreate.Designer.cs
 
                     b.ToTable("Payments");
                 });
@@ -384,15 +295,11 @@ namespace TravelBooking.Repository.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-<<<<<<<< HEAD:TravelBooking.Repository/Migrations/20250720125634_Initial Creation.Designer.cs
                     b.Property<string>("Description")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<int?>("HotelId")
-========
-                    b.Property<int>("HotelId")
->>>>>>>> ayman:TravelBooking.Repository/Migrations/20250714134417_InitialCreate.Designer.cs
                         .HasColumnType("int");
 
                     b.Property<bool>("IsAvailable")
@@ -404,12 +311,8 @@ namespace TravelBooking.Repository.Migrations
                         .HasColumnType("decimal(18,2)");
 
                     b.Property<int>("RoomType")
-<<<<<<<< HEAD:TravelBooking.Repository/Migrations/20250720125634_Initial Creation.Designer.cs
                         .HasColumnType("int")
                         .HasAnnotation("Relational:JsonPropertyName", "RoomType");
-========
-                        .HasColumnType("int");
->>>>>>>> ayman:TravelBooking.Repository/Migrations/20250714134417_InitialCreate.Designer.cs
 
                     b.HasKey("Id");
 
@@ -418,11 +321,7 @@ namespace TravelBooking.Repository.Migrations
                     b.ToTable("Rooms");
                 });
 
-<<<<<<<< HEAD:TravelBooking.Repository/Migrations/20250720125634_Initial Creation.Designer.cs
             modelBuilder.Entity("TravelBooking.Core.Models.RoomImage", b =>
-========
-            modelBuilder.Entity("TravelBooking.Core.Models.TourCompany", b =>
->>>>>>>> ayman:TravelBooking.Repository/Migrations/20250714134417_InitialCreate.Designer.cs
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -430,20 +329,11 @@ namespace TravelBooking.Repository.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-<<<<<<<< HEAD:TravelBooking.Repository/Migrations/20250720125634_Initial Creation.Designer.cs
-========
-                    b.Property<string>("Description")
-                        .IsRequired()
-                        .HasMaxLength(1000)
-                        .HasColumnType("nvarchar(1000)");
-
->>>>>>>> ayman:TravelBooking.Repository/Migrations/20250714134417_InitialCreate.Designer.cs
                     b.Property<string>("ImageUrl")
                         .IsRequired()
                         .HasMaxLength(500)
                         .HasColumnType("nvarchar(500)");
 
-<<<<<<<< HEAD:TravelBooking.Repository/Migrations/20250720125634_Initial Creation.Designer.cs
                     b.Property<int>("RoomId")
                         .HasColumnType("int");
 
@@ -455,28 +345,6 @@ namespace TravelBooking.Repository.Migrations
                 });
 
             modelBuilder.Entity("TravelBooking.Core.Models.Tour", b =>
-========
-                    b.Property<string>("Location")
-                        .IsRequired()
-                        .HasMaxLength(100)
-                        .HasColumnType("nvarchar(100)");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasMaxLength(100)
-                        .HasColumnType("nvarchar(100)");
-
-                    b.Property<string>("rating")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("Tours");
-                });
-
-            modelBuilder.Entity("TravelBooking.Core.Models.Trip", b =>
->>>>>>>> ayman:TravelBooking.Repository/Migrations/20250714134417_InitialCreate.Designer.cs
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -484,30 +352,20 @@ namespace TravelBooking.Repository.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-<<<<<<<< HEAD:TravelBooking.Repository/Migrations/20250720125634_Initial Creation.Designer.cs
                     b.Property<int?>("Category")
                         .HasColumnType("int");
 
                     b.Property<string>("Description")
-========
-                    b.Property<string>("Description")
-                        .IsRequired()
->>>>>>>> ayman:TravelBooking.Repository/Migrations/20250714134417_InitialCreate.Designer.cs
                         .HasMaxLength(1000)
                         .HasColumnType("nvarchar(1000)");
 
                     b.Property<string>("Destination")
-<<<<<<<< HEAD:TravelBooking.Repository/Migrations/20250720125634_Initial Creation.Designer.cs
-========
-                        .IsRequired()
->>>>>>>> ayman:TravelBooking.Repository/Migrations/20250714134417_InitialCreate.Designer.cs
                         .HasMaxLength(100)
                         .HasColumnType("nvarchar(100)");
 
                     b.Property<DateTime>("EndDate")
                         .HasColumnType("datetime2");
 
-<<<<<<<< HEAD:TravelBooking.Repository/Migrations/20250720125634_Initial Creation.Designer.cs
                     b.Property<int>("MaxGuests")
                         .HasColumnType("int");
 
@@ -515,8 +373,6 @@ namespace TravelBooking.Repository.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-========
->>>>>>>> ayman:TravelBooking.Repository/Migrations/20250714134417_InitialCreate.Designer.cs
                     b.Property<decimal>("Price")
                         .HasColumnType("decimal(18,2)");
 
@@ -530,7 +386,6 @@ namespace TravelBooking.Repository.Migrations
 
                     b.HasIndex("TourCompanyId");
 
-<<<<<<<< HEAD:TravelBooking.Repository/Migrations/20250720125634_Initial Creation.Designer.cs
                     b.ToTable("Tours");
                 });
 
@@ -586,9 +441,6 @@ namespace TravelBooking.Repository.Migrations
                     b.HasIndex("TourId");
 
                     b.ToTable("TourImages");
-========
-                    b.ToTable("Trips");
->>>>>>>> ayman:TravelBooking.Repository/Migrations/20250714134417_InitialCreate.Designer.cs
                 });
 
             modelBuilder.Entity("TravelBooking.Core.Models.User", b =>
@@ -644,12 +496,7 @@ namespace TravelBooking.Repository.Migrations
                     b.HasOne("TravelBooking.Core.Models.CarRentalCompany", "RentalCompany")
                         .WithMany("Cars")
                         .HasForeignKey("RentalCompanyId")
-<<<<<<<< HEAD:TravelBooking.Repository/Migrations/20250720125634_Initial Creation.Designer.cs
                         .OnDelete(DeleteBehavior.Cascade);
-========
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
->>>>>>>> ayman:TravelBooking.Repository/Migrations/20250714134417_InitialCreate.Designer.cs
 
                     b.Navigation("RentalCompany");
                 });
@@ -658,13 +505,9 @@ namespace TravelBooking.Repository.Migrations
                 {
                     b.HasOne("TravelBooking.Core.Models.FlightCompany", "FlightCompany")
                         .WithMany("Flights")
-<<<<<<<< HEAD:TravelBooking.Repository/Migrations/20250720125634_Initial Creation.Designer.cs
                         .HasForeignKey("FlightId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-========
-                        .HasForeignKey("FlightId");
->>>>>>>> ayman:TravelBooking.Repository/Migrations/20250714134417_InitialCreate.Designer.cs
 
                     b.Navigation("FlightCompany");
                 });
@@ -674,12 +517,7 @@ namespace TravelBooking.Repository.Migrations
                     b.HasOne("TravelBooking.Core.Models.Booking", "Booking")
                         .WithOne("Payment")
                         .HasForeignKey("TravelBooking.Core.Models.Payment", "BookingId")
-<<<<<<<< HEAD:TravelBooking.Repository/Migrations/20250720125634_Initial Creation.Designer.cs
                         .OnDelete(DeleteBehavior.Cascade);
-========
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
->>>>>>>> ayman:TravelBooking.Repository/Migrations/20250714134417_InitialCreate.Designer.cs
 
                     b.Navigation("Booking");
                 });
@@ -689,17 +527,11 @@ namespace TravelBooking.Repository.Migrations
                     b.HasOne("TravelBooking.Core.Models.HotelCompany", "Hotel")
                         .WithMany("Rooms")
                         .HasForeignKey("HotelId")
-<<<<<<<< HEAD:TravelBooking.Repository/Migrations/20250720125634_Initial Creation.Designer.cs
                         .OnDelete(DeleteBehavior.Cascade);
-========
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
->>>>>>>> ayman:TravelBooking.Repository/Migrations/20250714134417_InitialCreate.Designer.cs
 
                     b.Navigation("Hotel");
                 });
 
-<<<<<<<< HEAD:TravelBooking.Repository/Migrations/20250720125634_Initial Creation.Designer.cs
             modelBuilder.Entity("TravelBooking.Core.Models.RoomImage", b =>
                 {
                     b.HasOne("TravelBooking.Core.Models.Room", "Room")
@@ -715,19 +547,12 @@ namespace TravelBooking.Repository.Migrations
                 {
                     b.HasOne("TravelBooking.Core.Models.TourCompany", "TourCompany")
                         .WithMany("Tours")
-========
-            modelBuilder.Entity("TravelBooking.Core.Models.Trip", b =>
-                {
-                    b.HasOne("TravelBooking.Core.Models.TourCompany", "TourCompany")
-                        .WithMany("Trips")
->>>>>>>> ayman:TravelBooking.Repository/Migrations/20250714134417_InitialCreate.Designer.cs
                         .HasForeignKey("TourCompanyId")
                         .OnDelete(DeleteBehavior.Restrict);
 
                     b.Navigation("TourCompany");
                 });
 
-<<<<<<<< HEAD:TravelBooking.Repository/Migrations/20250720125634_Initial Creation.Designer.cs
             modelBuilder.Entity("TravelBooking.Core.Models.TourImage", b =>
                 {
                     b.HasOne("TravelBooking.Core.Models.Tour", "Tour")
@@ -739,8 +564,6 @@ namespace TravelBooking.Repository.Migrations
                     b.Navigation("Tour");
                 });
 
-========
->>>>>>>> ayman:TravelBooking.Repository/Migrations/20250714134417_InitialCreate.Designer.cs
             modelBuilder.Entity("TravelBooking.Core.Models.Booking", b =>
                 {
                     b.Navigation("Payment");
@@ -761,7 +584,6 @@ namespace TravelBooking.Repository.Migrations
                     b.Navigation("Rooms");
                 });
 
-<<<<<<<< HEAD:TravelBooking.Repository/Migrations/20250720125634_Initial Creation.Designer.cs
             modelBuilder.Entity("TravelBooking.Core.Models.Room", b =>
                 {
                     b.Navigation("Images");
@@ -775,11 +597,6 @@ namespace TravelBooking.Repository.Migrations
             modelBuilder.Entity("TravelBooking.Core.Models.TourCompany", b =>
                 {
                     b.Navigation("Tours");
-========
-            modelBuilder.Entity("TravelBooking.Core.Models.TourCompany", b =>
-                {
-                    b.Navigation("Trips");
->>>>>>>> ayman:TravelBooking.Repository/Migrations/20250714134417_InitialCreate.Designer.cs
                 });
 
             modelBuilder.Entity("TravelBooking.Core.Models.User", b =>

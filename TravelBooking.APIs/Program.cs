@@ -70,9 +70,14 @@ namespace TravelBooking.APIs
             var logger = Services.GetRequiredService<ILogger<Program>>();
             try
             {
+<<<<<<< HEAD
                 await _dbcontext.Database.MigrateAsync();
                 await TravelContextSeed.SeedAsync(_dbcontext);
                 
+=======
+                //await StoredContextSeed.SeedAsync(_dbcontext);
+                await _dbcontext.Database.MigrateAsync();
+>>>>>>> ayman
 
             }
             catch (Exception ex)

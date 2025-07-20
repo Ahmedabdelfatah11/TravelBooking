@@ -1,13 +1,11 @@
-using AutoMapper;
 using TravelBooking.APIs.Dtos.HotelCompany;
 using TravelBooking.APIs.Dtos.Rooms;
 using TravelBooking.APIs.Dtos.TourCompany;
 using TravelBooking.APIs.Dtos.Tours;
 using TravelBooking.Core.Models;
-using AutoMapper;
-using TravelBooking.Core.Models;
 using TravelBooking.Core.DTOS.CarRentalCompanies;
 using TravelBooking.Core.DTOS.Cars;
+using AutoMapper;
 
 namespace TravelBooking.Helper
 {
