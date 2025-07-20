@@ -19,6 +19,7 @@ namespace TravelBooking.Repository
         {
             _dbContext = dbContext;
         }
+
         public async Task<IReadOnlyList<T>> GetAllAsync()
         {
             return await _dbContext.Set<T>().ToListAsync();
@@ -32,10 +33,12 @@ namespace TravelBooking.Repository
         {
             return await ApplySpecifications(spec).AsNoTracking().ToListAsync();
         }
+
         public async Task<T?> GetWithSpecAsync(ISpecifications<T> spec)
         {
             return await ApplySpecifications(spec).FirstOrDefaultAsync();
         }
+
         private IQueryable<T> ApplySpecifications(ISpecifications<T> spec)
         {
             return SpecificationEvaluator<T>.GetQuery(_dbContext.Set<T>(), spec);

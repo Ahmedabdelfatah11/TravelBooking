@@ -25,7 +25,5 @@
         [Required]
         [RatingRangeString]
         public string Rating { get; set; }
-        [Required]
-        public int HotelCompanyId { get; set; }
     }
 }

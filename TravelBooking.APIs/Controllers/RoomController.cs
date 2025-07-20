@@ -116,8 +116,8 @@ namespace TravelBooking.APIs.Controllers
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
 
-            if (id != roomDto.Id)
-                return BadRequest("ID mismatch");
+            //if (id != roomDto.Id)
+            //    return BadRequest("ID mismatch");
 
             var room = await _roomRepo.GetAsync(id);
             if (room == null) return NotFound();

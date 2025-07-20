@@ -8,8 +8,9 @@ using TravelBooking.Core.Specifications;
 
 namespace TravelBooking.Core.Repository.Contract
 {
-    public interface IGenericRepository<T> where T:BaseEntity
+    public interface IGenericRepository<T> where T : BaseEntity
     {
+        // Get operations
         Task<T?> GetAsync(int id);
         Task<IReadOnlyList<T>> GetAllAsync();
         Task<IReadOnlyList<T>> GetAllWithSpecAsync(ISpecifications<T> spec);
@@ -18,5 +19,7 @@ namespace TravelBooking.Core.Repository.Contract
         Task<T> AddAsync(T entity);
         Task Update(T entity);
         Task Delete(T entity);
+
     }
+
 }

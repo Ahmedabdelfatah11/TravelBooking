@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace TravelBooking.Core.Specifications.HotelCompanySpecs
 {
-    public class HotelCompanySpecParams : PaginationParams
+    public class HotelCompanySpecParams :PaginationParams
     {
         public string? Search { get; set; }
         public string? Sort { get; set; }

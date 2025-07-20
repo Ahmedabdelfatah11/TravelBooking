@@ -61,7 +61,7 @@ namespace TravelBooking.APIs.Controllers
             return Ok(newCompany);
         }
         [HttpPut("{id}")]
-        public async Task<IActionResult> UpdateFlight(int id, Flight company)
+        public async Task<ActionResult> UpdateFlight(int id, Flight company)
         {
             if (company.Id != id) return BadRequest("ID mismatch");
 
@@ -70,7 +70,7 @@ namespace TravelBooking.APIs.Controllers
         }
 
         [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteFlight(int id)
+        public async Task<ActionResult> DeleteFlight(int id)
         {
             var existing = await flightRepository.GetAsync(id);
             if (existing == null) return NotFound();

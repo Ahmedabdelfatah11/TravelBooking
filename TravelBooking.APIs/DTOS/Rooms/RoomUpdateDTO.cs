@@ -2,9 +2,6 @@
 {
     public class RoomUpdateDTO
     {
-        [Required]
-        public int Id { get; set; }
-
 
         [Range(0, double.MaxValue)]
         public decimal Price { get; set; }

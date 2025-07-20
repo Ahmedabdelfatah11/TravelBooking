@@ -10,7 +10,7 @@ using TravelBooking.Helper;
 using TravelBooking.Repository.TourCompanySpecs;
 using TravelBooking.APIs.Dtos.Tours;
 using TravelBooking.Core.Specifications.TourSpecs;
-using TalabatAPIs.Errors;
+using TravelBooking.Errors;
 
 namespace TravelBooking.APIs.Controllers
 {

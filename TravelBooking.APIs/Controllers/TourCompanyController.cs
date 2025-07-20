@@ -2,12 +2,12 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using TalabatAPIs.Errors;
 using TravelBooking.APIs.Dtos.TourCompany;
 using TravelBooking.Core.Models;
 using TravelBooking.Core.Repository.Contract;
 using TravelBooking.Core.Specifications;
 using TravelBooking.Core.Specifications.TourCompanySpecs;
+using TravelBooking.Errors;
 using TravelBooking.Helper;
 using TravelBooking.Repository.TourCompanySpecs;
 
@@ -74,7 +74,7 @@ namespace TravelBooking.APIs.Controllers
         public async Task<ActionResult> UpdateTourCompany(int id, [FromBody] TourCompanyCreateDto dto)
         {
             var existing = await _tourCompanyRepo.GetAsync(id);
-            if (existing == null) return NotFound();
+            if (existing == null) return NotFound(new ApiResponse(404));
 
             _mapper.Map(dto, existing);
             await _tourCompanyRepo.Update(existing);
@@ -86,7 +86,7 @@ namespace TravelBooking.APIs.Controllers
         public async Task<ActionResult> DeleteTourCompany(int id)
         {
             var existing = await _tourCompanyRepo.GetAsync(id);
-            if (existing == null) return NotFound();
+            if (existing == null) return NotFound(new ApiResponse(404));
 
             await _tourCompanyRepo.Delete(existing);
             return NoContent();

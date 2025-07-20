@@ -4,6 +4,10 @@ using TravelBooking.APIs.Dtos.Rooms;
 using TravelBooking.APIs.Dtos.TourCompany;
 using TravelBooking.APIs.Dtos.Tours;
 using TravelBooking.Core.Models;
+using AutoMapper;
+using TravelBooking.Core.Models;
+using TravelBooking.Core.DTOS.CarRentalCompanies;
+using TravelBooking.Core.DTOS.Cars;
 
 namespace TravelBooking.Helper
 {
@@ -34,6 +38,7 @@ namespace TravelBooking.Helper
             //  HotelCompany
             CreateMap<HotelCompany, HotelCompanyReadDTO>();
             CreateMap<HotelCompanyCreateDTO, HotelCompany>();
+            CreateMap<HotelCompanyUpdateDTO, HotelCompany>();
 
 
             // Room
@@ -41,7 +46,7 @@ namespace TravelBooking.Helper
                 .ForMember(dest => dest.RoomImages, opt => opt.MapFrom(src => src.Images));
             CreateMap<RoomCreateDTO, Room>()
                 .ForMember(dest => dest.Images, opt => opt.Ignore()); // We'll map manually
-
+ 
 
             // RoomImage
             CreateMap<RoomImage, RoomImageReadDTO>();
@@ -62,7 +67,19 @@ namespace TravelBooking.Helper
             CreateMap<RoomImage, RoomImageReadDTO>();
             CreateMap<RoomImageCreateDTO, RoomImage>();
             #endregion
+            
+            //Car Mappings
+            CreateMap<Car, CarDto>().ReverseMap();
+            CreateMap<CarCreateUpdateDto, Car>();
 
+            //CarRental
+            CreateMap<CarRentalCompany, CarRentalDto>().ReverseMap();
+
+            CreateMap<CarRentalCompany, CarRentalWithCarsDto>()
+                .ForMember(dest => dest.Cars, opt => opt.MapFrom(src => src.Cars));
+
+            CreateMap<SaveCarRentalDto, CarRentalCompany>();
+            CreateMap<CarCreateUpdateDto, CarRentalCompany>();
         }
     }
 }

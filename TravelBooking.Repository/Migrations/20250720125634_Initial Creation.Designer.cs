@@ -12,8 +12,8 @@ using TravelBooking.Repository.Data;
 namespace TravelBooking.Repository.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20250719203942_TourCompany Model Changed")]
-    partial class TourCompanyModelChanged
+    [Migration("20250720125634_Initial Creation")]
+    partial class InitialCreation
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -75,12 +75,10 @@ namespace TravelBooking.Repository.Migrations
                         .HasDefaultValue(5);
 
                     b.Property<string>("Description")
-                        .IsRequired()
                         .HasMaxLength(1000)
                         .HasColumnType("nvarchar(1000)");
 
                     b.Property<string>("ImageUrl")
-                        .IsRequired()
                         .HasMaxLength(500)
                         .HasColumnType("nvarchar(500)");
 
@@ -90,7 +88,6 @@ namespace TravelBooking.Repository.Migrations
                         .HasDefaultValue(true);
 
                     b.Property<string>("Location")
-                        .IsRequired()
                         .HasMaxLength(100)
                         .HasColumnType("nvarchar(100)");
 
@@ -99,7 +96,7 @@ namespace TravelBooking.Repository.Migrations
                         .HasMaxLength(100)
                         .HasColumnType("nvarchar(100)");
 
-                    b.Property<decimal>("Price")
+                    b.Property<decimal?>("Price")
                         .HasColumnType("decimal(18,2)");
 
                     b.Property<int?>("RentalCompanyId")
@@ -121,12 +118,10 @@ namespace TravelBooking.Repository.Migrations
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<string>("ImageUrl")
-                        .IsRequired()
                         .HasMaxLength(500)
                         .HasColumnType("nvarchar(500)");
 
                     b.Property<string>("Location")
-                        .IsRequired()
                         .HasMaxLength(100)
                         .HasColumnType("nvarchar(100)");
 
@@ -136,11 +131,9 @@ namespace TravelBooking.Repository.Migrations
                         .HasColumnType("nvarchar(100)");
 
                     b.Property<string>("Rating")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("description")
-                        .IsRequired()
                         .HasMaxLength(1000)
                         .HasColumnType("nvarchar(1000)");
 
@@ -165,13 +158,7 @@ namespace TravelBooking.Repository.Migrations
                     b.Property<DateTime>("ArrivalTime")
                         .HasColumnType("datetime2");
 
-                    b.Property<int>("AvailableBusinessSeats")
-                        .HasColumnType("int");
-
-                    b.Property<int>("AvailableFirstClassSeats")
-                        .HasColumnType("int");
-
-                    b.Property<int>("AvailableStanderedSeats")
+                    b.Property<int>("AvailableSeats")
                         .HasColumnType("int");
 
                     b.Property<string>("DepartureAirport")
@@ -182,7 +169,7 @@ namespace TravelBooking.Repository.Migrations
                     b.Property<DateTime>("DepartureTime")
                         .HasColumnType("datetime2");
 
-                    b.Property<int?>("FlightId")
+                    b.Property<int>("FlightId")
                         .HasColumnType("int");
 
                     b.Property<decimal>("Price")
@@ -204,17 +191,14 @@ namespace TravelBooking.Repository.Migrations
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<string>("Description")
-                        .IsRequired()
                         .HasMaxLength(1000)
                         .HasColumnType("nvarchar(1000)");
 
                     b.Property<string>("ImageUrl")
-                        .IsRequired()
                         .HasMaxLength(500)
                         .HasColumnType("nvarchar(500)");
 
                     b.Property<string>("Location")
-                        .IsRequired()
                         .HasMaxLength(100)
                         .HasColumnType("nvarchar(100)");
 
@@ -224,7 +208,6 @@ namespace TravelBooking.Repository.Migrations
                         .HasColumnType("nvarchar(100)");
 
                     b.Property<string>("Rating")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
@@ -331,7 +314,8 @@ namespace TravelBooking.Repository.Migrations
                         .HasColumnType("decimal(18,2)");
 
                     b.Property<int>("RoomType")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasAnnotation("Relational:JsonPropertyName", "RoomType");
 
                     b.HasKey("Id");
 
@@ -524,7 +508,9 @@ namespace TravelBooking.Repository.Migrations
                 {
                     b.HasOne("TravelBooking.Core.Models.FlightCompany", "FlightCompany")
                         .WithMany("Flights")
-                        .HasForeignKey("FlightId");
+                        .HasForeignKey("FlightId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.Navigation("FlightCompany");
                 });

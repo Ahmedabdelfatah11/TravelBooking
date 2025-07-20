@@ -7,7 +7,7 @@ using TravelBooking.Core.Models;
 
 namespace TravelBooking.Core.Specifications.RoomSpecs
 {
-    public class RoomSpecParams : PaginationParams
+    public class RoomSpecParams : CarSpecParams
     {
         public RoomType? RoomType { get; set; }
         public string? Search { get; set; } //RoomType
