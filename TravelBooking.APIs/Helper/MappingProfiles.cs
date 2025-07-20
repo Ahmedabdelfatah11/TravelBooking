@@ -70,8 +70,8 @@ namespace TravelBooking.Helper
             
             //Car Mappings
             CreateMap<Car, CarDto>().ReverseMap();
-            CreateMap<CarCreateUpdateDto, Car>();
-
+            CreateMap<CarCreateUpdateDto, Car>()
+    .ForMember(dest => dest.RentalCompanyId, opt => opt.Ignore());
             //CarRental
             CreateMap<CarRentalCompany, CarRentalDto>().ReverseMap();
 

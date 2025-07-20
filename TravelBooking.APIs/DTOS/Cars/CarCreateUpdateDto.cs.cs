@@ -16,6 +16,6 @@ namespace TravelBooking.Core.DTOS.Cars
         public string? Location { get; set; }
         public string? ImageUrl { get; set; }
         public int? Capacity { get; set; }
-        public int? RentalCompanyId { get; set; }
+        public int RentalCompanyId { get; set; }
     }
 }
