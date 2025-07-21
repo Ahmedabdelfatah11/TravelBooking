@@ -1,4 +1,5 @@
 ﻿
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using TravelBooking.Core.Services;
@@ -28,18 +29,18 @@ namespace Jwt.Controllers
 
             var result = await _authService.Register(model);
 
-            if (!string.IsNullOrEmpty(result.Message) && !result.IsAuthenticated)
+            if (string.IsNullOrEmpty(result.Message) && !result.IsAuthenticated)
             {
                 return Ok(new
-                {
+                { 
                     message = result.Message
                 });
             }
-
             return BadRequest(new
             {
                 message = result.Message
             });
+
         }
 
         [HttpPost("Login")]
@@ -65,7 +66,7 @@ namespace Jwt.Controllers
             }
             return Unauthorized(result.Message);
         }
-
+        [Authorize (Roles = "Admin")]
         [HttpPost("AddRole")]
         public async Task<IActionResult> AddRole(AddRole role)
         {
@@ -120,7 +121,7 @@ namespace Jwt.Controllers
             }
             return BadRequest(new { message = result.Message });
         }
-        [HttpPost("ForgotPassword")]
+        [HttpPost("ForgetPassword")]
         public async Task<IActionResult> ForgotPassword([FromBody] ForgotPasswordModel model)
         {
             if (!ModelState.IsValid)

@@ -11,7 +11,7 @@ namespace TravelBooking.Models
         [Required, MaxLength(100)]
         public string LastName { get; set; }
 
-        [Required, MaxLength(50)]
+        [Required, MaxLength(50), RegularExpression(@"^[a-zA-Z0-9]+$")]
         public string UserName { get; set; }  
 
         [Required, MaxLength(50), EmailAddress]

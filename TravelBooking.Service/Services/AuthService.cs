@@ -248,22 +248,21 @@ namespace TravelBooking.Core.Models.Services
                 Message = "Password has been reset successfully.",
                 IsAuthenticated = true
             };
-        } 
+        }
         private async Task SendConfirmationEmail(ApplicationUser user, string code)
         {
-            var request = _httpAccessor.HttpContext?.Request;
-            var origin = $"{request?.Scheme}://{request?.Host}";// Get the origin URL from the request  //GET from frontend 
+            var confirmUrl = $"http://localhost:56724/confirm-email?userId={user.Id}&code={code}"; 
 
             var emailBody = EmailBodyBuilder.BuildEmailBody("EmailConfirmation",
                 new Dictionary<string, string>
                 {
                     { "{{name}}", user.FirstName },
-                    { "{{action_url}}", $"{origin}/auth/emailConfirmation?userId={user.Id}&code={code}" }
-                  
+                    { "{{action_url}}", confirmUrl }
                 });
 
             await _emailSender.SendEmailAsync(user.Email!, "Travel Booking: Email Confirmation", emailBody);
         }
+
         private async Task SendResetPasswordEmail(ApplicationUser user, string token)
         {
             var request = _httpAccessor.HttpContext?.Request;

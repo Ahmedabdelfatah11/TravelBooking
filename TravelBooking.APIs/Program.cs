@@ -89,11 +89,24 @@ namespace TravelBooking.APIs
                 options.Lockout.MaxFailedAccessAttempts = 5;
             });
             // adding Email service
-           webApplicationbuilder.Services.AddTransient<IEmailSender, EmailService>(); 
+           webApplicationbuilder.Services.AddTransient<IEmailSender, EmailService>();
+            
+            webApplicationbuilder.Services.AddCors(options =>
+            {
+                options.AddPolicy("AllowAngularApp", policy =>
+                {
+                    policy.WithOrigins("http://localhost:56724") // angular port
+                          .AllowAnyHeader()
+                          .AllowAnyMethod()
+                          .AllowCredentials(); // Allow credentials if needed
+                });
+            });
+
 
             webApplicationbuilder.Services.AddApplicationServices();
             var app = webApplicationbuilder.Build();
 
+            app.UseCors("AllowAngularApp");
             app.UseStatusCodePagesWithReExecute("/errors/{0}");
             using var scope = app.Services.CreateScope();
 
@@ -119,8 +132,7 @@ namespace TravelBooking.APIs
             }
 
             app.UseHttpsRedirection();
-            app.UseStaticFiles();
-
+            app.UseStaticFiles(); 
             app.UseAuthentication();
 
             app.UseAuthorization(); 
