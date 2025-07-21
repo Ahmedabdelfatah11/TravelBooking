@@ -6,6 +6,7 @@ using TravelBooking.Core.Models;
 using TravelBooking.Core.DTOS.CarRentalCompanies;
 using TravelBooking.Core.DTOS.Cars;
 using AutoMapper;
+using TravelBooking.Models;
 
 namespace TravelBooking.Helper
 {
@@ -78,6 +79,10 @@ namespace TravelBooking.Helper
 
             CreateMap<SaveCarRentalDto, CarRentalCompany>();
             CreateMap<CarCreateUpdateDto, CarRentalCompany>();
+
+
+            CreateMap<RegisterModel, ApplicationUser>();
+            CreateMap<LoginModel, ApplicationUser>();
         }
     }
 }

@@ -1,4 +1,5 @@
-﻿namespace TravelBooking.Errors
+
+namespace TravelBooking.Errors
 {
     public class ApiValidationErrorResponse : ApiResponse
     {

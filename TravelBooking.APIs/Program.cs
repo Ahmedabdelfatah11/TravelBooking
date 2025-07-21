@@ -3,10 +3,22 @@ using System.Text.Json.Serialization;
 using TravelBooking.Core.Repository.Contract;
 using TravelBooking.Extensions;
 
-using TravelBooking.Helper;
 using TravelBooking.Repository;
+using Jwt.Settings;
+using Microsoft.AspNetCore.Authentication.JwtBearer; 
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.UI.Services;
+using Microsoft.IdentityModel.Tokens;
+using System.Text;
+using TravelBooking.Core.Services;
+using TravelBooking.Core.Settings; 
+using TravelBooking.Models;
 using TravelBooking.Repository.Data;
-
+using Microsoft.Extensions.DependencyInjection;
+using TravelBooking.Core.Models.Services;
+using TravelBooking.Helper;
+using Jwt.Helper;
+using AutoMapper;
 namespace TravelBooking.APIs
 {
     public class Program
@@ -16,9 +28,6 @@ namespace TravelBooking.APIs
 
             var webApplicationbuilder = WebApplication.CreateBuilder(args);
 
-            // Add services to the container.
-            webApplicationbuilder.Services.AddAutoMapper(typeof(MappingProfiles));
-
 
             webApplicationbuilder.Services.AddControllers();
             // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
@@ -26,15 +35,66 @@ namespace TravelBooking.APIs
             webApplicationbuilder.Services.AddSwaggerServices();
             webApplicationbuilder.Services.AddScoped(typeof(IGenericRepository<>), typeof(GenericRepository<>));
 
+            //inject the AuthService as IAuthService
+            webApplicationbuilder.Services.AddScoped<IAuthService, AuthService>();
 
-            webApplicationbuilder.Services.AddAutoMapper(typeof(MappingProfiles).Assembly);
+            // add EmailService as IEmailSender
+            webApplicationbuilder.Services.AddScoped<IEmailSender, EmailService>();
+
+
+            //add Accessor for User
+            webApplicationbuilder.Services.AddHttpContextAccessor();
 
             webApplicationbuilder.Services.AddDbContext<AppDbContext>(options =>
+                options.UseSqlServer(webApplicationbuilder.Configuration.GetConnectionString("DefaultConnection")));
+
+            // Register JWT configuration and map it from appsettings.json
+           webApplicationbuilder.Services.Configure<JWT>(webApplicationbuilder.Configuration.GetSection("JWT"));
+
+            // Register Identity services
+           webApplicationbuilder.Services.AddIdentity<ApplicationUser, IdentityRole>()
+                .AddEntityFrameworkStores<AppDbContext>()
+                .AddDefaultTokenProviders();
+            //adding Email service 
+           webApplicationbuilder.Services.Configure<MailSettings>(webApplicationbuilder.Configuration.GetSection(nameof(MailSettings)));
+
+            // adding AutoMapper 
+            webApplicationbuilder.Services.AddAutoMapper(cfg => cfg.AddMaps(typeof(Program).Assembly));
+    
+            // Configure JWT authentication
+            webApplicationbuilder.Services.AddAuthentication(options =>
             {
-                options.UseSqlServer(webApplicationbuilder.Configuration.GetConnectionString("DefaultConnection"));
+                options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+                options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+            })
+                .AddJwtBearer(o =>
+                {
+                    o.RequireHttpsMetadata = false;
+                    o.SaveToken = false;
+                    o.TokenValidationParameters = new TokenValidationParameters
+                    {
+                        ValidateIssuerSigningKey = true,
+                        ValidateIssuer = true,
+                        ValidateAudience = true,
+                        ValidateLifetime = true,
+                        ValidIssuer = webApplicationbuilder.Configuration["JWT:Issuer"],
+                        ValidAudience =webApplicationbuilder.Configuration["JWT:Audience"],
+                        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(webApplicationbuilder.Configuration["JWT:Key"]))
+                    };
+
+                });
+           webApplicationbuilder.Services.Configure<IdentityOptions>(options =>
+            {
+                // Password settings  
+                options.Password.RequiredLength = 8;
+
+                //options.SignIn.RequireConfirmedEmail= true; // Optional: Require confirmed email for sign-in
+                options.User.RequireUniqueEmail = true; // Ensure unique email addresses
+                // Lockout settings
+                options.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromMinutes(5);
+                options.Lockout.MaxFailedAccessAttempts = 5;
             });
             webApplicationbuilder.Services.AddScoped(typeof(IGenericRepository<>), typeof(GenericRepository<>));
-            webApplicationbuilder.Services.AddAutoMapper(typeof(Program).Assembly);
 
             webApplicationbuilder.Services.AddControllers()
                 .AddJsonOptions(options =>
@@ -54,6 +114,8 @@ namespace TravelBooking.APIs
             //    options.JsonSerializerOptions.ReferenceHandler = null; // or ReferenceHandler.IgnoreCycles
             //});
 
+            // adding Email service
+           webApplicationbuilder.Services.AddTransient<IEmailSender, EmailService>(); 
 
             webApplicationbuilder.Services.AddApplicationServices();
        
@@ -87,10 +149,9 @@ namespace TravelBooking.APIs
             app.UseHttpsRedirection();
             app.UseStaticFiles();
 
-            app.UseAuthorization();
+            app.UseAuthentication();
 
-
-
+            app.UseAuthorization(); 
             app.MapControllers();
 
             app.Run();
