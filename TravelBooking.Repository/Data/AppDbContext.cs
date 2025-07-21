@@ -1,3 +1,4 @@
+
 using TravelBooking.Models;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
@@ -8,7 +9,8 @@ using System.Linq;
 using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
-using TravelBooking.Core.Models; 
+using TravelBooking.Core.Models;
+
 
 namespace TravelBooking.Repository.Data
 {
@@ -32,9 +34,9 @@ namespace TravelBooking.Repository.Data
         public DbSet<Room> Rooms { get; set; }
         public DbSet<HotelCompany> HotelCompanies { get; set; }
         public DbSet<Payment> Payments { get; set; }
-        public DbSet<Trip> Trips { get; set; }
-        public DbSet<TourCompany> Tours { get; set; }
+        public DbSet<Tour> Tours { get; set; }
+        public DbSet<TourCompany> TourCompany { get; set; }
         public DbSet<User> Users { get; set; }
-
+        public DbSet<TourImage> TourImages { get; set; }
     }
 }

@@ -1,5 +1,5 @@
 ﻿
-namespace TalabatAPIs.Errors
+namespace TravelBooking.Errors
 {
     public class ApiResponse
     {

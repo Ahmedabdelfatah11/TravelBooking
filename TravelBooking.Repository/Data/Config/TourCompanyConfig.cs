@@ -13,7 +13,6 @@ namespace TravelBooking.Core.Configurations
             builder.Property(tc => tc.Name).IsRequired().HasMaxLength(100);
             builder.Property(tc => tc.Description).HasMaxLength(1000);
             builder.Property(tc => tc.Location).HasMaxLength(100);
-            builder.Property(tc => tc.ImageUrl).HasMaxLength(500); 
         }
     }
 }

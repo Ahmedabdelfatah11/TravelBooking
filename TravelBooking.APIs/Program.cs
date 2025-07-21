@@ -1,33 +1,39 @@
+using Microsoft.EntityFrameworkCore;
+using System.Text.Json.Serialization;
+using TravelBooking.Core.Repository.Contract;
+using TravelBooking.Extensions;
 
-using Jwt.Helper;
+using TravelBooking.Repository;
 using Jwt.Settings;
 using Microsoft.AspNetCore.Authentication.JwtBearer; 
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.UI.Services;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
-using TravelBooking.Core.Models.Services;
 using TravelBooking.Core.Services;
 using TravelBooking.Core.Settings; 
-using TravelBooking.Extensions;
 using TravelBooking.Models;
 using TravelBooking.Repository.Data;
-
+using Microsoft.Extensions.DependencyInjection;
+using TravelBooking.Core.Models.Services;
+using TravelBooking.Helper;
+using Jwt.Helper;
+using AutoMapper;
 namespace TravelBooking.APIs
 {
     public class Program
     {
         public static async Task Main(string[] args)
         {
+
             var webApplicationbuilder = WebApplication.CreateBuilder(args);
 
-            // Add services to the container.
 
             webApplicationbuilder.Services.AddControllers();
             // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
             webApplicationbuilder.Services.AddOpenApi();
             webApplicationbuilder.Services.AddSwaggerServices();
+            webApplicationbuilder.Services.AddScoped(typeof(IGenericRepository<>), typeof(GenericRepository<>));
 
             //inject the AuthService as IAuthService
             webApplicationbuilder.Services.AddScoped<IAuthService, AuthService>();
@@ -54,9 +60,9 @@ namespace TravelBooking.APIs
 
             // adding AutoMapper 
             webApplicationbuilder.Services.AddAutoMapper(cfg => cfg.AddMaps(typeof(Program).Assembly));
-
+    
             // Configure JWT authentication
-           webApplicationbuilder.Services.AddAuthentication(options =>
+            webApplicationbuilder.Services.AddAuthentication(options =>
             {
                 options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
                 options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
@@ -88,6 +94,26 @@ namespace TravelBooking.APIs
                 options.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromMinutes(5);
                 options.Lockout.MaxFailedAccessAttempts = 5;
             });
+            webApplicationbuilder.Services.AddScoped(typeof(IGenericRepository<>), typeof(GenericRepository<>));
+
+            webApplicationbuilder.Services.AddControllers()
+                .AddJsonOptions(options =>
+                {
+                    options.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter());
+                });
+            webApplicationbuilder.Services.AddControllers()
+.AddJsonOptions(options =>
+{
+    //options.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.Preserve;
+    options.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter());
+    options.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles; // or Preserve
+    options.JsonSerializerOptions.WriteIndented = true; // optional, for readability
+});
+            //webApplicationbuilder.Services.AddControllers().AddJsonOptions(options =>
+            //{
+            //    options.JsonSerializerOptions.ReferenceHandler = null; // or ReferenceHandler.IgnoreCycles
+            //});
+
             // adding Email service
            webApplicationbuilder.Services.AddTransient<IEmailSender, EmailService>();
             
@@ -104,6 +130,8 @@ namespace TravelBooking.APIs
 
 
             webApplicationbuilder.Services.AddApplicationServices();
+       
+
             var app = webApplicationbuilder.Build();
 
             app.UseCors("AllowAngularApp");
@@ -117,8 +145,8 @@ namespace TravelBooking.APIs
             var logger = Services.GetRequiredService<ILogger<Program>>();
             try
             {
-                //await StoredContextSeed.SeedAsync(_dbcontext);
                 await _dbcontext.Database.MigrateAsync();
+                await TravelContextSeed.SeedAsync(_dbcontext);
 
             }
             catch (Exception ex)

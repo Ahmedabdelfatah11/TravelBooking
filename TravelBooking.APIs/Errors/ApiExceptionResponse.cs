@@ -1,4 +1,4 @@
-﻿namespace TalabatAPIs.Errors
+﻿namespace TravelBooking.Errors
 {
     public class ApiExceptionResponse:ApiResponse
     {
