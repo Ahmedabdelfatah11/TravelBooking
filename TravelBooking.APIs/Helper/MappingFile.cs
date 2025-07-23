@@ -1,5 +1,5 @@
 ﻿using AutoMapper; 
-using System.Runtime;
+using System.Runtime;  
 using TravelBooking.Models;
 
 namespace Jwt.Helper

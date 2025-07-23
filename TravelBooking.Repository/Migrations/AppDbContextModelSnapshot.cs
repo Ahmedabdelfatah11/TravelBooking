@@ -188,7 +188,7 @@ namespace TravelBooking.Repository.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("Bookings");
+                    b.ToTable("Bookings", (string)null);
                 });
 
             modelBuilder.Entity("TravelBooking.Core.Models.Car", b =>
@@ -236,7 +236,7 @@ namespace TravelBooking.Repository.Migrations
 
                     b.HasIndex("RentalCompanyId");
 
-                    b.ToTable("Cars");
+                    b.ToTable("Cars", (string)null);
                 });
 
             modelBuilder.Entity("TravelBooking.Core.Models.CarRentalCompany", b =>
@@ -269,7 +269,7 @@ namespace TravelBooking.Repository.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("CarRentalCompanies");
+                    b.ToTable("CarRentalCompanies", (string)null);
                 });
 
             modelBuilder.Entity("TravelBooking.Core.Models.Flight", b =>
@@ -309,7 +309,7 @@ namespace TravelBooking.Repository.Migrations
 
                     b.HasIndex("FlightId");
 
-                    b.ToTable("Flights");
+                    b.ToTable("Flights", (string)null);
                 });
 
             modelBuilder.Entity("TravelBooking.Core.Models.FlightCompany", b =>
@@ -342,7 +342,7 @@ namespace TravelBooking.Repository.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("FlightCompanies");
+                    b.ToTable("FlightCompanies", (string)null);
                 });
 
             modelBuilder.Entity("TravelBooking.Core.Models.HotelCompany", b =>
@@ -378,7 +378,7 @@ namespace TravelBooking.Repository.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("HotelCompanies");
+                    b.ToTable("HotelCompanies", (string)null);
                 });
 
             modelBuilder.Entity("TravelBooking.Core.Models.Payment", b =>
@@ -417,7 +417,7 @@ namespace TravelBooking.Repository.Migrations
                         .IsUnique()
                         .HasFilter("[BookingId] IS NOT NULL");
 
-                    b.ToTable("Payments");
+                    b.ToTable("Payments", (string)null);
                 });
 
             modelBuilder.Entity("TravelBooking.Core.Models.Room", b =>
@@ -451,7 +451,7 @@ namespace TravelBooking.Repository.Migrations
 
                     b.HasIndex("HotelId");
 
-                    b.ToTable("Rooms");
+                    b.ToTable("Rooms", (string)null);
                 });
 
             modelBuilder.Entity("TravelBooking.Core.Models.RoomImage", b =>
@@ -474,7 +474,7 @@ namespace TravelBooking.Repository.Migrations
 
                     b.HasIndex("RoomId");
 
-                    b.ToTable("RoomImage");
+                    b.ToTable("RoomImage", (string)null);
                 });
 
             modelBuilder.Entity("TravelBooking.Core.Models.Tour", b =>
@@ -519,7 +519,7 @@ namespace TravelBooking.Repository.Migrations
 
                     b.HasIndex("TourCompanyId");
 
-                    b.ToTable("Tours");
+                    b.ToTable("Tours", (string)null);
                 });
 
             modelBuilder.Entity("TravelBooking.Core.Models.TourCompany", b =>
@@ -551,7 +551,7 @@ namespace TravelBooking.Repository.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("TourCompany");
+                    b.ToTable("TourCompany", (string)null);
                 });
 
             modelBuilder.Entity("TravelBooking.Core.Models.TourImage", b =>
@@ -573,7 +573,7 @@ namespace TravelBooking.Repository.Migrations
 
                     b.HasIndex("TourId");
 
-                    b.ToTable("TourImages");
+                    b.ToTable("TourImages", (string)null);
                 });
 
             modelBuilder.Entity("TravelBooking.Core.Models.User", b =>
@@ -610,7 +610,7 @@ namespace TravelBooking.Repository.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Users");
+                    b.ToTable("Users", (string)null);
                 });
 
             modelBuilder.Entity("TravelBooking.Models.ApplicationUser", b =>

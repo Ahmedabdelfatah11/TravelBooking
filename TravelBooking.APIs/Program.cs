@@ -1,24 +1,24 @@
-using Microsoft.EntityFrameworkCore;
-using System.Text.Json.Serialization;
-using TravelBooking.Core.Repository.Contract;
-using TravelBooking.Extensions;
-
-using TravelBooking.Repository;
+using AutoMapper;
+using Jwt.Helper;
 using Jwt.Settings;
 using Microsoft.AspNetCore.Authentication.JwtBearer; 
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.UI.Services;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
+using System.Text.Json.Serialization;
+using TravelBooking.Core.Models.Services;
+using TravelBooking.Core.Repository.Contract;
 using TravelBooking.Core.Services;
 using TravelBooking.Core.Settings; 
-using TravelBooking.Models;
-using TravelBooking.Repository.Data;
-using Microsoft.Extensions.DependencyInjection;
-using TravelBooking.Core.Models.Services;
+using TravelBooking.Extensions;
 using TravelBooking.Helper;
-using Jwt.Helper;
-using AutoMapper;
+using TravelBooking.Models;
+using TravelBooking.Repository;
+using TravelBooking.Repository.Data;
+using TravelBooking.Repository.Data.Seeds;
 namespace TravelBooking.APIs
 {
     public class Program
@@ -60,6 +60,7 @@ namespace TravelBooking.APIs
 
             // adding AutoMapper 
             webApplicationbuilder.Services.AddAutoMapper(cfg => cfg.AddMaps(typeof(Program).Assembly));
+
     
             // Configure JWT authentication
             webApplicationbuilder.Services.AddAuthentication(options =>
@@ -102,13 +103,13 @@ namespace TravelBooking.APIs
                     options.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter());
                 });
             webApplicationbuilder.Services.AddControllers()
-.AddJsonOptions(options =>
-{
-    //options.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.Preserve;
-    options.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter());
-    options.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles; // or Preserve
-    options.JsonSerializerOptions.WriteIndented = true; // optional, for readability
-});
+                .AddJsonOptions(options =>
+                {
+                    //options.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.Preserve;
+                    options.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter());
+                    options.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles; // or Preserve
+                    options.JsonSerializerOptions.WriteIndented = true; // optional, for readability
+                });
             //webApplicationbuilder.Services.AddControllers().AddJsonOptions(options =>
             //{
             //    options.JsonSerializerOptions.ReferenceHandler = null; // or ReferenceHandler.IgnoreCycles
@@ -121,7 +122,7 @@ namespace TravelBooking.APIs
             {
                 options.AddPolicy("AllowAngularApp", policy =>
                 {
-                    policy.WithOrigins("http://localhost:56724") // angular port
+                    policy.WithOrigins("http://localhost:4200") // angular port
                           .AllowAnyHeader()
                           .AllowAnyMethod()
                           .AllowCredentials(); // Allow credentials if needed
@@ -133,19 +134,20 @@ namespace TravelBooking.APIs
        
 
             var app = webApplicationbuilder.Build();
-
+             
             app.UseCors("AllowAngularApp");
             app.UseStatusCodePagesWithReExecute("/errors/{0}");
             using var scope = app.Services.CreateScope();
 
             var Services = scope.ServiceProvider;
 
+            var logger = Services.GetRequiredService<ILogger<Program>>();
             var _dbcontext = Services.GetRequiredService<AppDbContext>();
 
-            var logger = Services.GetRequiredService<ILogger<Program>>();
             try
             {
                 await _dbcontext.Database.MigrateAsync();
+                await RoleSeeder.SeedAsync(Services); // assigning roles to the database
                 await TravelContextSeed.SeedAsync(_dbcontext);
 
             }

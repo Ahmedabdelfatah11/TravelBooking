@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("TravelBooking.Core")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+f125ea4c951687ac93c305ae4b9b2bab40665b05")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+f60c5a48322ca45d31fb585632ea70df9769a8ac")]
 [assembly: System.Reflection.AssemblyProductAttribute("TravelBooking.Core")]
 [assembly: System.Reflection.AssemblyTitleAttribute("TravelBooking.Core")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

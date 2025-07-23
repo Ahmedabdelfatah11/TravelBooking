@@ -1,5 +1,4 @@
 ﻿using AutoMapper;
-using TravelBooking.Models.ResetPassword;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.UI.Services;
@@ -12,9 +11,11 @@ using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
 using TravelBooking.Core.Services;
-using TravelBooking.Models;
 using TravelBooking.Core.Settings;
 using TravelBooking.EmailBuilderbody;
+using TravelBooking.Models;
+using TravelBooking.Models.ResetPassword;
+using TravelBooking.Repository.Data.Seeds;
 
 
 
@@ -148,6 +149,10 @@ namespace TravelBooking.Core.Models.Services
             var result = await _userManager.CreateAsync(user, model.Password);
             if (result.Succeeded)
             {
+                // Assign default role to user
+                await _userManager.AddToRoleAsync(user, Roles.User.ToString());
+
+                // Generate email confirmation token
                 var code = await _userManager.GenerateEmailConfirmationTokenAsync(user);
                 code = WebEncoders.Base64UrlEncode(Encoding.UTF8.GetBytes(code));
                 _logger.LogInformation($"User {user.UserName} registered with email confirmation code: {code}");
@@ -251,12 +256,12 @@ namespace TravelBooking.Core.Models.Services
         }
         private async Task SendConfirmationEmail(ApplicationUser user, string code)
         {
-            var confirmUrl = $"http://localhost:56724/confirm-email?userId={user.Id}&code={code}"; 
+            var confirmUrl = $"http://localhost:4200/confirm-email?userId={user.Id}&code={code}"; 
 
             var emailBody = EmailBodyBuilder.BuildEmailBody("EmailConfirmation",
                 new Dictionary<string, string>
                 {
-                    { "{{name}}", user.FirstName },
+                    { "{{name}}", user.UserName! },
                     { "{{action_url}}", confirmUrl }
                 });
 
@@ -265,14 +270,12 @@ namespace TravelBooking.Core.Models.Services
 
         private async Task SendResetPasswordEmail(ApplicationUser user, string token)
         {
-            var request = _httpAccessor.HttpContext?.Request;
-            var origin = $"{request?.Scheme}://{request?.Host}"; // Get the origin URL from the request
-
+            var resetUrl = $"http://localhost:4200/reset?email={user.Email}&token={token}";
             var emailBody = EmailBodyBuilder.BuildEmailBody("ResetPassword",
                 new Dictionary<string, string>
                 {
-                    { "{{name}}", user.FirstName },
-                    { "{{reset_url}}", $"{origin}/auth/resetPassword?email={user.Email}&token={token}" }
+                    { "{{name}}", user.UserName! },
+                    { "{{reset_url}}", resetUrl} 
                 });
 
             await _emailSender.SendEmailAsync(user.Email!, "Travel Booking: Reset Password", emailBody);
