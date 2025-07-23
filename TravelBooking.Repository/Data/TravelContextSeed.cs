@@ -21,6 +21,7 @@ namespace TravelBooking.Repository.Data
             if (!context.HotelCompanies.Any())
             {
                 var roomsData = await File.ReadAllTextAsync("../TravelBooking.Repository/Data/DataSeed/HotelAndRoom.json");
+
                 var seedData = JsonSerializer.Deserialize<SeedDataModel>(roomsData, options);
 
                 if (seedData?.HotelCompanies is not null && seedData.HotelCompanies.Count > 0)

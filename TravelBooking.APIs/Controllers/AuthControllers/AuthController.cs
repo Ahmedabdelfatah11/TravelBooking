@@ -29,13 +29,14 @@ namespace Jwt.Controllers
             var result = await _authService.Register(model);
 
             if (!string.IsNullOrEmpty(result.Message) && !result.IsAuthenticated)
+             
+            if (!result.IsAuthenticated)
             {
                 return Ok(new
                 {
                     message = result.Message
                 });
             }
-
             return BadRequest(new
             {
                 message = result.Message
@@ -63,7 +64,8 @@ namespace Jwt.Controllers
                 //    roles = result.Roles
                 //});
             }
-            return Unauthorized(result.Message);
+            return Unauthorized(new { message = "Invalid email or password" });
+
         }
 
         [HttpPost("AddRole")]
