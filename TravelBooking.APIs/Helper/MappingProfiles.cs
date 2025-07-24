@@ -7,6 +7,11 @@ using TravelBooking.Core.DTOS.CarRentalCompanies;
 using TravelBooking.Core.DTOS.Cars;
 using AutoMapper;
 using TravelBooking.Models;
+using TravelBooking.APIs.DTOS.Booking;
+using TravelBooking.APIs.DTOS.Booking.RoomBooking;
+using TravelBooking.APIs.DTOS.Booking.CarBooking;
+using TravelBooking.APIs.DTOS.Booking.FlightBooking;
+using TravelBooking.APIs.DTOS.Booking.TourBooking;
 
 namespace TravelBooking.Helper
 {
@@ -83,6 +88,62 @@ namespace TravelBooking.Helper
 
             CreateMap<RegisterModel, ApplicationUser>();
             CreateMap<LoginModel, ApplicationUser>();
+
+            //Booking
+            CreateMap<ApplicationUser, UserDto>();
+            CreateMap<Booking, BookingDto>();
+
+            // Room Booking
+            CreateMap<RoomBookingDto, Booking>()
+                .ForMember(dest => dest.Status, opt => opt.Ignore())
+                .ForMember(dest => dest.RoomId, opt => opt.Ignore())
+                .ForMember(dest => dest.BookingType, opt => opt.Ignore());
+            CreateMap<Booking, RoomBookingResultDto>()
+                .ForMember(dest => dest.BookingId, opt => opt.MapFrom(src => src.Id))
+                .ForMember(dest => dest.Status, opt => opt.MapFrom(src => src.Status.ToString()))
+                .ForMember(dest => dest.Price, opt => opt.MapFrom(src => src.Room != null ? src.Room.Price : 0))
+                .ForMember(dest => dest.RoomId, opt => opt.MapFrom(src => src.RoomId))
+                .ForMember(dest => dest.RoomType, opt => opt.MapFrom(src => src.Room.RoomType.ToString()));
+
+            // Car Booking
+            CreateMap<CarBookingDto, Booking>()
+                .ForMember(dest => dest.Status, opt => opt.Ignore())
+                .ForMember(dest => dest.CarId, opt => opt.Ignore())
+                .ForMember(dest => dest.BookingType, opt => opt.Ignore());
+            CreateMap<Booking, CarBookingResultDto>()
+                .ForMember(dest => dest.BookingId, opt => opt.MapFrom(src => src.Id))
+                .ForMember(dest => dest.Status, opt => opt.MapFrom(src => src.Status.ToString()))
+                .ForMember(dest => dest.Price, opt => opt.MapFrom(src => src.Car != null ? src.Car.Price : 0))
+                .ForMember(dest => dest.CarId, opt => opt.MapFrom(src => src.CarId))
+                .ForMember(dest => dest.CarModel, opt => opt.MapFrom(src => src.Car != null ? src.Car.Model : string.Empty));
+
+
+            // Flight Booking
+            CreateMap<FlightBookingDto, Booking>()
+                .ForMember(dest => dest.Status, opt => opt.Ignore())
+                .ForMember(dest => dest.FlightId, opt => opt.Ignore())
+                .ForMember(dest => dest.BookingType, opt => opt.Ignore());
+            CreateMap<Booking, FlightBookingResultDto>()
+                .ForMember(dest => dest.BookingId, opt => opt.MapFrom(src => src.Id))
+                .ForMember(dest => dest.Status, opt => opt.MapFrom(src => src.Status.ToString()))
+                .ForMember(dest => dest.Price, opt => opt.MapFrom(src => src.Flight.Price))
+                .ForMember(dest => dest.DepartureTime, opt => opt.MapFrom(src => src.Flight.DepartureTime))
+                .ForMember(dest => dest.ArrivalTime, opt => opt.MapFrom(src => src.Flight.ArrivalTime))
+                .ForMember(dest => dest.DepartureAirport, opt => opt.MapFrom(src => src.Flight.DepartureAirport))
+                .ForMember(dest => dest.ArrivalAirport, opt => opt.MapFrom(src => src.Flight.ArrivalAirport))
+                .ForMember(dest => dest.FlightId, opt => opt.MapFrom(src => src.FlightId));
+        
+            // Tour Booking
+            CreateMap<TourBookingDto, Booking>();
+
+            CreateMap<Booking, TourBookingResultDto>()
+                .ForMember(dest => dest.BookingId, opt => opt.MapFrom(src => src.Id))
+                .ForMember(dest => dest.Status, opt => opt.MapFrom(src => src.Status.ToString()))
+                .ForMember(dest => dest.Price, opt => opt.MapFrom(src => src.Tour != null ? src.Tour.Price : 0))
+                .ForMember(dest => dest.TourId, opt => opt.MapFrom(src => src.TourId))
+                .ForMember(dest => dest.TourName, opt => opt.MapFrom(src => src.Tour != null ? src.Tour.Name : string.Empty))
+                .ForMember(dest => dest.Destination, opt => opt.MapFrom(src => src.Tour != null ? src.Tour.Destination : string.Empty));
+
         }
     }
 }

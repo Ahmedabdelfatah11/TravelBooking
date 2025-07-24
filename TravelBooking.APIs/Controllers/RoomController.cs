@@ -1,12 +1,16 @@
 ﻿using AutoMapper;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using System.Security.Claims;
 using TravelBooking.APIs.Dtos.Rooms;
+using TravelBooking.APIs.DTOS.Booking.RoomBooking;
 using TravelBooking.APIs.Helper;
 using TravelBooking.Core.Models;
 using TravelBooking.Core.Repository.Contract;
 using TravelBooking.Core.Specifications;
 using TravelBooking.Core.Specifications.RoomSpecs;
+using TravelBooking.Errors;
 using TravelBooking.Helper;
 
 namespace TravelBooking.APIs.Controllers
@@ -18,6 +22,7 @@ namespace TravelBooking.APIs.Controllers
         private readonly IGenericRepository<Room> _roomRepo;
         private readonly IGenericRepository<RoomImage> _roomImageRepo;
         private readonly IGenericRepository<HotelCompany> _hotelRepo;
+        private readonly IGenericRepository<Booking> _bookingRepo;
         private readonly IMapper _mapper;
 
         /// <summary>
@@ -30,11 +35,13 @@ namespace TravelBooking.APIs.Controllers
         public RoomController(IGenericRepository<Room> roomRepo,
                               IGenericRepository<RoomImage> roomImageRepo,
                               IGenericRepository<HotelCompany> hotelRepo,
+                                IGenericRepository<Booking> bookingRepo,
                               IMapper mapper)
         {
             _roomRepo = roomRepo;
             _roomImageRepo = roomImageRepo;
             _hotelRepo = hotelRepo;
+            _bookingRepo = bookingRepo;
             _mapper = mapper;
         }
 
@@ -68,10 +75,52 @@ namespace TravelBooking.APIs.Controllers
             var spec = new RoomWithHotelAndImagesSpecification(id);
             var room = await _roomRepo.GetWithSpecAsync(spec);
 
-            if (room == null) return NotFound();
+            if (room == null) return NotFound(new ApiResponse(404));
 
             return Ok(_mapper.Map<Room, RoomToReturnDTO>(room));
         }
+
+        [Authorize]
+        [HttpPost("{serviceId}/book")]
+        public async Task<IActionResult> BookRoom(int serviceId, [FromBody] RoomBookingDto dto)
+        {
+            var userId = User.FindFirst("uid")?.Value;
+            if (string.IsNullOrEmpty(userId))
+                return Unauthorized("User ID not found in token.");
+
+            var room = await _roomRepo.GetAsync(serviceId);
+            if (room == null) return NotFound();
+
+            if (dto.StartDate >= dto.EndDate)
+                return BadRequest("Start date must be before end date.");
+
+            var overlapping = await _bookingRepo.GetAllAsync(b =>
+                b.RoomId == serviceId &&
+                b.Status != Status.Cancelled &&
+                b.StartDate < dto.EndDate &&
+                dto.StartDate < b.EndDate
+            );
+
+            if (overlapping.Any())
+                return BadRequest("Room already booked for selected dates.");
+
+            var booking = _mapper.Map<Booking>(dto);
+            booking.RoomId = serviceId;
+            booking.UserId = userId;
+            booking.BookingType = BookingType.Room;
+            booking.Status = Status.Pending;
+
+            await _bookingRepo.AddAsync(booking);
+
+            booking.Room = room;
+
+            var result = _mapper.Map<RoomBookingResultDto>(booking);
+            return CreatedAtAction("GetBookingById", "Booking", new { id = booking.Id }, result);
+        }
+
+
+
+
 
         /// <summary>
         /// Create a new room

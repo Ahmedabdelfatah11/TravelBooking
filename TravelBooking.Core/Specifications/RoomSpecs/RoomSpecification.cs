@@ -16,6 +16,7 @@ namespace TravelBooking.Core.Specifications.RoomSpecs
         (!specParams.IsAvailable.HasValue || r.IsAvailable == specParams.IsAvailable.Value))
 
         {
+            Includes.Add(r => r.Hotel);
             Includes.Add(r => r.Images);
 
             AddOrderBy(r => r.Id); // Default
@@ -40,6 +41,7 @@ namespace TravelBooking.Core.Specifications.RoomSpecs
         public RoomSpecification(int id) : base(r => r.Id == id)
         {
             Includes.Add(r => r.Images);
+            Includes.Add(r => r.Hotel);
         }
     }
 }

@@ -1,10 +1,14 @@
 ﻿using AutoMapper;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using TravelBooking.APIs.Dtos.Flight;
+using TravelBooking.APIs.DTOS.Booking;
+using TravelBooking.APIs.DTOS.Booking.FlightBooking;
 using TravelBooking.Core.Models;
 using TravelBooking.Core.Repository.Contract;
 using TravelBooking.Core.Specifications.FlightSpecs;
+using TravelBooking.Errors;
 using TravelBooking.Helper;
 using static System.Runtime.InteropServices.JavaScript.JSType;
 
@@ -16,11 +20,13 @@ namespace TravelBooking.APIs.Controllers
     {
         private readonly IGenericRepository<Flight> flightRepository;
         private readonly IMapper mapper;
+        private readonly IGenericRepository<Booking> _bookingRepo;
 
-        public FlightController(IGenericRepository<Flight> flightRepository , IMapper mapper)
+        public FlightController(IGenericRepository<Flight> flightRepository , IMapper mapper, IGenericRepository<Booking> bookingRepo)
         {
             this.flightRepository = flightRepository;
             this.mapper = mapper;
+            _bookingRepo = bookingRepo;
         }
         // GET: FlightController
         [HttpGet]
@@ -54,6 +60,51 @@ namespace TravelBooking.APIs.Controllers
             var flightDTO = mapper.Map<FlightDetialsDTO>(flight);
             return Ok(flightDTO);
         }
+
+        [Authorize]
+        [HttpPost("{serviceId}/book")]
+        public async Task<IActionResult> BookFlight(int serviceId/*, [FromBody] FlightBookingDto dto*/)
+        {
+            var userId = User.FindFirst("uid")?.Value;
+            if (string.IsNullOrEmpty(userId))
+                return Unauthorized("User ID not found in token.");
+
+            var flight = await flightRepository.GetAsync(serviceId);
+            if (flight == null) return NotFound(new ApiResponse(404));
+
+            var existingBookings = await _bookingRepo.GetAllAsync(b =>
+               b.UserId == userId &&
+               b.FlightId == serviceId &&
+               b.Status != Status.Cancelled &&
+               b.StartDate == flight.DepartureTime &&
+               b.EndDate == flight.ArrivalTime
+               );
+
+            if (existingBookings.Any())
+                return BadRequest("Tour already booked in selected time frame.");
+
+            var booking = new Booking
+            {
+                FlightId = serviceId,
+                UserId = userId,
+                BookingType = BookingType.Flight,
+                Status = Status.Pending,
+                StartDate = flight.DepartureTime,
+                EndDate = flight.ArrivalTime
+            };
+
+            await _bookingRepo.AddAsync(booking);
+
+            booking.Flight = flight; 
+            var result = mapper.Map<FlightBookingResultDto>(booking);
+
+            return CreatedAtAction("GetBookingById", "Booking", new { id = booking.Id }, result);
+        }
+
+
+
+
+
         [HttpPost]
         public async Task<ActionResult<Flight>> AddFlight(Flight flight)
         {

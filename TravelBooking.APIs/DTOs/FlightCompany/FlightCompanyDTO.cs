@@ -1,5 +1,4 @@
-﻿using System.ComponentModel.DataAnnotations;
-
+﻿
 namespace TravelBooking.APIs.Dtos.FlightCompany
 {
     public class FlightCompanyDTO

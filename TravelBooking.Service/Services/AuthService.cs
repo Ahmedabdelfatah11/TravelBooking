@@ -15,6 +15,8 @@ using TravelBooking.Core.Services;
 using TravelBooking.Models;
 using TravelBooking.Core.Settings;
 using TravelBooking.EmailBuilderbody;
+using Microsoft.AspNetCore.Mvc;
+using static Org.BouncyCastle.Math.EC.ECCurve;
 
 
 
@@ -99,6 +101,7 @@ namespace TravelBooking.Core.Models.Services
             }
         }
 
+        [HttpPost("Login")]
         public async Task<AuthModel> Login(LoginModel model)
         {
             var user = await _userManager.FindByEmailAsync(model.Email);
@@ -294,7 +297,9 @@ namespace TravelBooking.Core.Models.Services
                 new Claim(JwtRegisteredClaimNames.Sub, user.UserName),
                 new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
                 new Claim(JwtRegisteredClaimNames.Email,user.Email),
-                new Claim("uid", user.Id)
+                new Claim("uid", user.Id),
+                new Claim(ClaimTypes.NameIdentifier, user.Id), 
+                new Claim(ClaimTypes.Email, user.Email),      
             }
             .Union(userClaims)
             .Union(roleClaims);
@@ -304,7 +309,7 @@ namespace TravelBooking.Core.Models.Services
                 issuer: _jwt.Issuer,
                 audience: _jwt.Audience,
                 claims: claims,
-                expires: DateTime.Now.AddDays(_jwt.DurationInDays),
+                expires: DateTime.UtcNow.AddDays(_jwt.DurationInDays),
                 signingCredentials: creds
             );
             return token;
