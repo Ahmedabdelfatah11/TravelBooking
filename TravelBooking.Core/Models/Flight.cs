@@ -42,8 +42,10 @@ namespace TravelBooking.Core.Models
         [StringLength(100, MinimumLength = 3, ErrorMessage = "Arrival airport name must be between 3 and 100 characters.")]
         public string ArrivalAirport { get; set; } = string.Empty;
 
-        [ForeignKey("FlightCompany")]
-        public int FlightId { get; set; }
-        public FlightCompany? FlightCompany { get; set; }
+       public int FlightCompanyId { get; set; }
+
+[ForeignKey("FlightCompanyId")]
+public FlightCompany? FlightCompany { get; set; }
+
     }
 }

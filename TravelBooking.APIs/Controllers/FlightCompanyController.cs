@@ -1,7 +1,9 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using TravelBooking.APIs.Dtos.FlightCompany;
+using TravelBooking.APIs.DTOS.Flight;
+using TravelBooking.APIs.DTOS.FlightCompany;
+using TravelBooking.APIs.DTOS.TourCompany;
 using TravelBooking.Core.Models;
 using TravelBooking.Core.Repository.Contract;
 using TravelBooking.Core.Specifications.FlightSpecs;
@@ -43,11 +45,16 @@ namespace TravelBooking.APIs.Controllers
             return Ok(companyDTO);
         }
         [HttpPost]
-        public async Task<ActionResult<FlightCompany>> AddFlightCompany(FlightCompany flight)
+        public async Task<ActionResult<FlightCompany>> AddFlightCompany(FlightCompanyDTO flight)
         {
-            var newCompany = await _flightComRepository.AddAsync(flight);
-            return Ok(newCompany);
+            var entity = _mapper.Map<FlightCompany>(flight);
+
+            var newCompany = await _flightComRepository.AddAsync(entity);
+            var resultDto = _mapper.Map<FlightCompanyDTO>(newCompany);
+            return CreatedAtAction(nameof(GetFlightCompany), new { id = newCompany.Id }, resultDto);
         }
+
+
         [HttpPut("{id}")]
         public async Task<ActionResult> UpdateFlightCompany(int id, FlightCompany company)
         {

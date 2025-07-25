@@ -1,4 +1,4 @@
-﻿namespace TravelBooking.APIs.Dtos.TourCompany
+﻿namespace TravelBooking.APIs.DTOS.TourCompany
 {
     public class TourCompanyUpdateDto : TourCompanyCreateDto
     {

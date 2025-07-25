@@ -1,7 +1,7 @@
 ﻿using System.ComponentModel.DataAnnotations;
-using TravelBooking.APIs.Dtos.FlightCompany;
+using TravelBooking.APIs.DTOS.FlightCompany;
 
-namespace TravelBooking.APIs.Dtos.Flight
+namespace TravelBooking.APIs.DTOS.Flight
 {
     public class FlightDetialsDTO
     {
@@ -17,5 +17,6 @@ namespace TravelBooking.APIs.Dtos.Flight
         public string ImageUrl { get; set; } // URL to an image representing the flight or airline
         public int AvailableSeats { get; set; } // Number of available seats on the flight
         public FlightCompanyDTO FlightCompany { get; set; }
+
     }
 }

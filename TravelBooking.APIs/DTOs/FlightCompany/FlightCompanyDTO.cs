@@ -1,5 +1,5 @@
 ﻿
-namespace TravelBooking.APIs.Dtos.FlightCompany
+namespace TravelBooking.APIs.DTOS.FlightCompany
 {
     public class FlightCompanyDTO
     {

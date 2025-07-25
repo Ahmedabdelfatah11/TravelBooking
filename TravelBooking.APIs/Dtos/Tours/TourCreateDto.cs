@@ -1,6 +1,6 @@
 ﻿using TravelBooking.Core.Models;
 
-namespace TravelBooking.APIs.Dtos.Tours
+namespace TravelBooking.APIs.DTOS.Tours
 {
     public class TourCreateDto
     {

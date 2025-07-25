@@ -1,7 +1,5 @@
 using TravelBooking.APIs.Dtos.HotelCompany;
 using TravelBooking.APIs.Dtos.Rooms;
-using TravelBooking.APIs.Dtos.TourCompany;
-using TravelBooking.APIs.Dtos.Tours;
 using TravelBooking.Core.Models;
 using TravelBooking.Core.DTOS.CarRentalCompanies;
 using TravelBooking.Core.DTOS.Cars;
@@ -12,6 +10,8 @@ using TravelBooking.APIs.DTOS.Booking.FlightBooking;
 using TravelBooking.APIs.DTOS.Booking.TourBooking;
 using AutoMapper;
 using TravelBooking.Models;
+using TravelBooking.APIs.DTOS.Tours;
+using TravelBooking.APIs.DTOS.TourCompany;
 
 namespace TravelBooking.Helper
 {

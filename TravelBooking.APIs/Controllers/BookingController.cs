@@ -1,21 +1,20 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using TravelBooking.APIs.DTOS.Booking;
-using TravelBooking.APIs.Dtos.FlightCompany;
 using TravelBooking.Core.DTOS.CarRentalCompanies;
 using TravelBooking.Core.Models;
 using TravelBooking.Repository.Data;
 using TravelBooking.APIs.Dtos.HotelCompany;
 using TravelBooking.Core.DTOS.Cars;
 using TravelBooking.APIs.Dtos.Rooms;
-using TravelBooking.APIs.Dtos.Tours;
-using TravelBooking.APIs.Dtos.Flight;
 using TravelBooking.Core.Repository.Contract;
 using AutoMapper;
 using TravelBooking.Core.Specifications.CarSpecs;
 using TravelBooking.Core.Specifications.RoomSpecs;
 using TravelBooking.Core.Specifications.FlightSpecs;
 using TravelBooking.Core.Specifications.TourSpecs;
+using TravelBooking.APIs.DTOS.Flight;
+using TravelBooking.APIs.DTOS.Tours;
 
 
 namespace TravelBooking.APIs.Controllers
