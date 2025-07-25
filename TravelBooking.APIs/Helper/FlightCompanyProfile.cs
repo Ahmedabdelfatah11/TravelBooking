@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
-using TravelBooking.APIs.Dtos.FlightCompany;
+using TravelBooking.APIs.DTOS.FlightCompany;
+using TravelBooking.APIs.DTOS.TourCompany;
 using TravelBooking.Core.Models;
 using TravelBooking.Helper;
 
@@ -26,6 +27,8 @@ namespace TravelBooking.APIs.Helper
                 .ForMember(dest => dest.FlightCount, opt => opt.MapFrom(src => src.Flights.Count.ToString()))
                 .ForMember(dest => dest.Flights, opt => opt.MapFrom(src => src.Flights))
                 ;
+            CreateMap<FlightCompanyDTO, FlightCompany>();
+
         }
     }
 }

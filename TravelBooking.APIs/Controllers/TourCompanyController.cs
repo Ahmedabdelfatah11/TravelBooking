@@ -2,7 +2,7 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using TravelBooking.APIs.Dtos.TourCompany;
+using TravelBooking.APIs.DTOS.TourCompany;
 using TravelBooking.Core.Models;
 using TravelBooking.Core.Repository.Contract;
 using TravelBooking.Core.Specifications;

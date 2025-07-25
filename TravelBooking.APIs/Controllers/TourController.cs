@@ -1,19 +1,16 @@
-﻿using AutoMapper;
-using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using TravelBooking.APIs.Dtos.TourCompany;
 using TravelBooking.Core.Models;
-using TravelBooking.Core.Repository.Contract;
-using TravelBooking.Core.Specifications.TourCompanySpecs;
-using TravelBooking.Core.Specifications;
+
 using TravelBooking.Helper;
-using TravelBooking.Repository.TourCompanySpecs;
-using TravelBooking.APIs.Dtos.Tours;
-using TravelBooking.Core.Specifications.TourSpecs;
 using TravelBooking.Errors;
-using TravelBooking.APIs.DTOS.Booking;
 using TravelBooking.APIs.DTOS.Booking.TourBooking;
 using Microsoft.AspNetCore.Authorization;
+using TravelBooking.Core.Repository.Contract;
+using AutoMapper;
+using TravelBooking.Core.Specifications.TourSpecs;
+using TravelBooking.APIs.DTOS.Tours;
+using TravelBooking.APIs.DTOS.TourCompany;
 
 namespace TravelBooking.APIs.Controllers
 {

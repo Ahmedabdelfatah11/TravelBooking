@@ -16,5 +16,9 @@ namespace TravelBooking.Core.Models
         public string Rating { get; set; }
         public ICollection<Room>? Rooms { get; set; } // Navigation property for related rooms
 
+        public ICollection<Favoritet> favoritets { get; set; } = new List<Favoritet>();
+
+        public ICollection<Review> reviews { get; set; } = new List<Review>();
+
     }
 }

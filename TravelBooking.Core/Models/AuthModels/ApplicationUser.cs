@@ -12,5 +12,9 @@ namespace TravelBooking.Models
         public string LastName { get; set; }
         public ICollection<Booking> bookings { get; set; } = new List<Booking>();
 
+
+       public ICollection<Favoritet> favoritets  { get; set; } = new List<Favoritet>();
+
+        public ICollection<Review> reviews { get; set; } = new List<Review>();
     }
 }

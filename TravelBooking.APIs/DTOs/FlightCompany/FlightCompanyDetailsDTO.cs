@@ -1,6 +1,6 @@
-﻿using TravelBooking.APIs.Dtos.Flight;
+﻿using TravelBooking.APIs.DTOS.Flight;
 
-namespace TravelBooking.APIs.Dtos.FlightCompany
+namespace TravelBooking.APIs.DTOS.FlightCompany
 {
     public class FlightCompanyDetailsDTO
     {

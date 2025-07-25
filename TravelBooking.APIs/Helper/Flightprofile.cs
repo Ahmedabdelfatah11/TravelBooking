@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
-using TravelBooking.APIs.Dtos.Flight;
+using TravelBooking.APIs.DTOS.Flight;
+using TravelBooking.APIs.DTOS.Tours;
 using TravelBooking.Core.Models;
 using TravelBooking.Helper;
 
@@ -14,10 +15,10 @@ namespace TravelBooking.APIs.Helper
                 //.ForMember(dest => dest.ImageUrl, opt => opt.MapFrom(src => src.FlightCompany.ImageUrl))
                 .ForMember(dest => dest.DepartureAirport, opt => opt.MapFrom(src => src.DepartureAirport))
                 .ForMember(dest => dest.ArrivalAirport, opt => opt.MapFrom(src => src.ArrivalAirport))
-                .ForMember(dest => dest.departureTime, opt => opt.MapFrom(src => src.DepartureTime))
-                .ForMember(dest => dest.arrivalTime, opt => opt.MapFrom(src => src.ArrivalTime))
+                .ForMember(dest => dest.DepartureTime, opt => opt.MapFrom(src => src.DepartureTime))
+                .ForMember(dest => dest.ArrivalTime, opt => opt.MapFrom(src => src.ArrivalTime))
                 .ForMember(dest => dest.Price, opt => opt.MapFrom(src => src.Price))
-                .ForMember(dest => dest.FlightNumber, opt => opt.MapFrom(src => src.Id))
+                //.ForMember(dest => dest.FlightNumber, opt => opt.MapFrom(src => src.Id))
                 .AfterMap((src, dest) =>
                 {
                     if (src.FlightCompany != null)
@@ -45,6 +46,7 @@ namespace TravelBooking.APIs.Helper
                 .ForMember(dest => dest.FlightCompany, opt => opt.MapFrom(src => src.FlightCompany))
 
                    ;
+            CreateMap<FlightDTO, Flight>();
 
         }
     }

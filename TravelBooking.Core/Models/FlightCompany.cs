@@ -34,5 +34,10 @@ namespace TravelBooking.Core.Models
  
         public string? Rating { get; set; } // Rating out of 5 or a descriptive rating like "Excellent", "Good", etc.
         public virtual ICollection<Flight> Flights { get; set; } = new List<Flight>(); // Navigation property for related flights
+
+
+        public ICollection<Favoritet> favoritets { get; set; } = new List<Favoritet>();
+
+        public ICollection<Review> reviews { get; set; } = new List<Review>();
     }
 }
