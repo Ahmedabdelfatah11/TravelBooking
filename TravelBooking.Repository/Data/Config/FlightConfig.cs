@@ -19,7 +19,7 @@ namespace TravelBooking.Core.Configurations
             // one-to-many with FlightCompany
             builder.HasOne(f => f.FlightCompany)
                    .WithMany(fc => fc.Flights)
-                   .HasForeignKey(f => f.FlightId);
+                   .HasForeignKey(f => f.FlightCompanyId);
         }
     }
 }

@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.ComponentModel.DataAnnotations.Schema;
+using TravelBooking.Models;
 
 namespace TravelBooking.Core.Models
 {
@@ -16,8 +17,8 @@ namespace TravelBooking.Core.Models
 
     public enum BookingType
     {
-        Hotel,
-        CarRental,
+        Room,
+        Car,
         Flight,
         Tour
     }
@@ -26,13 +27,23 @@ namespace TravelBooking.Core.Models
     {
         public DateTime StartDate { get; set; }
         public DateTime EndDate { get; set; }
-        public Status status { get; set; }
+        public Status Status { get; set; }
         public BookingType BookingType { get; set; }
 
-        public int? RefId { get; set; }
-        public int? PaymentId { get; set; }
+        public int? RoomId { get; set; }
+        public Room? Room { get; set; }
+
+        public int? CarId { get; set; }
+        public Car? Car { get; set; }
+
+        public int? FlightId { get; set; }
+        public Flight? Flight { get; set; }
         public Payment? Payment { get; set; }
-        public int? UserId { get; set; }
-        public User? User { get; set; }
+
+        public int? TourId { get; set; }
+        public Tour? Tour { get; set; }
+
+        public string? UserId { get; set; }
+        public ApplicationUser? User { get; set; }
     }
 }

@@ -34,16 +34,13 @@ namespace TravelBooking.Core.Specifications
         {
             OrderByDesc = orderByDescExpression;
         }
-        protected void AddInclude(Expression<Func<T, object>> includeExpression)
-        {
-            Includes.Add(includeExpression);
-        }
         public void ApplyPagination(int skip, int take)
         {
             Skip = skip;
             Take = take;
             IsPaginationEnabled = true;
         }
+
 
     }
 }

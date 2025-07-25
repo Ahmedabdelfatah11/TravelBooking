@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Text;
 using System.Threading.Tasks;
 using TravelBooking.Core.Models;
@@ -24,7 +25,6 @@ namespace TravelBooking.Repository
         {
             return await _dbContext.Set<T>().ToListAsync();
         }
-
         public async Task<T?> GetAsync(int id)
         {
             return await _dbContext.Set<T>().FindAsync(id);
@@ -50,26 +50,27 @@ namespace TravelBooking.Repository
             return await ApplySpecifications(spec).CountAsync();
         }
 
-        public async Task AddAsync(T entity)
+        public async Task<T> AddAsync(T entity)
         {
             await _dbContext.Set<T>().AddAsync(entity);
+            await _dbContext.SaveChangesAsync();
+            return entity;
         }
-
-        public void Update(T entity)
+        public async Task Update(T entity)
         {
             _dbContext.Set<T>().Update(entity);
-        }
-
-        public void Delete(T entity)
-        {
-            _dbContext.Set<T>().Remove(entity);
-        }
-
-        public async Task SaveChangesAsync()
-        {
             await _dbContext.SaveChangesAsync();
         }
 
-        
+        public async Task Delete(T entity)
+        {
+            _dbContext.Set<T>().Remove(entity);
+            await _dbContext.SaveChangesAsync();
+        }
+        public async Task<IReadOnlyList<T>> GetAllAsync(Expression<Func<T, bool>> predicate)
+        {
+            return await _dbContext.Set<T>().Where(predicate).ToListAsync();
+        }
+
     }
 }

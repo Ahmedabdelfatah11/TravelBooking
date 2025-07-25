@@ -2,15 +2,13 @@
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using TravelBooking.Core;
-using TravelBooking.Core.DTOS;
+using TravelBooking.Core.DTOS.CarRentalCompanies;
+using TravelBooking.Core.DTOS.Cars;
 using TravelBooking.Core.Models;
 using TravelBooking.Core.Repository.Contract;
-using TravelBooking.Core.Specifications;
+using TravelBooking.Core.Specifications.CarRentalCompanySpecs;
+using TravelBooking.Errors;
 using TravelBooking.Helper;
-using TravelBooking.Repository;
-using TravelBooking.Service.Dto;
-
 namespace TravelBooking.APIs.Controllers
 {
     [ApiController]
@@ -29,44 +27,48 @@ namespace TravelBooking.APIs.Controllers
         }
 
         [HttpGet]
-        public async Task<ActionResult<IReadOnlyList<CarRentalDto>>> GetPagedRentals(
-            [FromQuery] int pageIndex = 1,
-            [FromQuery] int pageSize = 10)
+        public async Task<ActionResult<IReadOnlyList<CarRentalWithCarsDto>>> GetCarRentalCompanies([FromQuery]
+           CarRentalSpecParams specParams)
         {
-            var spec = new SpecificationWithCars(pageIndex, pageSize);
+            var spec = new CarRentalCompanySpecifications(specParams);
             var rentals = await _carRentalRepo.GetAllWithSpecAsync(spec);
-            return Ok(_mapper.Map<IReadOnlyList<CarRentalDto>>(rentals));
+
+            var data = _mapper.Map<IReadOnlyList<CarRentalCompany>, IReadOnlyList<CarRentalWithCarsDto>>(rentals);
+
+            var countSpec = new CarRentalCompanyWithFilterForCountSpec(specParams);
+            var count = await _carRentalRepo.GetCountAsync(countSpec);
+            return Ok(new Pagination<CarRentalWithCarsDto>(specParams.PageIndex, specParams.PageSize, count, data));
+
         }
 
         [HttpGet("{id}")]
-        public async Task<ActionResult<CarRentalDto>> GetRentalWithCars(int id)
+        public async Task<ActionResult<CarRentalWithCarsDto>> GetCarRentalCompanyWithCarsById(int id)
         {
-            var spec = new SpecificationWithCars(id);
+            var spec = new CarRentalCompanySpecifications(id);
             var rental = await _carRentalRepo.GetWithSpecAsync(spec);
-            if (rental == null) return NotFound();
+            if (rental == null) return NotFound(new ApiResponse(404));
+            return Ok(_mapper.Map<CarRentalCompany, CarRentalDto>(rental));
 
-            return Ok(_mapper.Map<CarRentalDto>(rental));
         }
 
         [HttpPost]
         public async Task<ActionResult<CarRentalDto>> CreateRental(SaveCarRentalDto dto)
         {
             var rental = _mapper.Map<CarRentalCompany>(dto);
-            await _carRentalRepo.AddAsync(rental);
-            await _carRentalRepo.SaveChangesAsync(); 
+            var result = await _carRentalRepo.AddAsync(rental);
+            var resultDto = _mapper.Map<CarRentalDto>(result);
 
-            return Ok(_mapper.Map<CarRentalDto>(rental));
+            return CreatedAtAction(nameof(GetCarRentalCompanyWithCarsById), new { id = result.Id }, resultDto);
         }
 
         [HttpPut("{id}")]
-        public async Task<ActionResult> UpdateRental(int id, SaveCarRentalDto dto)
+        public async Task<ActionResult> UpdateRental(int id, CarCreateUpdateDto dto)
         {
             var rental = await _carRentalRepo.GetAsync(id);
-            if (rental == null) return NotFound();
+            if (rental == null) return NotFound(new ApiResponse(404));
 
             _mapper.Map(dto, rental);
-            _carRentalRepo.Update(rental);
-            await _carRentalRepo.SaveChangesAsync(); 
+            await _carRentalRepo.Update(rental);
 
             return NoContent();
         }
@@ -75,10 +77,9 @@ namespace TravelBooking.APIs.Controllers
         public async Task<ActionResult> DeleteRental(int id)
         {
             var rental = await _carRentalRepo.GetAsync(id);
-            if (rental == null) return NotFound();
+            if (rental == null) return NotFound(new ApiResponse(404));
 
-            _carRentalRepo.Delete(rental);
-            await _carRentalRepo.SaveChangesAsync(); 
+            await _carRentalRepo.Delete(rental);
 
             return NoContent();
         }

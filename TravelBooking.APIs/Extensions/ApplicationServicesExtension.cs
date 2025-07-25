@@ -1,27 +1,32 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.DependencyInjection;
-using System;
-using System.Linq;
-using TalabatAPIs.Errors;
 using TravelBooking.Core.Repository.Contract;
-using TravelBooking.Repository; // Make sure this is included
-                                // Adjust based on where your repos are defined
-namespace TalabatAPIs.Extensions
+using TravelBooking.Errors;
+using TravelBooking.Repository;
+﻿
+using Microsoft.AspNetCore.Mvc; 
+using TravelBooking.Errors;
+
+namespace TravelBooking.Extensions
 {
     public static class ApplicationServicesExtension
     {
-        
-        public static IServiceCollection AddApplicationServices(this IServiceCollection services)
+         public static IServiceCollection AddApplicationServices(this IServiceCollection Services)
         {
+            Services.AddScoped(typeof(IGenericRepository<>), typeof(GenericRepository<>));
+            //Services.AddAutoMapper(configuration =>
+            //{
+            //    configuration.AddMaps(AppDomain.CurrentDomain.GetAssemblies());
+            //});
 
-            services.AddScoped(typeof(IGenericRepository<>), typeof(GenericRepository<>));
-           services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
+
+            
             /// Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
             ///builder.Services.AddOpenApi();
-            services.Configure<ApiBehaviorOptions>(options =>
+            Services.Configure<ApiBehaviorOptions>(options =>
             {
+
                 options.InvalidModelStateResponseFactory = (actionContext) =>
                 {
                     var errors = actionContext.ModelState
@@ -34,9 +39,9 @@ namespace TalabatAPIs.Extensions
                     };
                     return new BadRequestObjectResult(errorResponse);
                 };
-            }
+            } 
             );
-            return services;
+            return Services;
         }
     }
 }
