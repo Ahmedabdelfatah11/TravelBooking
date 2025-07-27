@@ -1,5 +1,5 @@
 
-﻿using AutoMapper;
+using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using TravelBooking.APIs.DTOS.Booking.FlightBooking;
@@ -20,13 +20,13 @@ namespace TravelBooking.APIs.Controllers
         private readonly IGenericRepository<Booking> _bookingRepo;
         private readonly IMapper _mapper;
 
-        public FlightController(IGenericRepository<Flight> flightRepository , IMapper mapper, IGenericRepository<Booking> bookingRepo)
+        public FlightController(IGenericRepository<Flight> flightRepository, IMapper mapper, IGenericRepository<Booking> bookingRepo)
         {
             _flightRepo = flightRepository;
             _mapper = mapper;
             _bookingRepo = bookingRepo;
         }
-       
+
         [HttpGet]
         public async Task<ActionResult<Pagination<FlightDTO>>> GetAllFlights([FromQuery] FlightSpecParams specParams)
         {
@@ -125,7 +125,7 @@ namespace TravelBooking.APIs.Controllers
             result.BookingId = booking.Id;
             result.Price = price;
 
-            return Ok(result);  
+            return Ok(result);
         }
         [HttpPost]
         public async Task<ActionResult<Flight>> AddFlight([FromBody] FlightDTO dto)

@@ -18,16 +18,16 @@ namespace TravelBooking.Core.Models
         Flight,
         Tour
     }
-     
+
 
     public class Booking : BaseEntity
     {
         public DateTime StartDate { get; set; }
         public DateTime EndDate { get; set; }
-        public Status Status { get; set; }  
+        public Status Status { get; set; }
         public BookingType BookingType { get; set; }
 
-        public SeatClass? SeatClass { get; set; } 
+        public SeatClass? SeatClass { get; set; }
 
         public int? RoomId { get; set; }
         public Room? Room { get; set; }

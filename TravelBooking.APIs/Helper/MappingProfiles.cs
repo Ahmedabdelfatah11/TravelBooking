@@ -1,5 +1,5 @@
 using TravelBooking.APIs.Dtos.HotelCompany;
-using TravelBooking.APIs.Dtos.Rooms; 
+using TravelBooking.APIs.Dtos.Rooms;
 using TravelBooking.Core.DTOS.CarRentalCompanies;
 using TravelBooking.Core.DTOS.Cars;
 using TravelBooking.APIs.DTOS.Booking;
@@ -7,7 +7,7 @@ using TravelBooking.APIs.DTOS.Booking.RoomBooking;
 using TravelBooking.APIs.DTOS.Booking.CarBooking;
 using TravelBooking.APIs.DTOS.Booking.FlightBooking;
 using TravelBooking.APIs.DTOS.Booking.TourBooking;
-using AutoMapper; 
+using AutoMapper;
 using TravelBooking.APIs.DTOS.Tours;
 using TravelBooking.APIs.DTOS.TourCompany;
 using TravelBooking.Core.Models;
@@ -137,7 +137,7 @@ namespace TravelBooking.Helper
                 .ForMember(dest => dest.DepartureAirport, opt => opt.MapFrom(src => src.Flight.DepartureAirport))
                 .ForMember(dest => dest.ArrivalAirport, opt => opt.MapFrom(src => src.Flight.ArrivalAirport))
                 .ForMember(dest => dest.FlightId, opt => opt.MapFrom(src => src.FlightId))
-                .ForMember(dest => dest.SeatClass , opt => opt.MapFrom(src => src.SeatClass))
+                .ForMember(dest => dest.SeatClass, opt => opt.MapFrom(src => src.SeatClass))
                 .ForMember(dest => dest.Price, opt => opt.MapFrom(src => src.TotalPrice))
                 ;
 
