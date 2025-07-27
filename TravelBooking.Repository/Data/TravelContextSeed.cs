@@ -16,7 +16,58 @@ namespace TravelBooking.Repository.Data
             {
                 Converters = { new JsonStringEnumConverter() }
             };
+            // Seed Car Rental Companies
+            if (!context.CarRentalCompanies.Any())
+            {
+                var carsData = await File.ReadAllTextAsync("../TravelBooking.Repository/Data/DataSeed/CarRentalAndCars.json");
+                var seedData = JsonSerializer.Deserialize<SeedDataModel>(carsData, options);
 
+                if (seedData?.CarRentalCompanies is not null && seedData.CarRentalCompanies.Count > 0)
+                {
+                    var carRentalCompanies = seedData.CarRentalCompanies.Select(crc => new CarRentalCompany
+                    {
+                        Name = crc.Name,
+                        description = crc.description,
+                        Location = crc.Location,
+                        ImageUrl = crc.ImageUrl,
+                        Rating = crc.Rating
+                    }).ToList();
+
+                    foreach (var company in carRentalCompanies)
+                        await context.Set<CarRentalCompany>().AddAsync(company);
+
+                    await context.SaveChangesAsync();
+                }
+            }
+
+            // Seed Cars
+            if (!context.Cars.Any())
+            {
+                var carsData = await File.ReadAllTextAsync("../TravelBooking.Repository/Data/DataSeed/CarRentalAndCars.json");
+                var seedData = JsonSerializer.Deserialize<SeedDataModel>(carsData, options);
+
+                if (seedData?.Cars is not null && seedData.Cars.Count > 0)
+                {
+                    var cars = seedData.Cars.Select(c => new Car
+                    {
+                        Model = c.Model,
+                        Price = c.Price,
+                        Description = c.Description,
+                        IsAvailable = c.IsAvailable,
+                        DepartureTime = c.DepartureTime,
+                        ArrivalTime = c.ArrivalTime,
+                        Location = c.Location,
+                        ImageUrl = c.ImageUrl,
+                        Capacity = c.Capacity,
+                        RentalCompanyId = c.RentalCompanyId
+                    }).ToList();
+
+                    foreach (var car in cars)
+                        await context.Set<Car>().AddAsync(car);
+
+                    await context.SaveChangesAsync();
+                }
+            }
             // Seed Hotel Companies
             if (!context.HotelCompanies.Any())
             {

@@ -175,7 +175,13 @@ namespace TravelBooking.Repository.Migrations
                     b.Property<int?>("FlightId")
                         .HasColumnType("int");
 
+                    b.Property<decimal>("Price")
+                        .HasColumnType("decimal(18,2)");
+
                     b.Property<int?>("RoomId")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("SeatClass")
                         .HasColumnType("int");
 
                     b.Property<DateTime>("StartDate")
@@ -376,28 +382,40 @@ namespace TravelBooking.Repository.Migrations
 
                     b.Property<string>("ArrivalAirport")
                         .IsRequired()
-                        .HasMaxLength(10)
-                        .HasColumnType("nvarchar(10)");
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
 
                     b.Property<DateTime>("ArrivalTime")
                         .HasColumnType("datetime2");
 
-                    b.Property<int>("AvailableSeats")
+                    b.Property<decimal>("BusinessPrice")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<int>("BusinessSeats")
                         .HasColumnType("int");
 
                     b.Property<string>("DepartureAirport")
                         .IsRequired()
-                        .HasMaxLength(10)
-                        .HasColumnType("nvarchar(10)");
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
 
                     b.Property<DateTime>("DepartureTime")
                         .HasColumnType("datetime2");
 
-                    b.Property<int>("FlightCompanyId")
+                    b.Property<decimal>("EconomyPrice")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<int>("EconomySeats")
                         .HasColumnType("int");
 
-                    b.Property<decimal>("Price")
+                    b.Property<decimal>("FirstClassPrice")
                         .HasColumnType("decimal(18,2)");
+
+                    b.Property<int>("FirstClassSeats")
+                        .HasColumnType("int");
+
+                    b.Property<int>("FlightCompanyId")
+                        .HasColumnType("int");
 
                     b.HasKey("Id");
 
@@ -431,8 +449,8 @@ namespace TravelBooking.Repository.Migrations
                         .HasMaxLength(100)
                         .HasColumnType("nvarchar(100)");
 
-                    b.Property<string>("Rating")
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<int?>("Rating")
+                        .HasColumnType("int");
 
                     b.HasKey("Id");
 

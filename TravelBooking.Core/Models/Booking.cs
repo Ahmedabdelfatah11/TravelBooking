@@ -22,6 +22,12 @@ namespace TravelBooking.Core.Models
         Flight,
         Tour
     }
+    public enum SeatClass
+    {
+        Economy,
+        Business,
+        FirstClass
+    }
     public class Booking : BaseEntity
 
     {
@@ -29,7 +35,8 @@ namespace TravelBooking.Core.Models
         public DateTime EndDate { get; set; }
         public Status Status { get; set; }
         public BookingType BookingType { get; set; }
-
+        public SeatClass? SeatClass { get; set; }
+        public decimal Price { get; set; }
         public int? RoomId { get; set; }
         public Room? Room { get; set; }
 
