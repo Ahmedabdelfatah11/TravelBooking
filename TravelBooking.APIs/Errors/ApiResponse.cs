@@ -16,7 +16,7 @@ private string? GetDefaultMessageForStatusCode(int statusCode)
            {
                400 => "A Bad Request, you have made",
                401 => "Authorized, you are not",
-               404 => "Resource Found, it was not",
+               404 => "Resource Not Found",
                500 => "Internal Server Error, something went wrong", 
                _ => null
            };

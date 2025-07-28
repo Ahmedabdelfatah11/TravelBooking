@@ -8,6 +8,8 @@ using System.Threading.Tasks;
 
 namespace TravelBooking.Core.Models
 {
+
+
     public class Flight : BaseEntity
     {
         [Required(ErrorMessage = "Departure time is required.")]
@@ -20,19 +22,14 @@ namespace TravelBooking.Core.Models
 
         [Required(ErrorMessage = "Price is required.")]
         [Range(0.01, double.MaxValue, ErrorMessage = "Price must be greater than zero.")]
-        public decimal Price { get; set; }
 
-        [Required(ErrorMessage = "Standard seats are required.")]
-        [Range(0, int.MaxValue, ErrorMessage = "Available standard seats cannot be negative.")]
-        public int AvailableSeats { get; set; }
-        
-        //[Required(ErrorMessage = "Business class seats are required.")]
-        //[Range(0, int.MaxValue, ErrorMessage = "Available business class seats cannot be negative.")]
-        //public int AvailableBusinessSeats { get; set; }
+        public int EconomySeats { get; set; }
+        public int BusinessSeats { get; set; }
+        public int FirstClassSeats { get; set; }
 
-        //[Required(ErrorMessage = "First class seats are required.")]
-        //[Range(0, int.MaxValue, ErrorMessage = "Available first class seats cannot be negative.")]
-        //public int AvailableFirstClassSeats { get; set; }
+        public decimal EconomyPrice { get; set; }
+        public decimal BusinessPrice { get; set; }
+        public decimal FirstClassPrice { get; set; }
 
         [Required(ErrorMessage = "Departure airport is required.")]
         [StringLength(100, MinimumLength = 3, ErrorMessage = "Departure airport name must be between 3 and 100 characters.")]
@@ -42,8 +39,29 @@ namespace TravelBooking.Core.Models
         [StringLength(100, MinimumLength = 3, ErrorMessage = "Arrival airport name must be between 3 and 100 characters.")]
         public string ArrivalAirport { get; set; } = string.Empty;
 
-        [ForeignKey("FlightCompany")]
-        public int FlightId { get; set; }
+        public int FlightCompanyId { get; set; }
+
+        [ForeignKey("FlightCompanyId")]
         public FlightCompany? FlightCompany { get; set; }
+        public SeatClass? SelectedSeatClass { get; set; }
+
+        public decimal GetPrice(SeatClass? seatClass)
+        {
+            switch (seatClass)
+            {
+                case SeatClass.Economy:
+                    return EconomyPrice;
+                case SeatClass.Business:
+                    return BusinessPrice;
+                case SeatClass.FirstClass:
+                    return FirstClassPrice;
+                default:
+                    return 0;
+            }
+        }
+
+
+
     }
+
 }

@@ -40,6 +40,11 @@ namespace TravelBooking.Core.Specifications
             Take = take;
             IsPaginationEnabled = true;
         }
+        public void AddInclude(Expression<Func<T, object>> includeExpression)
+        {
+            Includes.Add(includeExpression);
+        }
+
 
 
     }

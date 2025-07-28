@@ -15,6 +15,11 @@ namespace TravelBooking.Core.Models
         public string? Location { get; set; } // Location of the tour company, e.g., "Rome, Italy"
         public string? rating { get; set; } // Rating out of 5 or a descriptive rating like "Excellent", "Good", etc.
 
-        public ICollection<Tour>? Tours { get; set; } = new List<Tour>(); 
+        public ICollection<Tour>? Tours { get; set; } = new List<Tour>();
+
+
+        public ICollection<Favoritet> favoritets { get; set; } = new List<Favoritet>();
+
+        public ICollection<Review> reviews { get; set; } = new List<Review>();
     }
 }

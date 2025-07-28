@@ -1,16 +1,16 @@
-﻿using AutoMapper;
-using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using TravelBooking.APIs.Dtos.TourCompany;
 using TravelBooking.Core.Models;
-using TravelBooking.Core.Repository.Contract;
-using TravelBooking.Core.Specifications.TourCompanySpecs;
-using TravelBooking.Core.Specifications;
+
 using TravelBooking.Helper;
-using TravelBooking.Repository.TourCompanySpecs;
-using TravelBooking.APIs.Dtos.Tours;
-using TravelBooking.Core.Specifications.TourSpecs;
 using TravelBooking.Errors;
+using TravelBooking.APIs.DTOS.Booking.TourBooking;
+using Microsoft.AspNetCore.Authorization;
+using TravelBooking.Core.Repository.Contract;
+using AutoMapper;
+using TravelBooking.Core.Specifications.TourSpecs;
+using TravelBooking.APIs.DTOS.Tours;
+using TravelBooking.APIs.DTOS.TourCompany;
 
 namespace TravelBooking.APIs.Controllers
 {
@@ -20,13 +20,19 @@ namespace TravelBooking.APIs.Controllers
     {
         private readonly IGenericRepository<Tour> _tourRepo;
         private readonly IMapper _mapper;
+        private readonly IGenericRepository<Booking> _bookingRepo;
+        private readonly IGenericRepository<TourCompany> _tourCompany;
 
         public TourController(
             IGenericRepository<Tour> tourRepo,
-            IMapper mapper)
+            IMapper mapper,
+             IGenericRepository<Booking> bookingRepo,
+             IGenericRepository<TourCompany> tourCompany)
         {
             _tourRepo = tourRepo;
             _mapper = mapper;
+            _bookingRepo = bookingRepo;
+            _tourCompany = tourCompany;
         }
         [HttpGet]
         public async Task<ActionResult<Pagination<TourReadDto>>> GetTourCompanies([FromQuery] TourSpecParams specParams)
@@ -64,9 +70,57 @@ namespace TravelBooking.APIs.Controllers
         {
             var entity = _mapper.Map<Tour>(dto);
             var result = await _tourRepo.AddAsync(entity);
+
+            // Load TourCompany so AutoMapper can project its Name
+            result.TourCompany = await _tourCompany.GetAsync(dto.TourCompanyId.Value);
+
             var resultDto = _mapper.Map<TourReadDto>(result);
             return CreatedAtAction(nameof(GetTourById), new { id = result.Id }, resultDto);
         }
+        [Authorize]
+        [HttpPost("{serviceId}/book")]
+        public async Task<IActionResult> BookTour(int serviceId/*, [FromBody] TourBookingDto? dto*/)
+        {
+            var userId = User.FindFirst("uid")?.Value;
+            if (string.IsNullOrEmpty(userId))
+                return Unauthorized("User ID not found in token.");
+
+            var tour = await _tourRepo.GetAsync(serviceId);
+            if (tour == null) return NotFound(new ApiResponse(404));
+
+            // Validate that the tour date is valid (optional but recommended)
+            if (tour.StartDate >= tour.EndDate)
+                return BadRequest("Invalid tour date range.");
+
+            // Check for overlapping bookings
+            var existingBookings = await _bookingRepo.GetAllAsync(b =>
+                b.TourId == serviceId &&
+                b.Status != Status.Cancelled &&
+                b.StartDate < tour.EndDate &&
+                tour.StartDate < b.EndDate
+            );
+            if (existingBookings.Any())
+                return BadRequest("Tour already booked in selected time frame.");
+
+            var booking = new Booking
+            {
+                UserId = userId,
+                TourId = serviceId,
+                StartDate = tour.StartDate,
+                EndDate = tour.EndDate,
+                BookingType = BookingType.Tour,
+                Status = Status.Pending
+            };
+
+            await _bookingRepo.AddAsync(booking);
+            booking.Tour = tour;
+
+            var result = _mapper.Map<TourBookingResultDto>(booking);
+            return CreatedAtAction("GetBookingById", "Booking", new { id = booking.Id }, result);
+        }
+
+
+
 
         // PUT: api/TourCompany/5
         [HttpPut("{id}")]

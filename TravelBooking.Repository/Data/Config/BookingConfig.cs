@@ -10,19 +10,33 @@ namespace TravelBooking.Core.Configurations
         {
             builder.Property(b => b.StartDate).IsRequired();
             builder.Property(b => b.EndDate).IsRequired();
-            builder.Property(b => b.status).IsRequired();
+            builder.Property(b => b.Status).IsRequired();
             builder.Property(b => b.BookingType).IsRequired();
-            builder.Property(b => b.RefId).IsRequired(false);
 
-            // One-to-many relationship with user
+            builder.HasOne(b => b.Room)
+                   .WithMany()
+                   .HasForeignKey(b => b.RoomId)
+                   .OnDelete(DeleteBehavior.Restrict);
+
+            builder.HasOne(b => b.Car)
+                   .WithMany()
+                   .HasForeignKey(b => b.CarId)
+                   .OnDelete(DeleteBehavior.Restrict);
+
+            builder.HasOne(b => b.Flight)
+                   .WithMany()
+                   .HasForeignKey(b => b.FlightId)
+                   .OnDelete(DeleteBehavior.Restrict);
+
+            builder.HasOne(b => b.Tour)
+                   .WithMany()
+                   .HasForeignKey(b => b.TourId)
+                   .OnDelete(DeleteBehavior.Restrict);
+
             builder.HasOne(b => b.User)
                    .WithMany()
-                   .HasForeignKey(b => b.UserId);
-
-            // one to many relationship with payment
-            builder.HasOne(b => b.Payment)
-                   .WithMany()
-                   .HasForeignKey(b => b.PaymentId);
+                   .HasForeignKey(b => b.UserId)
+                   .IsRequired(false);
         }
     }
 }

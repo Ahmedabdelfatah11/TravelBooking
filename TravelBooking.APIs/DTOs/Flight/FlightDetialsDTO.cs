@@ -1,7 +1,7 @@
 ﻿using System.ComponentModel.DataAnnotations;
-using TravelBooking.APIs.Dtos.FlightCompany;
+using TravelBooking.APIs.DTOS.FlightCompany;
 
-namespace TravelBooking.APIs.Dtos.Flight
+namespace TravelBooking.APIs.DTOS.Flight
 {
     public class FlightDetialsDTO
     {
@@ -12,10 +12,15 @@ namespace TravelBooking.APIs.Dtos.Flight
         public string ArrivalAirport { get; set; } // Arrival airport code, e.g., "LAX"
         public DateTime departureTime { get; set; } // Departure time of the flight
         public DateTime arrivalTime { get; set; } // Arrival time of the flight
-        public decimal Price { get; set; } // Price of the flight ticket
-        public string AirlineName { get; set; } // Name of the airline operating the flight
-        public string ImageUrl { get; set; } // URL to an image representing the flight or airline
-        public int AvailableSeats { get; set; } // Number of available seats on the flight
+        
+        public int EconomySeats { get; set; }
+        public int BusinessSeats { get; set; }
+        public int FirstClassSeats { get; set; }
+
+        public decimal EconomyPrice { get; set; }
+        public decimal BusinessPrice { get; set; }
+        public decimal FirstClassPrice { get; set; } 
         public FlightCompanyDTO FlightCompany { get; set; }
+
     }
 }

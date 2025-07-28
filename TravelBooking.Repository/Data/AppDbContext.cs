@@ -1,3 +1,6 @@
+
+using TravelBooking.Models;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.ChangeTracking.Internal;
 using System;
@@ -8,9 +11,10 @@ using System.Text;
 using System.Threading.Tasks;
 using TravelBooking.Core.Models;
 
+
 namespace TravelBooking.Repository.Data
 {
-    public class AppDbContext : DbContext
+    public class AppDbContext : IdentityDbContext<ApplicationUser>
     {
         public AppDbContext(DbContextOptions<AppDbContext> options) : base(options)
         {
@@ -31,8 +35,11 @@ namespace TravelBooking.Repository.Data
         public DbSet<HotelCompany> HotelCompanies { get; set; }
         public DbSet<Payment> Payments { get; set; }
         public DbSet<Tour> Tours { get; set; }
-        public DbSet<TourCompany> TourCompany { get; set; }
-        public DbSet<User> Users { get; set; }
+        public DbSet<TourCompany> TourCompanies { get; set; }
         public DbSet<TourImage> TourImages { get; set; }
+        public DbSet<ApplicationUser> Users { get; set; }
+
+        public DbSet<Favoritet> Favorites { get; set; }
+        public DbSet<Review> Reviews { get; set; }
     }
 }
