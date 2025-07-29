@@ -151,8 +151,8 @@ namespace TravelBooking.APIs
             {
                 await _dbcontext.Database.MigrateAsync();
                 await RoleSeeder.SeedAsync(Services); // assigning roles to the database
-                await TravelContextSeed.SeedAsync(_dbcontext);
                 await FlightContextSeed.SeedAsync(_dbcontext);
+                await TravelContextSeed.SeedAsync(_dbcontext);
             }
             catch (Exception ex)
             {

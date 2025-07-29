@@ -13,6 +13,7 @@ public class BookingSpecification : BaseSpecifications<Booking>
     {
         // Include related data if any, for example User:
         Includes.Add(b => b.User);
+        Includes.Add(b=>b.Payment);
         // Add more includes if needed
     }
 

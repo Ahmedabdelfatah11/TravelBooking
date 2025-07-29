@@ -60,11 +60,11 @@ namespace TravelBooking.APIs.Controllers
         {
             var userId = User.FindFirst("uid")?.Value;
             if (string.IsNullOrEmpty(userId))
-                return Unauthorized("User ID not found in token.");
+                return Unauthorized(new ApiResponse(401, "User ID not found in token."));
 
             var flight = await _flightRepo.GetAsync(serviceId);
             if (flight == null)
-                return NotFound(new ApiResponse(404));
+                return NotFound(new ApiResponse(404, "Flight not found."));
 
             var existingBookings = await _bookingRepo.GetAllAsync(b =>
                 b.UserId == userId &&
@@ -74,34 +74,34 @@ namespace TravelBooking.APIs.Controllers
                 b.EndDate == flight.ArrivalTime);
 
             if (existingBookings.Any())
-                return BadRequest("Flight already booked in selected time frame.");
+                return BadRequest(new ApiResponse(400, "You already have a booking for this flight at the same time."));
 
             decimal price;
             switch (dto.SeatClass)
             {
                 case SeatClass.Economy:
                     if (flight.EconomySeats <= 0)
-                        return BadRequest("No economy seats available.");
+                        return BadRequest(new ApiResponse(400, "No economy seats available."));
                     flight.EconomySeats--;
                     price = flight.EconomyPrice;
                     break;
 
                 case SeatClass.Business:
                     if (flight.BusinessSeats <= 0)
-                        return BadRequest("No business class seats available.");
+                        return BadRequest(new ApiResponse(400, "No business class seats available."));
                     flight.BusinessSeats--;
                     price = flight.BusinessPrice;
                     break;
 
                 case SeatClass.FirstClass:
                     if (flight.FirstClassSeats <= 0)
-                        return BadRequest("No first class seats available.");
+                        return BadRequest(new ApiResponse(400, "No first class seats available."));
                     flight.FirstClassSeats--;
                     price = flight.FirstClassPrice;
                     break;
 
                 default:
-                    return BadRequest("Invalid seat class.");
+                    return BadRequest(new ApiResponse(400, "Invalid seat class."));
             }
 
             var booking = new Booking
@@ -112,7 +112,7 @@ namespace TravelBooking.APIs.Controllers
                 Status = Status.Pending,
                 StartDate = flight.DepartureTime,
                 EndDate = flight.ArrivalTime,
-                SeatClass = dto.SeatClass  
+                SeatClass = dto.SeatClass
             };
 
             await _bookingRepo.AddAsync(booking);
@@ -121,11 +121,11 @@ namespace TravelBooking.APIs.Controllers
             booking.Flight = flight;
 
             var result = _mapper.Map<FlightBookingResultDto>(booking);
+            result.BookingId = booking.Id;
             result.Price = price;
 
-            return CreatedAtAction("GetBookingById", "Booking", new { id = booking.Id }, result);
+            return Ok(result);  
         }
-
         [HttpPost]
         public async Task<ActionResult<Flight>> AddFlight([FromBody] FlightDTO dto)
         {

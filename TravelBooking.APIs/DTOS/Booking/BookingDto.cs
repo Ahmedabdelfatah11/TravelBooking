@@ -14,7 +14,7 @@ namespace TravelBooking.APIs.DTOS.Booking
             public string? PaymentIntentId { get; set; }
             public string? ClientSecret { get; set; }
 
-            public string? PaymentStatus { get; set; }  
+            public PaymentStatus? PaymentStatus { get; set; }  
    
 
     }
