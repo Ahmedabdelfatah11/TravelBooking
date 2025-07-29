@@ -93,6 +93,7 @@ namespace TravelBooking.Helper
             CreateMap<ApplicationUser, UserDto>();
             CreateMap<Booking, BookingDto>();
 
+
             // Room Booking
             CreateMap<RoomBookingDto, Booking>()
                 .ForMember(dest => dest.Status, opt => opt.Ignore())
