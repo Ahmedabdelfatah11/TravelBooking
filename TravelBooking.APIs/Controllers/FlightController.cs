@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 using TravelBooking.APIs.DTOS.Booking.FlightBooking;
 using TravelBooking.APIs.DTOS.Flight;
+using TravelBooking.APIs.DTOS.FlightCompany;
 using TravelBooking.APIs.DTOS.Tours;
 using TravelBooking.Core.Models;
 using TravelBooking.Core.Repository.Contract;
@@ -130,13 +131,10 @@ namespace TravelBooking.APIs.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult<Flight>> AddFlight([FromBody] FlightDTO dto)
+        public async Task<ActionResult<Flight>> AddFlight([FromBody] Flight dto)
         {
-            var entity = mapper.Map<Flight>(dto);
-            var newCompany = await flightRepository.AddAsync(entity);
-
-            var resultDto = mapper.Map<FlightDTO>(newCompany);
-            return CreatedAtAction(nameof(GetFlight), new { id = newCompany.Id }, resultDto);
+            var newCompany = await flightRepository.AddAsync(dto);
+            return CreatedAtAction(nameof(GetFlight), new { id = newCompany.Id }, newCompany);
         }
         [HttpPut("{id}")]
         public async Task<ActionResult> UpdateFlight(int id, Flight company)
