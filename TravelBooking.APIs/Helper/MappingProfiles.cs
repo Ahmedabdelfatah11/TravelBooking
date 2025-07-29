@@ -53,12 +53,18 @@ namespace TravelBooking.Helper
 
 
             // RoomImage
-            CreateMap<RoomImage, RoomImageReadDTO>();
+            CreateMap<RoomImage, RoomImageReadDTO>()
+                
+                //.ForMember(dest => dest.Room, opt => opt.Ignore())
+                ;
 
             #region Room and RoomImage  
             //  Room Mappings
             CreateMap<Room, RoomToReturnDTO>()
+
                 .ForMember(dest => dest.RoomType, opt => opt.MapFrom(src => src.RoomType.ToString()))
+                .ForMember(dest => dest.HotelCompanyName, opt => opt.MapFrom(src => src.Hotel != null ? src.Hotel.Name : string.Empty))
+                .ForMember(dest => dest.HotelCompanyId, opt => opt.MapFrom(src => src.HotelId))
                 .ForMember(dest => dest.RoomImages, opt => opt.MapFrom(src => src.Images));
 
             CreateMap<RoomCreateDTO, Room>()

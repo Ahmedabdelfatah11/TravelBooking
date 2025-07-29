@@ -497,7 +497,7 @@ namespace TravelBooking.Repository.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "RoomImage",
+                name: "RoomImages",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
@@ -507,9 +507,9 @@ namespace TravelBooking.Repository.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_RoomImage", x => x.Id);
+                    table.PrimaryKey("PK_RoomImages", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_RoomImage_Rooms_RoomId",
+                        name: "FK_RoomImages_Rooms_RoomId",
                         column: x => x.RoomId,
                         principalTable: "Rooms",
                         principalColumn: "Id",
@@ -798,8 +798,8 @@ namespace TravelBooking.Repository.Migrations
                 filter: "[HotelCompanyId] IS NOT NULL AND [FlightCompanyId] IS NOT NULL AND [CarRentalCompanyId] IS NOT NULL AND [TourCompanyId] IS NOT NULL");
 
             migrationBuilder.CreateIndex(
-                name: "IX_RoomImage_RoomId",
-                table: "RoomImage",
+                name: "IX_RoomImages_RoomId",
+                table: "RoomImages",
                 column: "RoomId");
 
             migrationBuilder.CreateIndex(
@@ -846,7 +846,7 @@ namespace TravelBooking.Repository.Migrations
                 name: "Reviews");
 
             migrationBuilder.DropTable(
-                name: "RoomImage");
+                name: "RoomImages");
 
             migrationBuilder.DropTable(
                 name: "TourImages");

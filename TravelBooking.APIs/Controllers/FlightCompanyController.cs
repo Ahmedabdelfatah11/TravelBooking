@@ -37,11 +37,11 @@ namespace TravelBooking.APIs.Controllers
             return Ok(companyDTOs);
         }
         [HttpGet("{id}")]
-        public async Task<ActionResult<FlightCompanyDetailsDTO>> GetFlightCompany(int id)
+        public async Task<ActionResult<FlightDetailsDTO>> GetFlightCompany(int id)
         {
             var spec = new FlightWithCompanySpecs(id);
             var Company = await _flightComRepository.GetWithSpecAsync(spec);
-            var companyDTO = _mapper.Map<FlightCompanyDetailsDTO>(Company);
+            var companyDTO = _mapper.Map<FlightDetailsDTO>(Company);
             return Ok(companyDTO);
         }
         [HttpPost]

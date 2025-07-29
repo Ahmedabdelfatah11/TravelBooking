@@ -7,6 +7,6 @@ namespace TravelBooking.APIs.Dtos.Rooms
         public string ImageUrl { get; set; }
 
         public int RoomId { get; set; }
-        public Room Room { get; set; }
+        //public Room Room { get; set; }
     }
 }

@@ -677,7 +677,7 @@ namespace TravelBooking.Repository.Migrations
 
                     b.HasIndex("RoomId");
 
-                    b.ToTable("RoomImage");
+                    b.ToTable("RoomImages");
                 });
 
             modelBuilder.Entity("TravelBooking.Core.Models.Tour", b =>

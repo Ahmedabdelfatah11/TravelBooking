@@ -12,7 +12,7 @@ using TravelBooking.Repository.Data;
 namespace TravelBooking.Repository.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20250726151914_initial version")]
+    [Migration("20250729222220_initial version")]
     partial class initialversion
     {
         /// <inheritdoc />
@@ -680,7 +680,7 @@ namespace TravelBooking.Repository.Migrations
 
                     b.HasIndex("RoomId");
 
-                    b.ToTable("RoomImage");
+                    b.ToTable("RoomImages");
                 });
 
             modelBuilder.Entity("TravelBooking.Core.Models.Tour", b =>
