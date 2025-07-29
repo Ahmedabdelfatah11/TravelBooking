@@ -3,7 +3,7 @@
 	<PropertyGroup>
 		<TargetFramework>net9.0</TargetFramework>
 		<Nullable>enable</Nullable>
-		<ImplicitUsings>enable</ImplicitUsings>
+		<ImplicitUsings>enable</ImplicitUsings> 
 		<UserSecretsId>ec6a08a0-e272-4b88-9cbb-5ae2dab98a35</UserSecretsId>
 	</PropertyGroup>
 
@@ -19,6 +19,7 @@
 	</ItemGroup>
 
 	<ItemGroup>
+		<ProjectReference Include="..\TravelBooking.Core\TravelBooking.Core.csproj" />
 		<ProjectReference Include="..\TravelBooking.Repository\TravelBooking.Repository.csproj" />
 		<ProjectReference Include="..\TravelBooking.Service\TravelBooking.Service.csproj" />
 	</ItemGroup>

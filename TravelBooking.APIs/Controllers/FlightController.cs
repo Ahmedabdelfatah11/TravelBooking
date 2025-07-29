@@ -1,3 +1,4 @@
+
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -19,13 +20,13 @@ namespace TravelBooking.APIs.Controllers
         private readonly IGenericRepository<Booking> _bookingRepo;
         private readonly IMapper _mapper;
 
-        public FlightController(IGenericRepository<Flight> flightRepo, IMapper mapper, IGenericRepository<Booking> bookingRepo)
+        public FlightController(IGenericRepository<Flight> flightRepository , IMapper mapper, IGenericRepository<Booking> bookingRepo)
         {
-            _flightRepo = flightRepo;
+            _flightRepo = flightRepository;
             _mapper = mapper;
             _bookingRepo = bookingRepo;
         }
-
+       
         [HttpGet]
         public async Task<ActionResult<Pagination<FlightDTO>>> GetAllFlights([FromQuery] FlightSpecParams specParams)
         {

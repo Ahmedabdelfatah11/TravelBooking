@@ -1,6 +1,5 @@
 using TravelBooking.APIs.Dtos.HotelCompany;
-using TravelBooking.APIs.Dtos.Rooms;
-using TravelBooking.Core.Models;
+using TravelBooking.APIs.Dtos.Rooms; 
 using TravelBooking.Core.DTOS.CarRentalCompanies;
 using TravelBooking.Core.DTOS.Cars;
 using TravelBooking.APIs.DTOS.Booking;
@@ -8,10 +7,11 @@ using TravelBooking.APIs.DTOS.Booking.RoomBooking;
 using TravelBooking.APIs.DTOS.Booking.CarBooking;
 using TravelBooking.APIs.DTOS.Booking.FlightBooking;
 using TravelBooking.APIs.DTOS.Booking.TourBooking;
-using AutoMapper;
-using TravelBooking.Models;
+using AutoMapper; 
 using TravelBooking.APIs.DTOS.Tours;
 using TravelBooking.APIs.DTOS.TourCompany;
+using TravelBooking.Core.Models;
+using TravelBooking.Models;
 
 namespace TravelBooking.Helper
 {
@@ -91,7 +91,10 @@ namespace TravelBooking.Helper
 
             //Booking
             CreateMap<ApplicationUser, UserDto>();
-            CreateMap<Booking, BookingDto>();
+            CreateMap<Booking, BookingDto>()
+            .ForMember(dest => dest.CustomerEmail, opt => opt.MapFrom(src => src.User.Email))
+            .ForMember(dest => dest.PaymentStatus, opt => opt.MapFrom(src => src.Payment.PaymentStatus.ToString()));
+
 
 
             // Room Booking

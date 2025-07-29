@@ -31,11 +31,11 @@ namespace TravelBooking.APIs.Controllers
         private readonly IGenericRepository<Flight> _flightRepo;
         private readonly IGenericRepository<Tour> _tourRepo;
         public BookingController(IGenericRepository<Booking> bookingRepo,
-    IGenericRepository<Room> roomRepo,
-    IGenericRepository<Car> carRepo,
-    IGenericRepository<Flight> flightRepo,
-    IGenericRepository<Tour> tourRepo,
-    IMapper mapper)
+            IGenericRepository<Room> roomRepo,
+            IGenericRepository<Car> carRepo,
+            IGenericRepository<Flight> flightRepo,
+            IGenericRepository<Tour> tourRepo,
+            IMapper mapper)
         {
             _bookingRepo = bookingRepo;
             _roomRepo = roomRepo;
@@ -48,7 +48,9 @@ namespace TravelBooking.APIs.Controllers
         [HttpGet("{id}")]
         public async Task<ActionResult<BookingDto>> GetBookingById(int id)
         {
-            var booking = await _bookingRepo.GetAsync(id);
+            var spec = new BookingSpecification(id);
+            var booking = await _bookingRepo.GetWithSpecAsync(spec);
+
             if (booking is null) return NotFound();
 
             var dto = _mapper.Map<BookingDto>(booking);
@@ -77,13 +79,17 @@ namespace TravelBooking.APIs.Controllers
                     dto.AgencyDetails = _mapper.Map<TourReadDto>(tour);
                     break;
             }
+
             return Ok(dto);
         }
+
         // GET: api/booking
         [HttpGet]
         public async Task<ActionResult<IEnumerable<BookingDto>>> GetAllBookings()
         {
-            var bookings = await _bookingRepo.GetAllAsync();
+            var bookingSpec = new BookingSpecification();
+            var bookings = await _bookingRepo.GetAllWithSpecAsync(bookingSpec);
+
             var dtoList = new List<BookingDto>();
 
             foreach (var booking in bookings)
@@ -96,32 +102,35 @@ namespace TravelBooking.APIs.Controllers
                     case BookingType.Room:
                         if (booking.RoomId.HasValue)
                         {
-                            var spec = new RoomSpecification(booking.RoomId.Value);
-                            var room = await _roomRepo.GetWithSpecAsync(spec);
+                            var roomSpec = new RoomSpecification(booking.RoomId.Value);
+                            var room = await _roomRepo.GetWithSpecAsync(roomSpec);
                             dto.AgencyDetails = _mapper.Map<RoomToReturnDTO>(room);
                         }
                         break;
+
                     case BookingType.Car:
                         if (booking.CarId.HasValue)
                         {
-                            var spec = new CarSpecifications(booking.CarId.Value);
-                            var car = await _carRepo.GetWithSpecAsync(spec);
+                            var carSpec = new CarSpecifications(booking.CarId.Value);
+                            var car = await _carRepo.GetWithSpecAsync(carSpec);
                             dto.AgencyDetails = _mapper.Map<CarDto>(car);
                         }
                         break;
+
                     case BookingType.Flight:
                         if (booking.FlightId.HasValue)
                         {
-                            var spec = new FlightSpecs(booking.FlightId.Value);
-                            var flight = await _flightRepo.GetWithSpecAsync(spec);
+                            var flightSpec = new FlightSpecs(booking.FlightId.Value);
+                            var flight = await _flightRepo.GetWithSpecAsync(flightSpec);
                             dto.AgencyDetails = _mapper.Map<FlightDTO>(flight);
                         }
                         break;
+
                     case BookingType.Tour:
                         if (booking.TourId.HasValue)
                         {
-                            var spec = new ToursSpecification(booking.TourId.Value);
-                            var tour = await _tourRepo.GetWithSpecAsync(spec);
+                            var tourSpec = new ToursSpecification(booking.TourId.Value);
+                            var tour = await _tourRepo.GetWithSpecAsync(tourSpec);
                             dto.AgencyDetails = _mapper.Map<TourReadDto>(tour);
                         }
                         break;
@@ -132,6 +141,7 @@ namespace TravelBooking.APIs.Controllers
 
             return Ok(dtoList);
         }
+
 
         // DELETE: api/booking/{id}
         [HttpDelete("{id}")]
