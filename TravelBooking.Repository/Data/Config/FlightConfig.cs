@@ -12,9 +12,8 @@ namespace TravelBooking.Core.Configurations
 
             builder.Property(f => f.DepartureTime).IsRequired();
             builder.Property(f => f.ArrivalTime).IsRequired();
-            builder.Property(f => f.Price).HasColumnType("decimal(18,2)");
-            builder.Property(f => f.DepartureAirport).HasMaxLength(10);
-            builder.Property(f => f.ArrivalAirport).HasMaxLength(10);
+            builder.Property(f => f.DepartureAirport).HasMaxLength(100);
+            builder.Property(f => f.ArrivalAirport).HasMaxLength(100);
 
             // one-to-many with FlightCompany
             builder.HasOne(f => f.FlightCompany)

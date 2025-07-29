@@ -64,7 +64,7 @@ namespace TravelBooking.APIs.Controllers
 
         [Authorize]
         [HttpPost("{serviceId}/book")]
-        public async Task<IActionResult> BookFlight(int serviceId/*, [FromBody] FlightBookingDto dto*/)
+        public async Task<IActionResult> BookFlight(int serviceId, [FromBody] FlightBookingDto dto)
         {
             var userId = User.FindFirst("uid")?.Value;
             if (string.IsNullOrEmpty(userId))
@@ -83,7 +83,33 @@ namespace TravelBooking.APIs.Controllers
 
             if (existingBookings.Any())
                 return BadRequest("Tour already booked in selected time frame.");
+            decimal price;
+            switch (dto.SeatClass)
+            {
+                case SeatClass.Economy:
+                    if (flight.EconomySeats <= 0)
+                        return BadRequest("No economy seats available.");
+                    flight.EconomySeats--;
+                    price = flight.EconomyPrice;
+                    break;
 
+                case SeatClass.Business:
+                    if (flight.BusinessSeats <= 0)
+                        return BadRequest("No business class seats available.");
+                    flight.BusinessSeats--;
+                    price = flight.BusinessPrice;
+                    break;
+
+                case SeatClass.FirstClass:
+                    if (flight.FirstClassSeats <= 0)
+                        return BadRequest("No first class seats available.");
+                    flight.FirstClassSeats--;
+                    price = flight.FirstClassPrice;
+                    break;
+
+                default:
+                    return BadRequest("Invalid seat class.");
+            }
             var booking = new Booking
             {
                 FlightId = serviceId,
@@ -95,16 +121,13 @@ namespace TravelBooking.APIs.Controllers
             };
 
             await _bookingRepo.AddAsync(booking);
+            await flightRepository.Update(flight);
 
             booking.Flight = flight; 
             var result = mapper.Map<FlightBookingResultDto>(booking);
-
+            result.Price = price;
             return CreatedAtAction("GetBookingById", "Booking", new { id = booking.Id }, result);
         }
-
-
-
-
 
         [HttpPost]
         public async Task<ActionResult<Flight>> AddFlight([FromBody] FlightDTO dto)

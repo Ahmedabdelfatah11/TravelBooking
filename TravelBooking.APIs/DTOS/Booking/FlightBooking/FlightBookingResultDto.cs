@@ -1,4 +1,6 @@
-﻿namespace TravelBooking.APIs.DTOS.Booking.FlightBooking
+﻿using TravelBooking.Core.Models;
+
+namespace TravelBooking.APIs.DTOS.Booking.FlightBooking
 {
     public class FlightBookingResultDto
     {
@@ -10,6 +12,8 @@
         public string DepartureAirport { get; set; }
         public string ArrivalAirport { get; set; }
         public int FlightId { get; set; }
+        public SeatClass SeatClass { get; set; }
     }
+
 
 }

@@ -133,7 +133,7 @@ namespace TravelBooking.Core.Models.Services
                 Email = user.Email,
                 Roles = roles.ToList(),
                 Token = new JwtSecurityTokenHandler().WriteToken(token),
-                ExpireOn = token.ValidTo
+                ExpireOn = token.ValidTo.ToLocalTime()
             };
         }
         public async Task<AuthModel> Register(RegisterModel model)

@@ -122,16 +122,20 @@ namespace TravelBooking.Helper
             CreateMap<FlightBookingDto, Booking>()
                 .ForMember(dest => dest.Status, opt => opt.Ignore())
                 .ForMember(dest => dest.FlightId, opt => opt.Ignore())
-                .ForMember(dest => dest.BookingType, opt => opt.Ignore());
+                .ForMember(dest => dest.BookingType, opt => opt.Ignore())
+                .ForMember(dest => dest.SeatClass, opt => opt.MapFrom(src => src.SeatClass))
+                ;
             CreateMap<Booking, FlightBookingResultDto>()
                 .ForMember(dest => dest.BookingId, opt => opt.MapFrom(src => src.Id))
                 .ForMember(dest => dest.Status, opt => opt.MapFrom(src => src.Status.ToString()))
-                .ForMember(dest => dest.Price, opt => opt.MapFrom(src => src.Flight.Price))
                 .ForMember(dest => dest.DepartureTime, opt => opt.MapFrom(src => src.Flight.DepartureTime))
                 .ForMember(dest => dest.ArrivalTime, opt => opt.MapFrom(src => src.Flight.ArrivalTime))
                 .ForMember(dest => dest.DepartureAirport, opt => opt.MapFrom(src => src.Flight.DepartureAirport))
                 .ForMember(dest => dest.ArrivalAirport, opt => opt.MapFrom(src => src.Flight.ArrivalAirport))
-                .ForMember(dest => dest.FlightId, opt => opt.MapFrom(src => src.FlightId));
+                .ForMember(dest => dest.FlightId, opt => opt.MapFrom(src => src.FlightId))
+                .ForMember(dest => dest.SeatClass , opt => opt.MapFrom(src => src.SeatClass))
+                .ForMember(dest => dest.Price, opt => opt.MapFrom(src => src.Price))
+                ;
 
             // Tour Booking
             CreateMap<TourBookingDto, Booking>();

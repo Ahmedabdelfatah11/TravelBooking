@@ -22,11 +22,11 @@ namespace TravelBooking.Core.Specifications.FlightSpecs
                 switch (specParams.Sort)
                 {
                     case "priceAsc":
-                        AddOrderBy(P => P.Price);
+                        AddOrderBy(P => P.EconomyPrice);
                         //OrderBy = P => P.Price;
                         break;
                     case "priceDesc":
-                        AddOrderByDesc(P => P.Price);
+                        AddOrderByDesc(P => P.EconomyPrice);
                         break;
                     default:
                         AddOrderBy(P => P.FlightCompany);
