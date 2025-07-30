@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using TravelBooking.Repository.Data;
 
@@ -11,9 +12,11 @@ using TravelBooking.Repository.Data;
 namespace TravelBooking.Repository.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250729201651_Change ApplicationUser Model")]
+    partial class ChangeApplicationUserModel
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -175,13 +178,7 @@ namespace TravelBooking.Repository.Migrations
                     b.Property<int?>("FlightId")
                         .HasColumnType("int");
 
-                    b.Property<decimal>("Price")
-                        .HasColumnType("decimal(18,2)");
-
                     b.Property<int?>("RoomId")
-                        .HasColumnType("int");
-
-                    b.Property<int?>("SeatClass")
                         .HasColumnType("int");
 
                     b.Property<DateTime>("StartDate")
@@ -382,40 +379,28 @@ namespace TravelBooking.Repository.Migrations
 
                     b.Property<string>("ArrivalAirport")
                         .IsRequired()
-                        .HasMaxLength(100)
-                        .HasColumnType("nvarchar(100)");
+                        .HasMaxLength(10)
+                        .HasColumnType("nvarchar(10)");
 
                     b.Property<DateTime>("ArrivalTime")
                         .HasColumnType("datetime2");
 
-                    b.Property<decimal>("BusinessPrice")
-                        .HasColumnType("decimal(18,2)");
-
-                    b.Property<int>("BusinessSeats")
+                    b.Property<int>("AvailableSeats")
                         .HasColumnType("int");
 
                     b.Property<string>("DepartureAirport")
                         .IsRequired()
-                        .HasMaxLength(100)
-                        .HasColumnType("nvarchar(100)");
+                        .HasMaxLength(10)
+                        .HasColumnType("nvarchar(10)");
 
                     b.Property<DateTime>("DepartureTime")
                         .HasColumnType("datetime2");
 
-                    b.Property<decimal>("EconomyPrice")
-                        .HasColumnType("decimal(18,2)");
-
-                    b.Property<int>("EconomySeats")
-                        .HasColumnType("int");
-
-                    b.Property<decimal>("FirstClassPrice")
-                        .HasColumnType("decimal(18,2)");
-
-                    b.Property<int>("FirstClassSeats")
-                        .HasColumnType("int");
-
                     b.Property<int>("FlightCompanyId")
                         .HasColumnType("int");
+
+                    b.Property<decimal>("Price")
+                        .HasColumnType("decimal(18,2)");
 
                     b.HasKey("Id");
 
@@ -449,8 +434,8 @@ namespace TravelBooking.Repository.Migrations
                         .HasMaxLength(100)
                         .HasColumnType("nvarchar(100)");
 
-                    b.Property<int?>("Rating")
-                        .HasColumnType("int");
+                    b.Property<string>("Rating")
+                        .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
 
@@ -677,7 +662,7 @@ namespace TravelBooking.Repository.Migrations
 
                     b.HasIndex("RoomId");
 
-                    b.ToTable("RoomImages");
+                    b.ToTable("RoomImage");
                 });
 
             modelBuilder.Entity("TravelBooking.Core.Models.Tour", b =>
