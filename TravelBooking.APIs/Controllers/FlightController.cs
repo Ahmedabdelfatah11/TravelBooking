@@ -17,6 +17,7 @@ namespace TravelBooking.APIs.Controllers
 {
     [Route("[controller]")]
     [ApiController]
+    [Authorize(Roles = "SuperAdmin,User,FlightAdmin")]
     public class FlightController : Controller
     {
         private readonly IGenericRepository<Flight> flightRepository;
@@ -31,6 +32,7 @@ namespace TravelBooking.APIs.Controllers
         }
         // GET: FlightController
         [HttpGet]
+        [AllowAnonymous]
         public async Task<ActionResult<Pagination<FlightDTO>>> GetAllFlights( [FromQuery]FlightSpecParams specParams )
         {
            var spec =new FlightSpecs(specParams);
@@ -50,6 +52,7 @@ namespace TravelBooking.APIs.Controllers
         }
         // GET: FlightController/5
         [HttpGet("{id}")]
+        [AllowAnonymous]
         public async Task<ActionResult<FlightDetialsDTO>> GetFlight( int id )
         {
             var spec = new FlightSpecs(id);
@@ -64,6 +67,7 @@ namespace TravelBooking.APIs.Controllers
 
         [Authorize]
         [HttpPost("{serviceId}/book")]
+        [Authorize(Roles = "SuperAdmin,User")]
         public async Task<IActionResult> BookFlight(int serviceId/*, [FromBody] FlightBookingDto dto*/)
         {
             var userId = User.FindFirst("uid")?.Value;
@@ -107,6 +111,7 @@ namespace TravelBooking.APIs.Controllers
 
 
         [HttpPost]
+        [Authorize(Roles = "SuperAdmin,FlightAdmin")]
         public async Task<ActionResult<Flight>> AddFlight([FromBody] FlightDTO dto)
         {
             var entity = mapper.Map<Flight>(dto);
@@ -116,6 +121,7 @@ namespace TravelBooking.APIs.Controllers
             return CreatedAtAction(nameof(GetFlight), new { id = newCompany.Id }, resultDto);
         }
         [HttpPut("{id}")]
+        [Authorize(Roles = "SuperAdmin,FlightAdmin")]
         public async Task<ActionResult> UpdateFlight(int id, Flight company)
         {
             if (company.Id != id) return BadRequest("ID mismatch");
@@ -125,6 +131,7 @@ namespace TravelBooking.APIs.Controllers
         }
 
         [HttpDelete("{id}")]
+        [Authorize(Roles = "SuperAdmin,FlightAdmin")]
         public async Task<ActionResult> DeleteFlight(int id)
         {
             var existing = await flightRepository.GetAsync(id);

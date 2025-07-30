@@ -9,5 +9,8 @@ namespace TravelBooking.APIs.DTOS.FlightCompany
         public string Location { get; set; }
         public string Rating { get; set; } // Rating out of 5 or a descriptive rating like "Excellent", "Good", etc.
         public string FlightCount { get; set; }
+
+        [Required]
+        public string?AdminId { get; set; }
     }
 }

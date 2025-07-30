@@ -33,7 +33,8 @@ namespace TravelBooking.Repository
             }
 
             query = spec.Includes.Aggregate(query, (current, include) => current.Include(include));
-
+            // Apply IncludeStrings (Nested Navigation Properties)
+            query = spec.IncludeStrings.Aggregate(query, (current, include) => current.Include(include));
             return query;
         }
     }

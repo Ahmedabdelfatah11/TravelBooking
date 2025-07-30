@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.EntityFrameworkCore;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
@@ -23,6 +24,11 @@ namespace TravelBooking.Core.Repository.Contract
         Task Update(T entity);
         Task Delete(T entity);
 
+        public Task<IReadOnlyList<HotelCompany>> GetHotelsByAdminIdAsync(string adminId);
+
+        public Task<IReadOnlyList<CarRentalCompany>> GetCarRentalByAdminIdAsync(string adminId);
+        public Task<IReadOnlyList<FlightCompany>> GetFlighByAdminIdAsync(string adminId);
+        public Task<IReadOnlyList<TourCompany>> GetTourByAdminIdAsync(string adminId);
     }
 
 }

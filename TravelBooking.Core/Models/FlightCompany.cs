@@ -7,6 +7,7 @@ using System.Globalization;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using TravelBooking.Models;
 
 namespace TravelBooking.Core.Models
 {
@@ -39,5 +40,8 @@ namespace TravelBooking.Core.Models
         public ICollection<Favoritet> favoritets { get; set; } = new List<Favoritet>();
 
         public ICollection<Review> reviews { get; set; } = new List<Review>();
+
+        public string? AdminId { get; set; } // FK to AspNetUsers
+        public ApplicationUser? Admin { get; set; } // Navigation Property
     }
 }

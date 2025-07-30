@@ -8,7 +8,7 @@ namespace TravelBooking.APIs.DTOS.Tours
         public string Name { get; set; }
         [Required(ErrorMessage = "StartDate is required.")]
         [FutureDate(ErrorMessage = "StartDate  must be in the future.")]
-        public DateTime StartDate { get; set; }
+        public DateTime StartDate { get; set; } = DateTime.UtcNow;
         [Required(ErrorMessage = "EndDate is required.")]
         [GreaterThan("StartDate", ErrorMessage = "EndDate time must be after StartDate time.")]
         public DateTime EndDate { get; set; }

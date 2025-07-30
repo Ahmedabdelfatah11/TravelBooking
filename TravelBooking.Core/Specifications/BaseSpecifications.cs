@@ -17,6 +17,7 @@ namespace TravelBooking.Core.Specifications
         public int Skip { get ; set; }
         public int Take { get ; set; }
         public bool IsPaginationEnabled { get ; set; }
+        public List<string> IncludeStrings { get; } = new();
 
         public BaseSpecifications()
         {
@@ -41,6 +42,11 @@ namespace TravelBooking.Core.Specifications
             IsPaginationEnabled = true;
         }
 
+        // Add String Includes for Nested Navigation Properties
+        public void AddInclude(string includeString)
+        {
+            IncludeStrings.Add(includeString);
+        }
 
     }
 }

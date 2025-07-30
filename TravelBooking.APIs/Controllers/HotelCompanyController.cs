@@ -1,31 +1,51 @@
 ﻿using AutoMapper;
-using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using TravelBooking.APIs.Dtos.HotelCompany;
+using Microsoft.EntityFrameworkCore;
+using System.Security.Claims;
+
+using TravelBooking.APIs.DTOS.HotelCompany;
 using TravelBooking.APIs.Helper;
 using TravelBooking.Core.Models;
 using TravelBooking.Core.Repository.Contract;
-using TravelBooking.Core.Specifications;
 using TravelBooking.Core.Specifications.HotelCompanySpecs;
 using TravelBooking.Helper;
+using TravelBooking.Service.Services.Dashboard;
 
 namespace TravelBooking.APIs.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize(Roles = "SuperAdmin,HotelAdmin")]
     public class HotelCompanyController : ControllerBase
     {
         private readonly IGenericRepository<HotelCompany> _hotelRepo;
         private readonly IMapper _mapper;
+        private readonly IDashboardService _dashboardService;
 
-        public HotelCompanyController(IGenericRepository<HotelCompany> hotelRepo, IMapper mapper)
+        public HotelCompanyController(IGenericRepository<HotelCompany> hotelRepo, IMapper mapper, IDashboardService dashboardService)
         {
             _hotelRepo = hotelRepo;
             _mapper = mapper;
+            _dashboardService = dashboardService;
         }
 
-        // Get All with Search + Sort + Paging
+        // Helper Method to check if HotelAdmin is authorized to access HotelCompany
+        private bool IsHotelAdminAuthorizedForHotel(int hotelCompanyId)
+        {
+            var userRole = User.FindFirst(ClaimTypes.Role)?.Value;
+            if (userRole == "HotelAdmin")
+            {
+                var hotelCompanyIdClaim = User.Claims.FirstOrDefault(c => c.Type == "HotelCompanyId")?.Value;
+                if (hotelCompanyIdClaim == null || hotelCompanyIdClaim != hotelCompanyId.ToString())
+                    return false;
+            }
+            return true;
+        }
+
+
         [HttpGet]
+        [AllowAnonymous]
         public async Task<ActionResult<Pagination<HotelCompanyReadDTO>>> GetAll([FromQuery] HotelCompanySpecParams specParams)
         {
             var spec = new HotelCompanyWithRoomsSpecification(specParams);
@@ -38,8 +58,8 @@ namespace TravelBooking.APIs.Controllers
             return Ok(new Pagination<HotelCompanyReadDTO>(specParams.PageIndex, specParams.PageSize, totalItems, data));
         }
 
-        //  Get By Id
         [HttpGet("{id}")]
+        [AllowAnonymous]
         public async Task<ActionResult<HotelCompanyReadDTO>> GetById(int id)
         {
             var spec = new HotelCompanyWithRoomsSpecification(id);
@@ -49,47 +69,77 @@ namespace TravelBooking.APIs.Controllers
             return Ok(_mapper.Map<HotelCompanyReadDTO>(hotel));
         }
 
-        // Create
         [HttpPost]
-        public async Task<ActionResult> Create([FromForm] HotelCompanyCreateDTO dto)
+        [Authorize(Roles = "SuperAdmin")]
+        [HttpPost]
+        [Authorize(Roles = "SuperAdmin")]
+        public async Task<ActionResult> Create([FromBody] HotelCompanyCreateDTO dto)
         {
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
 
+            // Validate AdminId
+            if (string.IsNullOrWhiteSpace(dto.AdminId))
+                return BadRequest("AdminId is required.");
+
             var model = _mapper.Map<HotelCompany>(dto);
+            model.AdminId = dto.AdminId;
+
             await _hotelRepo.AddAsync(model);
-            return Ok(model);
+
+            return CreatedAtAction(nameof(GetById), new { id = model.Id }, model);
         }
 
-        //Update
+
         [HttpPut("{id}")]
         public async Task<ActionResult> Update(int id, [FromForm] HotelCompanyUpdateDTO dto)
         {
-            if (!ModelState.IsValid)
-                return BadRequest(ModelState);
-
             if (id != dto.Id)
                 return BadRequest("ID mismatch");
 
             var hotel = await _hotelRepo.GetAsync(id);
             if (hotel == null) return NotFound();
 
+            var userRole = User.FindFirst(ClaimTypes.Role)?.Value;
+            if (userRole == "HotelAdmin" && !IsHotelAdminAuthorizedForHotel(id))
+                return Forbid();
+
             _mapper.Map(dto, hotel);
-          _hotelRepo.Update(hotel);
+            await _hotelRepo.Update(hotel);
+
             return Ok(hotel);
         }
 
-        // Delete
+
         [HttpDelete("{id}")]
         public async Task<ActionResult> Delete(int id)
         {
             var hotel = await _hotelRepo.GetAsync(id);
             if (hotel == null) return NotFound();
 
-             _hotelRepo.Delete(hotel);
+            if (!IsHotelAdminAuthorizedForHotel(id))
+                return Forbid();
+
+            _hotelRepo.Delete(hotel);
             return Ok();
+        }
+
+
+        // Get hotels managed by current HotelAdmin
+        [HttpGet("my-hotels")]
+        [Authorize(Roles = "HotelAdmin")]
+        public async Task<ActionResult<IEnumerable<HotelCompanyReadDTO>>> GetMyHotels()
+        {
+
+            var userId = User.FindFirst("uid")?.Value;
+            if (string.IsNullOrEmpty(userId))
+                return Unauthorized();
+
+            var hotels = await _hotelRepo.GetHotelsByAdminIdAsync(userId);
+
+            var data = _mapper.Map<IReadOnlyList<HotelCompanyReadDTO>>(hotels);
+
+            return Ok(data);
         }
     }
 }
-
-

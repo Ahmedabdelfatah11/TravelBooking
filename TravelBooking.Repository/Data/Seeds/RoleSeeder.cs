@@ -7,31 +7,75 @@ using System.Data;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using TravelBooking.Models;
 
 namespace TravelBooking.Repository.Data.Seeds
 {
-    public enum Roles
-    {
-        Admin,
-        User
-    }
+ 
     public static class RoleSeeder
     {
         public static async Task SeedAsync(IServiceProvider serviceProvider)
         {
-            var roleManager = serviceProvider.GetRequiredService<RoleManager<IdentityRole>>();
+            //foreach (var roleName in Enum.GetNames(typeof(Roles)))
+            //{
+            //    if (!await roleManager.RoleExistsAsync(roleName))
+            //    {
+            //        var result = await roleManager.CreateAsync(new IdentityRole(roleName));
+            //        Console.WriteLine($"Created role: {roleName} | Success: {result.Succeeded}");
+            //    }
+            //    else
+            //    {
+            //        Console.WriteLine($"Role already exists: {roleName}");
+            //    }
+            //}
 
-            foreach (var roleName in Enum.GetNames(typeof(Roles)))
+
+            var roleManager = serviceProvider.GetRequiredService<RoleManager<IdentityRole>>();
+            var userManager = serviceProvider.GetRequiredService<UserManager<ApplicationUser>>();
+            string[] roles = {
+                "User",
+                "SuperAdmin",
+                "HotelAdmin",
+                "FlightAdmin",
+                "CarRentalAdmin",
+                "TourAdmin"
+            };
+
+            foreach (string role in roles)
             {
-                if (!await roleManager.RoleExistsAsync(roleName))
+                if (!await roleManager.RoleExistsAsync(role))
                 {
-                    var result = await roleManager.CreateAsync(new IdentityRole(roleName));
-                    Console.WriteLine($"Created role: {roleName} | Success: {result.Succeeded}");
+                    await roleManager.CreateAsync(new IdentityRole(role));
                 }
-                else
+            }
+
+
+            await CreateDefaultSuperAdmin(userManager);
+        }
+
+        private static async Task CreateDefaultSuperAdmin(UserManager<ApplicationUser> userManager)
+        {
+            string superAdminEmail = "superadmin@travelbooking.com";
+            string superAdminPassword = "SuperAdmin@123";
+
+            var existingSuperAdmin = await userManager.FindByEmailAsync(superAdminEmail);
+            if (existingSuperAdmin == null)
+            {
+                var superAdmin = new ApplicationUser
                 {
-                    Console.WriteLine($"Role already exists: {roleName}");
+                    UserName = "SuperAdmin",
+                    Email = superAdminEmail,
+                    EmailConfirmed = true,
+                    FirstName = "Super",
+                    LastName = "Admin"
+                };
+
+                var result = await userManager.CreateAsync(superAdmin, superAdminPassword);
+                if (result.Succeeded)
+                {
+                    await userManager.AddToRoleAsync(superAdmin, "SuperAdmin");
                 }
+
             }
         }
     }

@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace TravelBooking.APIs.Dtos.Rooms
+namespace TravelBooking.APIs.DTOS.Rooms
 {
     public class RoomCreateDTO
     {

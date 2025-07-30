@@ -267,6 +267,9 @@ namespace TravelBooking.Repository.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
+                    b.Property<string>("AdminId")
+                        .HasColumnType("nvarchar(450)");
+
                     b.Property<string>("ImageUrl")
                         .HasMaxLength(500)
                         .HasColumnType("nvarchar(500)");
@@ -288,6 +291,10 @@ namespace TravelBooking.Repository.Migrations
                         .HasColumnType("nvarchar(1000)");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("AdminId")
+                        .IsUnique()
+                        .HasFilter("[AdminId] IS NOT NULL");
 
                     b.ToTable("CarRentalCompanies");
                 });
@@ -414,6 +421,9 @@ namespace TravelBooking.Repository.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
+                    b.Property<string>("AdminId")
+                        .HasColumnType("nvarchar(450)");
+
                     b.Property<string>("Description")
                         .HasMaxLength(1000)
                         .HasColumnType("nvarchar(1000)");
@@ -436,6 +446,10 @@ namespace TravelBooking.Repository.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("AdminId")
+                        .IsUnique()
+                        .HasFilter("[AdminId] IS NOT NULL");
+
                     b.ToTable("FlightCompanies");
                 });
 
@@ -446,6 +460,9 @@ namespace TravelBooking.Repository.Migrations
                         .HasColumnType("int");
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("AdminId")
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("Description")
                         .IsRequired()
@@ -471,6 +488,10 @@ namespace TravelBooking.Repository.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("AdminId")
+                        .IsUnique()
+                        .HasFilter("[AdminId] IS NOT NULL");
 
                     b.ToTable("HotelCompanies");
                 });
@@ -715,6 +736,9 @@ namespace TravelBooking.Repository.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
+                    b.Property<string>("AdminId")
+                        .HasColumnType("nvarchar(450)");
+
                     b.Property<string>("Description")
                         .HasMaxLength(1000)
                         .HasColumnType("nvarchar(1000)");
@@ -735,6 +759,10 @@ namespace TravelBooking.Repository.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("AdminId")
+                        .IsUnique()
+                        .HasFilter("[AdminId] IS NOT NULL");
 
                     b.ToTable("TourCompanies");
                 });
@@ -934,6 +962,16 @@ namespace TravelBooking.Repository.Migrations
                     b.Navigation("RentalCompany");
                 });
 
+            modelBuilder.Entity("TravelBooking.Core.Models.CarRentalCompany", b =>
+                {
+                    b.HasOne("TravelBooking.Models.ApplicationUser", "Admin")
+                        .WithOne("CarRentalCompany")
+                        .HasForeignKey("TravelBooking.Core.Models.CarRentalCompany", "AdminId")
+                        .OnDelete(DeleteBehavior.Restrict);
+
+                    b.Navigation("Admin");
+                });
+
             modelBuilder.Entity("TravelBooking.Core.Models.Favoritet", b =>
                 {
                     b.HasOne("TravelBooking.Models.ApplicationUser", null)
@@ -1002,6 +1040,26 @@ namespace TravelBooking.Repository.Migrations
                         .IsRequired();
 
                     b.Navigation("FlightCompany");
+                });
+
+            modelBuilder.Entity("TravelBooking.Core.Models.FlightCompany", b =>
+                {
+                    b.HasOne("TravelBooking.Models.ApplicationUser", "Admin")
+                        .WithOne("FlightCompany")
+                        .HasForeignKey("TravelBooking.Core.Models.FlightCompany", "AdminId")
+                        .OnDelete(DeleteBehavior.Restrict);
+
+                    b.Navigation("Admin");
+                });
+
+            modelBuilder.Entity("TravelBooking.Core.Models.HotelCompany", b =>
+                {
+                    b.HasOne("TravelBooking.Models.ApplicationUser", "Admin")
+                        .WithOne("HotelCompany")
+                        .HasForeignKey("TravelBooking.Core.Models.HotelCompany", "AdminId")
+                        .OnDelete(DeleteBehavior.Restrict);
+
+                    b.Navigation("Admin");
                 });
 
             modelBuilder.Entity("TravelBooking.Core.Models.Payment", b =>
@@ -1104,6 +1162,16 @@ namespace TravelBooking.Repository.Migrations
                     b.Navigation("TourCompany");
                 });
 
+            modelBuilder.Entity("TravelBooking.Core.Models.TourCompany", b =>
+                {
+                    b.HasOne("TravelBooking.Models.ApplicationUser", "Admin")
+                        .WithOne("TourCompany")
+                        .HasForeignKey("TravelBooking.Core.Models.TourCompany", "AdminId")
+                        .OnDelete(DeleteBehavior.Restrict);
+
+                    b.Navigation("Admin");
+                });
+
             modelBuilder.Entity("TravelBooking.Core.Models.TourImage", b =>
                 {
                     b.HasOne("TravelBooking.Core.Models.Tour", "Tour")
@@ -1168,6 +1236,14 @@ namespace TravelBooking.Repository.Migrations
 
             modelBuilder.Entity("TravelBooking.Models.ApplicationUser", b =>
                 {
+                    b.Navigation("CarRentalCompany");
+
+                    b.Navigation("FlightCompany");
+
+                    b.Navigation("HotelCompany");
+
+                    b.Navigation("TourCompany");
+
                     b.Navigation("bookings");
 
                     b.Navigation("favoritets");

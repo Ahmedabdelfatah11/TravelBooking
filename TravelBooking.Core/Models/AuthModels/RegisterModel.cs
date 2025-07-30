@@ -19,5 +19,7 @@ namespace TravelBooking.Models
 
         [Required, MaxLength(50), DataType(DataType.Password)]
         public string Password { get; set; }
+        public int? CompanyId { get; set; }
+
     }
 }

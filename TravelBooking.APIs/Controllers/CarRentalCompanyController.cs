@@ -1,7 +1,9 @@
 ﻿using AutoMapper;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using TravelBooking.APIs.DTOS.HotelCompany;
 using TravelBooking.Core.DTOS.CarRentalCompanies;
 using TravelBooking.Core.DTOS.Cars;
 using TravelBooking.Core.Models;
@@ -13,6 +15,7 @@ namespace TravelBooking.APIs.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
+    [Authorize(Roles = "SuperAdmin,CarRentalAdmin")]
     public class CarRentalController : ControllerBase
     {
         private readonly IGenericRepository<CarRentalCompany> _carRentalRepo;
@@ -27,6 +30,7 @@ namespace TravelBooking.APIs.Controllers
         }
 
         [HttpGet]
+        [AllowAnonymous]
         public async Task<ActionResult<IReadOnlyList<CarRentalWithCarsDto>>> GetCarRentalCompanies([FromQuery]
            CarRentalSpecParams specParams)
         {
@@ -42,6 +46,7 @@ namespace TravelBooking.APIs.Controllers
         }
 
         [HttpGet("{id}")]
+        [AllowAnonymous]
         public async Task<ActionResult<CarRentalWithCarsDto>> GetCarRentalCompanyWithCarsById(int id)
         {
             var spec = new CarRentalCompanySpecifications(id);
@@ -52,9 +57,16 @@ namespace TravelBooking.APIs.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult<CarRentalDto>> CreateRental(SaveCarRentalDto dto)
+        [Authorize(Roles = "SuperAdmin")]
+        public async Task<ActionResult<CarRentalDto>> CreateRental([FromBody] SaveCarRentalDto dto)
         {
+
+            // Validate AdminId
+            if (string.IsNullOrWhiteSpace(dto.AdminId))
+                return BadRequest("AdminId is required.");
             var rental = _mapper.Map<CarRentalCompany>(dto);
+            rental.AdminId = dto.AdminId;
+
             var result = await _carRentalRepo.AddAsync(rental);
             var resultDto = _mapper.Map<CarRentalDto>(result);
 
@@ -62,27 +74,56 @@ namespace TravelBooking.APIs.Controllers
         }
 
         [HttpPut("{id}")]
+        [Authorize(Roles = "SuperAdmin,CarRentalAdmin")]
         public async Task<ActionResult> UpdateRental(int id, CarCreateUpdateDto dto)
         {
             var rental = await _carRentalRepo.GetAsync(id);
             if (rental == null) return NotFound(new ApiResponse(404));
 
+            var userId = User.FindFirst("uid")?.Value;
+            var userRoles = User.FindAll("role").Select(r => r.Value);
+
+            if (userRoles.Contains("CarRentalAdmin") && rental.AdminId != userId)
+                return Forbid("You are not authorized to update this rental company.");
+
             _mapper.Map(dto, rental);
-           await _carRentalRepo.Update(rental);
+            await _carRentalRepo.Update(rental);
 
             return NoContent();
         }
-  
+
         [HttpDelete("{id}")]
+        [Authorize(Roles = "SuperAdmin,CarRentalAdmin")]
         public async Task<ActionResult> DeleteRental(int id)
         {
             var rental = await _carRentalRepo.GetAsync(id);
             if (rental == null) return NotFound(new ApiResponse(404));
 
+            var userId = User.FindFirst("uid")?.Value;
+            var userRoles = User.FindAll("role").Select(r => r.Value);
+
+            if (userRoles.Contains("CarRentalAdmin") && rental.AdminId != userId)
+                return Forbid("You are not authorized to delete this rental company.");
+
             await _carRentalRepo.Delete(rental);
 
             return NoContent();
         }
+
+        [HttpGet("my-companies")]
+        [Authorize(Roles = "CarRentalAdmin")]
+        public async Task<ActionResult<IEnumerable<CarRentalDto>>> GetMyCompanies()
+        {
+            var userId = User.FindFirst("uid")?.Value;
+            if (string.IsNullOrEmpty(userId))
+                return Unauthorized();
+
+            var companies = await _carRentalRepo.GetCarRentalByAdminIdAsync(userId);
+            var data = _mapper.Map<IReadOnlyList<CarRentalDto>>(companies);
+
+            return Ok(data);
+        }
+
     }
 
 }

@@ -18,6 +18,9 @@ namespace TravelBooking.Core.Specifications.HotelCompanySpecs
                 h.Description.ToLower().Contains(specParams.Search.ToLower()))
         {
             Includes.Add(h => h.Rooms);
+            AddInclude("Rooms.Images");
+          
+
 
             // Pagination
             ApplyPagination(specParams.PageSize * (specParams.PageIndex - 1), specParams.PageSize);
@@ -57,6 +60,8 @@ namespace TravelBooking.Core.Specifications.HotelCompanySpecs
             : base(h => h.Id == id)
         {
             Includes.Add(h => h.Rooms);
+            AddInclude("Rooms.Images");
+         
         }
     }
 }
