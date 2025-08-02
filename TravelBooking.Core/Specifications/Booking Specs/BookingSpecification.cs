@@ -12,8 +12,8 @@ public class BookingSpecification : BaseSpecifications<Booking>
     public BookingSpecification(int id) : base(b => b.Id == id)
     {
         // Include related data if any, for example User:
-        Includes.Add(b => b.User);
-        // Add more includes if needed
+        Includes.Add(b => b.User); 
+        Includes.Add(b=>b.Payment); 
     }
 
     public BookingSpecification()

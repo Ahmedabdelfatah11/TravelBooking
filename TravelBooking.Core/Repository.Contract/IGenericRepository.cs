@@ -22,7 +22,7 @@ namespace TravelBooking.Core.Repository.Contract
         Task<T> AddAsync(T entity);
         Task Update(T entity);
         Task Delete(T entity);
-
+        Task SaveChangesAsync();
     }
 
 }
