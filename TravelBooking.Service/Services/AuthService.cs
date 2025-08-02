@@ -2,22 +2,25 @@
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.UI.Services;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.WebUtilities;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
+using System.ComponentModel.Design;
+using System.Data;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
+using TravelBooking.Core.Repository.Contract;
 using TravelBooking.Core.Services;
 using TravelBooking.Core.Settings;
 using TravelBooking.EmailBuilderbody;
-using Microsoft.AspNetCore.Mvc;
-using static Org.BouncyCastle.Math.EC.ECCurve;
 using TravelBooking.Models;
 using TravelBooking.Models.ResetPassword;
 using TravelBooking.Repository.Data.Seeds;
+using static Org.BouncyCastle.Math.EC.ECCurve;
 
 
 
@@ -35,10 +38,22 @@ namespace TravelBooking.Core.Models.Services
         private readonly IEmailSender _emailSender;
 
 
+
+        private readonly IGenericRepository<HotelCompany> _hotelCompanyRepo;
+        private readonly IGenericRepository<FlightCompany> _flightCompanyRepo;
+        private readonly IGenericRepository<CarRentalCompany> _carRentalCompanyRepo;
+        private readonly IGenericRepository<TourCompany> _tourCompanyRepo;
+
         public AuthService(UserManager<ApplicationUser> userManager, IMapper mapper, 
              IOptions<JWT> jwt, RoleManager<IdentityRole> roleManager, ILogger<AuthService> logger
             , SignInManager<ApplicationUser> signInManager, IHttpContextAccessor httpAccessor,
-             IEmailSender emailSender)
+             IEmailSender emailSender,
+                IGenericRepository<HotelCompany> hotelCompanyRepo,
+                IGenericRepository<FlightCompany> flightCompanyRepo,
+                IGenericRepository<CarRentalCompany> carRentalCompanyRepo,
+                IGenericRepository<TourCompany> tourCompanyRepo
+
+             )
         {
             _userManager = userManager;
             _mapper = mapper;
@@ -48,6 +63,11 @@ namespace TravelBooking.Core.Models.Services
             _signInManager = signInManager;
             _httpAccessor = httpAccessor;
             _emailSender = emailSender;
+
+            _hotelCompanyRepo = hotelCompanyRepo;
+            _flightCompanyRepo = flightCompanyRepo;
+            _carRentalCompanyRepo = carRentalCompanyRepo;
+            _tourCompanyRepo = tourCompanyRepo;
         }
 
         public async Task<string> AddRole(AddRole role)
@@ -291,12 +311,14 @@ namespace TravelBooking.Core.Models.Services
 
         public async Task<JwtSecurityToken> CreateJwtToken(ApplicationUser user)
         {
+
             var userClaims = await _userManager.GetClaimsAsync(user);
             var roles = await _userManager.GetRolesAsync(user);
             var roleClaims = new List<Claim>();
             foreach (var role in roles)
             {
                 roleClaims.Add(new Claim("role", role));
+                roleClaims.Add(new Claim(ClaimTypes.Role, role));
             }
             var claims = new List<Claim>
             {
@@ -308,7 +330,40 @@ namespace TravelBooking.Core.Models.Services
                 new Claim(ClaimTypes.Email, user.Email),      
             }
             .Union(userClaims)
-            .Union(roleClaims);
+            .Union(roleClaims)
+            .ToList();
+
+            //  Add CompanyId Based on Role
+            if (roles.Contains("HotelAdmin"))
+            {
+                var hotelCompany = await _hotelCompanyRepo.GetAllAsync(h => h.AdminId == user.Id);
+                var hotelCompanyId = hotelCompany.FirstOrDefault()?.Id;
+                if (hotelCompanyId.HasValue)
+                    claims.Add(new Claim("HotelCompanyId", hotelCompanyId.Value.ToString()));
+            }
+            else if (roles.Contains("FlightAdmin"))
+            {
+                var flightCompany = await _flightCompanyRepo.GetAllAsync(f => f.AdminId == user.Id);
+                var flightCompanyId = flightCompany.FirstOrDefault()?.Id;
+                if (flightCompanyId.HasValue)
+                    claims.Add(new Claim("FlightCompanyId", flightCompanyId.Value.ToString()));
+            }
+            else if (roles.Contains("CarRentalAdmin"))
+            {
+                var carCompany = await _carRentalCompanyRepo.GetAllAsync(c => c.AdminId == user.Id);
+                var carCompanyId = carCompany.FirstOrDefault()?.Id;
+                if (carCompanyId.HasValue)
+                    claims.Add(new Claim("CarRentalCompanyId", carCompanyId.Value.ToString()));
+            }
+            else if (roles.Contains("TourAdmin"))
+            {
+                var tourCompany = await _tourCompanyRepo.GetAllAsync(t => t.AdminId == user.Id);
+                var tourCompanyId = tourCompany.FirstOrDefault()?.Id;
+                if (tourCompanyId.HasValue)
+                    claims.Add(new Claim("TourCompanyId", tourCompanyId.Value.ToString()));
+            }
+
+
             var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_jwt.Key));
             var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
             var token = new JwtSecurityToken(
@@ -320,5 +375,235 @@ namespace TravelBooking.Core.Models.Services
             );
             return token;
         }
+
+
+        // Super Admin 
+        public async Task<AuthModel> CreateUserByAdmin(RegisterModel model, string role)
+        {
+            if (await _userManager.FindByEmailAsync(model.Email) != null)
+                return new AuthModel { Message = "Email already exists" };
+
+            if (await _userManager.FindByNameAsync(model.UserName) != null)
+                return new AuthModel { Message = "Username already exists" };
+
+            var user = _mapper.Map<ApplicationUser>(model);
+            user.EmailConfirmed = true;
+
+            var result = await _userManager.CreateAsync(user, model.Password);
+            if (!result.Succeeded)
+            {
+                return new AuthModel
+                {
+                    Message = string.Join(", ", result.Errors.Select(e => e.Description)),
+                    IsAuthenticated = false
+                };
+            }
+
+            if (!await _roleManager.RoleExistsAsync(role))
+                return new AuthModel { Message = "Role does not exist" };
+
+            await _userManager.AddToRoleAsync(user, role);
+
+            if (role == "HotelAdmin" && model.CompanyId.HasValue)
+            {
+                var hotelCompany = await _hotelCompanyRepo.GetAsync(model.CompanyId.Value);
+                if (hotelCompany != null)
+                {
+                    hotelCompany.AdminId = user.Id;
+                    await _hotelCompanyRepo.Update(hotelCompany);
+                }
+            }
+            else if (role == "FlightAdmin" && model.CompanyId.HasValue)
+            {
+                var flightCompany = await _flightCompanyRepo.GetAsync(model.CompanyId.Value);
+                if (flightCompany != null)
+                {
+                    flightCompany.AdminId = user.Id;
+                    await _flightCompanyRepo.Update(flightCompany);
+                }
+            }
+            else if (role == "CarRentalAdmin" && model.CompanyId.HasValue)
+            {
+                var carCompany = await _carRentalCompanyRepo.GetAsync(model.CompanyId.Value);
+                if (carCompany != null)
+                {
+                    carCompany.AdminId = user.Id;
+                    await _carRentalCompanyRepo.Update(carCompany);
+                }
+            }
+            else if (role == "TourAdmin" && model.CompanyId.HasValue)
+            {
+                var tourCompany = await _tourCompanyRepo.GetAsync(model.CompanyId.Value);
+                if (tourCompany != null)
+                {
+                    tourCompany.AdminId = user.Id;
+                    await _tourCompanyRepo.Update(tourCompany);
+                }
+            }
+
+
+            return new AuthModel
+            {
+                Message = $"User created successfully with role {role} and linked to company.",
+                IsAuthenticated = false
+            };
+        }
+        public async Task<List<object>> GetAllUsersAsync(int pageIndex, int pageSize)
+        {
+            var users = await _userManager.Users
+       .Skip((pageIndex - 1) * pageSize)
+       .Take(pageSize)
+       .ToListAsync();
+
+            var userIds = users.Select(u => u.Id).ToList();
+
+            // Fetch all related companies in advance (batch query)
+            var hotels = await _hotelCompanyRepo.GetAllAsync(h => userIds.Contains(h.AdminId));
+            var carCompanies = await _carRentalCompanyRepo.GetAllAsync(c => userIds.Contains(c.AdminId));
+            var flightCompanies = await _flightCompanyRepo.GetAllAsync(f => userIds.Contains(f.AdminId));
+            var tourCompanies = await _tourCompanyRepo.GetAllAsync(t => userIds.Contains(t.AdminId));
+
+            var userDtos = new List<object>();
+
+            foreach (var user in users)
+            {
+                var roles = await _userManager.GetRolesAsync(user);
+                string? entityName = null;
+
+                if (roles.Contains("HotelAdmin"))
+                {
+                    var hotel = hotels.FirstOrDefault(h => h.AdminId == user.Id);
+                    entityName = hotel?.Name;
+                }
+                else if (roles.Contains("CarRentalAdmin"))
+                {
+                    var carCompany = carCompanies.FirstOrDefault(c => c.AdminId == user.Id);
+                    entityName = carCompany?.Name;
+                }
+                else if (roles.Contains("FlightAdmin"))
+                {
+                    var flightCompany = flightCompanies.FirstOrDefault(f => f.AdminId == user.Id);
+                    entityName = flightCompany?.Name;
+                }
+                else if (roles.Contains("TourAdmin"))
+                {
+                    var tourCompany = tourCompanies.FirstOrDefault(t => t.AdminId == user.Id);
+                    entityName = tourCompany?.Name;
+                }
+
+                userDtos.Add(new
+                {
+                    user.Id,
+                    user.UserName,
+                    user.Email,
+                    user.EmailConfirmed,
+                    Roles = roles,
+                    EntityName = entityName
+                });
+            }
+
+            return userDtos;
+
+
+        }
+
+        public async Task<string> AssignRoleToUserAsync(string userId, int companyId, string companyType)
+        {
+            var user = await _userManager.FindByIdAsync(userId);
+            if (user == null) return "User not found";
+
+            companyType = companyType.ToLower();
+
+            // Assign Role to User in Identity
+            var roleName = companyType switch
+            {
+                "hotel" => "HotelAdmin",
+                "flight" => "FlightAdmin",
+                "carrental" => "CarRentalAdmin",
+                "tour" => "TourAdmin",
+                _ => null
+            };
+
+            if (roleName == null) return "Invalid company type";
+
+            if (!await _userManager.IsInRoleAsync(user, roleName))
+            {
+                var roleResult = await _userManager.AddToRoleAsync(user, roleName);
+                if (!roleResult.Succeeded)
+                    return "Failed to assign role to user";
+            }
+
+            // Link UserId as AdminId to the Company
+            switch (companyType)
+            {
+                case "hotel":
+                    var hotelCompany = await _hotelCompanyRepo.GetAsync(companyId);
+                    if (hotelCompany == null) return "Hotel company not found";
+                    hotelCompany.AdminId = userId;
+                    await _hotelCompanyRepo.Update(hotelCompany);
+                    break;
+
+                case "flight":
+                    var flightCompany = await _flightCompanyRepo.GetAsync(companyId);
+                    if (flightCompany == null) return "Flight company not found";
+                    flightCompany.AdminId = userId;
+                    await _flightCompanyRepo.Update(flightCompany);
+                    break;
+
+                case "carrental":
+                    var carCompany = await _carRentalCompanyRepo.GetAsync(companyId);
+                    if (carCompany == null) return "Car rental company not found";
+                    carCompany.AdminId = userId;
+                    await _carRentalCompanyRepo.Update(carCompany);
+                    break;
+
+                case "tour":
+                    var tourCompany = await _tourCompanyRepo.GetAsync(companyId);
+                    if (tourCompany == null) return "Tour company not found";
+                    tourCompany.AdminId = userId;
+                    await _tourCompanyRepo.Update(tourCompany);
+                    break;
+            }
+
+            return "Admin assigned to company and role successfully";
+        }
+
+        public async Task<string> RemoveRoleFromUserAsync(string userId, string role)
+        {
+            var user = await _userManager.FindByIdAsync(userId);
+            if (user == null)
+                return "User not found";
+
+            var result = await _userManager.RemoveFromRoleAsync(user, role);
+            if (result.Succeeded)
+                return "Role removed successfully";
+
+            return string.Join(", ", result.Errors.Select(e => e.Description));
+        }
+
+
+        public async Task<string> DeleteUserAsync(string userId)
+        {
+            var user = await _userManager.FindByIdAsync(userId);
+            if (user == null)
+                return "User not found";
+
+            var roles = await _userManager.GetRolesAsync(user);
+
+            // Remove all roles
+            var removeRolesResult = await _userManager.RemoveFromRolesAsync(user, roles);
+            if (!removeRolesResult.Succeeded)
+            {
+                return "Failed to remove user roles: " + string.Join(", ", removeRolesResult.Errors.Select(e => e.Description));
+            }
+
+            var result = await _userManager.DeleteAsync(user);
+            if (result.Succeeded)
+                return "User deleted successfully";
+
+            return string.Join(", ", result.Errors.Select(e => e.Description));
+        }
+
+
     }
 }

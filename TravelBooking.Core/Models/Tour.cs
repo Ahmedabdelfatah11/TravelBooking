@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Org.BouncyCastle.Crypto.Signers;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
@@ -19,7 +20,7 @@ namespace TravelBooking.Core.Models
     public class Tour : BaseEntity
     {
         public string Name { get; set; }
-        public DateTime StartDate { get; set; } 
+        public DateTime StartDate { get; set; } =DateTime.UtcNow;
         public DateTime EndDate { get; set; } 
         public string? Description { get; set; } 
         public string? Destination { get; set; } // Destination of the Tour (e.g., city or country)

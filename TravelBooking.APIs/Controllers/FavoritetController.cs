@@ -12,7 +12,8 @@ namespace TravelBooking.APIs.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    [Authorize]
+    [Authorize(Roles = "SuperAdmin,User")]
+
     public class FavoritetController : ControllerBase
     {
         private readonly AppDbContext _context;
@@ -30,6 +31,7 @@ namespace TravelBooking.APIs.Controllers
         /// Get all favorites for the current user
         /// </summary>
         [HttpGet]
+        [Authorize(Roles = "SuperAdmin,User")]
         public async Task<ActionResult<IEnumerable<FavoritetDto>>> GetUserFavorites(
             [FromQuery] int page = 1,
             [FromQuery] int pageSize = 10)
@@ -74,6 +76,7 @@ namespace TravelBooking.APIs.Controllers
         /// Get user favorites by company type
         /// </summary>
         [HttpGet("type/{companyType}")]
+        [Authorize(Roles = "SuperAdmin,User")]
         public async Task<ActionResult<IEnumerable<FavoritetDto>>> GetUserFavoritesByType(
             string companyType,
             [FromQuery] int page = 1,
@@ -121,6 +124,7 @@ namespace TravelBooking.APIs.Controllers
         /// Add a company to favorites
         /// </summary>
         [HttpPost]
+        [Authorize(Roles = "SuperAdmin,User")]
         public async Task<ActionResult<FavoritetDto>> AddFavorite([FromBody] CreateFavoriteTDto createDto)
         {
             try
@@ -177,6 +181,7 @@ namespace TravelBooking.APIs.Controllers
         /// Remove a favorite by ID
         /// </summary>
         [HttpDelete("{id}")]
+        [Authorize(Roles = "SuperAdmin,User")]
         public async Task<IActionResult> RemoveFavorite(int id)
         {
             try
@@ -208,6 +213,7 @@ namespace TravelBooking.APIs.Controllers
         /// Check if a company is in user's favorites
         /// </summary>
         [HttpPost("check")]
+        [Authorize(Roles = "SuperAdmin,User")]
         public async Task<ActionResult<bool>> CheckFavorite([FromBody] FavoriteCheckDto checkDto)
         {
             try
@@ -238,6 +244,7 @@ namespace TravelBooking.APIs.Controllers
         /// Get favorites count by company type for current user
         /// </summary>
         [HttpGet("count")]
+        [Authorize(Roles = "SuperAdmin,User")]
         public async Task<ActionResult<Dictionary<string, int>>> GetFavoritesCount()
         {
             try

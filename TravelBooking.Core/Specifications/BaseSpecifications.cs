@@ -46,12 +46,13 @@ namespace TravelBooking.Core.Specifications
         {
             Includes.Add(includeExpression);
         }
+
+
+        // Add String Includes for Nested Navigation Properties
         public void AddInclude(string includeString)
         {
             IncludeStrings.Add(includeString);
         }
-
-
 
     }
 }

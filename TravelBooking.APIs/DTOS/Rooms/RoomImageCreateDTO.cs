@@ -1,4 +1,4 @@
-﻿namespace TravelBooking.APIs.Dtos.Rooms
+﻿namespace TravelBooking.APIs.DTOS.Rooms
 {
     public class RoomImageCreateDTO
     {

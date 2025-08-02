@@ -13,7 +13,12 @@ namespace TravelBooking.Core.Configurations
             builder.Property(cr => cr.Name).IsRequired().HasMaxLength(100);
             builder.Property(cr => cr.description).HasMaxLength(1000);
             builder.Property(cr => cr.Location).HasMaxLength(100);
-            builder.Property(cr => cr.ImageUrl).HasMaxLength(500); 
+            builder.Property(cr => cr.ImageUrl).HasMaxLength(500);
+
+            builder.HasOne(h => h.Admin)
+            .WithOne(u => u.CarRentalCompany)
+            .HasForeignKey<CarRentalCompany>(h => h.AdminId)
+             .OnDelete(DeleteBehavior.Restrict);
         }
     }
 }
