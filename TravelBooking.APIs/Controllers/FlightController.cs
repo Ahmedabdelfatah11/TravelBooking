@@ -1,4 +1,3 @@
-
 using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -127,6 +126,7 @@ namespace TravelBooking.APIs.Controllers
 
             return Ok(result);
         }
+
         [HttpPost]
         public async Task<ActionResult<Flight>> AddFlight([FromBody] FlightDTO dto)
         {

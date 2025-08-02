@@ -223,18 +223,21 @@ namespace TravelBooking.Repository.Migrations
 
                 b.Property<int?>("CarId")
                     .HasColumnType("int");
-
+                 
                 b.Property<string>("ClientSecret")
-                    .HasColumnType("nvarchar(max)");
+                    .HasColumnType("nvarchar(max)"); 
+                    b.Property<string>("ClientSecret")
+                        .HasColumnType("nvarchar(max)");
 
-                b.Property<DateTime>("EndDate")
-                    .HasColumnType("datetime2");
-
+                    b.Property<DateTime>("EndDate")
+                        .HasColumnType("datetime2"); 
+                 
+                 
                 b.Property<int?>("FlightId")
-                    .HasColumnType("int");
-
-                b.Property<string>("PaymentIntentId")
-                    .HasColumnType("nvarchar(max)");
+                    .HasColumnType("int"); 
+                    b.Property<string>("PaymentIntentId")
+                        .HasColumnType("nvarchar(max)"); 
+                 
 
                 b.Property<decimal>("Price")
                     .HasColumnType("decimal(18,2)");
@@ -429,9 +432,64 @@ namespace TravelBooking.Repository.Migrations
                 b.HasIndex("UserId", "HotelCompanyId", "FlightCompanyId", "CarRentalCompanyId", "TourCompanyId")
                     .IsUnique()
                     .HasFilter("[HotelCompanyId] IS NOT NULL AND [FlightCompanyId] IS NOT NULL AND [CarRentalCompanyId] IS NOT NULL AND [TourCompanyId] IS NOT NULL");
-
+ 
                 b.ToTable("Favorites");
-            });
+            }); 
+
+            modelBuilder.Entity("TravelBooking.Core.Models.Flight", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("ArrivalAirport")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<DateTime>("ArrivalTime")
+                        .HasColumnType("datetime2");
+
+                    b.Property<decimal>("BusinessPrice")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<int>("BusinessSeats")
+                        .HasColumnType("int");
+
+                    b.Property<string>("DepartureAirport")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<DateTime>("DepartureTime")
+                        .HasColumnType("datetime2");
+
+                    b.Property<decimal>("EconomyPrice")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<int>("EconomySeats")
+                        .HasColumnType("int");
+
+                    b.Property<decimal>("FirstClassPrice")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<int>("FirstClassSeats")
+                        .HasColumnType("int");
+
+                    b.Property<int>("FlightCompanyId")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("SelectedSeatClass")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("FlightCompanyId");
+
+                    b.ToTable("Flights");
+                }); 
 
             modelBuilder.Entity("TravelBooking.Core.Models.FlightCompany", b =>
             {
@@ -512,9 +570,9 @@ namespace TravelBooking.Repository.Migrations
 
                 b.Property<decimal>("Amount")
                     .HasColumnType("decimal(18,2)");
-
+                 
                 b.Property<int>("BookingId")
-                    .HasColumnType("int");
+                    .HasColumnType("int"); 
 
                 b.Property<DateTime>("PaymentDate")
                     .HasColumnType("datetime2");
@@ -532,10 +590,10 @@ namespace TravelBooking.Repository.Migrations
                     .HasMaxLength(100)
                     .HasColumnType("nvarchar(100)");
 
-                b.HasKey("Id");
-
+                b.HasKey("Id"); 
                 b.HasIndex("BookingId")
                     .IsUnique();
+ 
 
                 b.ToTable("Payments");
             });
@@ -1030,15 +1088,17 @@ namespace TravelBooking.Repository.Migrations
                 b.Navigation("User");
             });
 
-            modelBuilder.Entity("TravelBooking.Core.Models.Payment", b =>
+            modelBuilder.Entity("TravelBooking.Core.Models.Payment", b => 
             {
                 b.HasOne("TravelBooking.Core.Models.Booking", "Booking")
                     .WithOne("Payment")
                     .HasForeignKey("TravelBooking.Core.Models.Payment", "BookingId")
                     .OnDelete(DeleteBehavior.Cascade)
                     .IsRequired();
+                {
 
-                b.Navigation("Booking");
+                    b.Navigation("Booking");
+                }
             });
 
             modelBuilder.Entity("TravelBooking.Core.Models.Review", b =>

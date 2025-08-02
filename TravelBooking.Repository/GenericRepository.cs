@@ -70,11 +70,11 @@ namespace TravelBooking.Repository
         public async Task<IReadOnlyList<T>> GetAllAsync(Expression<Func<T, bool>> predicate)
         {
             return await _dbContext.Set<T>().Where(predicate).ToListAsync();
-        }
+        } 
          
         public Task SaveChangesAsync()
         {
             return _dbContext.SaveChangesAsync();
-        } 
+        }  
     }
 }
