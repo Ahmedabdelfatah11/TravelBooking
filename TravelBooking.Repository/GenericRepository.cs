@@ -71,6 +71,10 @@ namespace TravelBooking.Repository
         {
             return await _dbContext.Set<T>().Where(predicate).ToListAsync();
         }
-
+         
+        public Task SaveChangesAsync()
+        {
+            return _dbContext.SaveChangesAsync();
+        } 
     }
 }

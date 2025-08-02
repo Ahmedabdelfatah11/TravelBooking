@@ -1,18 +1,15 @@
+
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 using TravelBooking.APIs.DTOS.Booking.FlightBooking;
 using TravelBooking.APIs.DTOS.Flight;
-using TravelBooking.APIs.DTOS.FlightCompany;
 using TravelBooking.APIs.DTOS.Tours;
 using TravelBooking.Core.Models;
 using TravelBooking.Core.Repository.Contract;
 using TravelBooking.Core.Specifications.FlightSpecs;
 using TravelBooking.Errors;
 using TravelBooking.Helper;
-using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace TravelBooking.APIs.Controllers
 {
@@ -20,46 +17,42 @@ namespace TravelBooking.APIs.Controllers
     [ApiController]
     public class FlightController : Controller
     {
-        private readonly IGenericRepository<Flight> flightRepository;
-        private readonly IMapper mapper;
+        private readonly IGenericRepository<Flight> _flightRepo;
         private readonly IGenericRepository<Booking> _bookingRepo;
+        private readonly IMapper _mapper;
 
         public FlightController(IGenericRepository<Flight> flightRepository , IMapper mapper, IGenericRepository<Booking> bookingRepo)
         {
-            this.flightRepository = flightRepository;
-            this.mapper = mapper;
+            _flightRepo = flightRepository;
+            _mapper = mapper;
             _bookingRepo = bookingRepo;
         }
-        // GET: FlightController
+       
         [HttpGet]
-        public async Task<ActionResult<Pagination<FlightDTO>>> GetAllFlights( [FromQuery]FlightSpecParams specParams )
+        public async Task<ActionResult<Pagination<FlightDTO>>> GetAllFlights([FromQuery] FlightSpecParams specParams)
         {
-           var spec =new FlightSpecs(specParams);
-            var flights = await flightRepository.GetAllWithSpecAsync(spec);
+            var spec = new FlightSpecs(specParams);
+            var flights = await _flightRepo.GetAllWithSpecAsync(spec);
+
             if (flights == null || !flights.Any())
-            {
                 return NotFound("No flights found.");
-            }
-            foreach (var flight in flights)
-            {
-                Console.WriteLine(flight.FlightCompany?.Name); // null ولا موجود؟
-            }
-            var flightDTOs = mapper.Map<IReadOnlyList<FlightDTO>>(flights);
+
+            var flightDTOs = _mapper.Map<IReadOnlyList<FlightDTO>>(flights);
             var countSpec = new FlightCountSpec(specParams);
-            var totalCount = await flightRepository.GetCountAsync(countSpec);
+            var totalCount = await _flightRepo.GetCountAsync(countSpec);
+
             return Ok(new Pagination<FlightDTO>(specParams.PageIndex, specParams.PageSize, totalCount, flightDTOs));
         }
-        // GET: FlightController/5
+
         [HttpGet("{id}")]
-        public async Task<ActionResult<FlightDetialsDTO>> GetFlight( int id )
+        public async Task<ActionResult<FlightDetialsDTO>> GetFlight(int id)
         {
             var spec = new FlightSpecs(id);
-            var flight = await flightRepository.GetWithSpecAsync(spec);
+            var flight = await _flightRepo.GetWithSpecAsync(spec);
             if (flight == null)
-            {
                 return NotFound($"Flight with ID {id} not found.");
-            }
-            var flightDTO = mapper.Map<FlightDetialsDTO>(flight);
+
+            var flightDTO = _mapper.Map<FlightDetialsDTO>(flight);
             return Ok(flightDTO);
         }
 
@@ -69,48 +62,50 @@ namespace TravelBooking.APIs.Controllers
         {
             var userId = User.FindFirst("uid")?.Value;
             if (string.IsNullOrEmpty(userId))
-                return Unauthorized("User ID not found in token.");
+                return Unauthorized(new ApiResponse(401, "User ID not found in token."));
 
-            var flight = await flightRepository.GetAsync(serviceId);
-            if (flight == null) return NotFound(new ApiResponse(404));
+            var flight = await _flightRepo.GetAsync(serviceId);
+            if (flight == null)
+                return NotFound(new ApiResponse(404, "Flight not found."));
 
             var existingBookings = await _bookingRepo.GetAllAsync(b =>
-               b.UserId == userId &&
-               b.FlightId == serviceId &&
-               b.Status != Status.Cancelled &&
-               b.StartDate == flight.DepartureTime &&
-               b.EndDate == flight.ArrivalTime
-               );
+                b.UserId == userId &&
+                b.FlightId == serviceId &&
+                b.Status != Status.Cancelled &&
+                b.StartDate == flight.DepartureTime &&
+                b.EndDate == flight.ArrivalTime);
 
             if (existingBookings.Any())
-                return BadRequest("Tour already booked in selected time frame.");
+                return BadRequest(new ApiResponse(400, "You already have a booking for this flight at the same time."));
+
             decimal price;
             switch (dto.SeatClass)
             {
                 case SeatClass.Economy:
                     if (flight.EconomySeats <= 0)
-                        return BadRequest("No economy seats available.");
+                        return BadRequest(new ApiResponse(400, "No economy seats available."));
                     flight.EconomySeats--;
                     price = flight.EconomyPrice;
                     break;
 
                 case SeatClass.Business:
                     if (flight.BusinessSeats <= 0)
-                        return BadRequest("No business class seats available.");
+                        return BadRequest(new ApiResponse(400, "No business class seats available."));
                     flight.BusinessSeats--;
                     price = flight.BusinessPrice;
                     break;
 
                 case SeatClass.FirstClass:
                     if (flight.FirstClassSeats <= 0)
-                        return BadRequest("No first class seats available.");
+                        return BadRequest(new ApiResponse(400, "No first class seats available."));
                     flight.FirstClassSeats--;
                     price = flight.FirstClassPrice;
                     break;
 
                 default:
-                    return BadRequest("Invalid seat class.");
+                    return BadRequest(new ApiResponse(400, "Invalid seat class."));
             }
+
             var booking = new Booking
             {
                 FlightId = serviceId,
@@ -118,40 +113,48 @@ namespace TravelBooking.APIs.Controllers
                 BookingType = BookingType.Flight,
                 Status = Status.Pending,
                 StartDate = flight.DepartureTime,
-                EndDate = flight.ArrivalTime
+                EndDate = flight.ArrivalTime,
+                SeatClass = dto.SeatClass
             };
 
             await _bookingRepo.AddAsync(booking);
-            await flightRepository.Update(flight);
+            await _flightRepo.Update(flight);
 
-            booking.Flight = flight; 
-            var result = mapper.Map<FlightBookingResultDto>(booking);
+            booking.Flight = flight;
+
+            var result = _mapper.Map<FlightBookingResultDto>(booking);
+            result.BookingId = booking.Id;
             result.Price = price;
-            return CreatedAtAction("GetBookingById", "Booking", new { id = booking.Id }, result);
-        }
 
+            return Ok(result);  
+        }
         [HttpPost]
-        public async Task<ActionResult<Flight>> AddFlight([FromBody] Flight dto)
+        public async Task<ActionResult<FlightDetialsDTO>> AddFlight([FromBody] FlightCreateDTO dto)
         {
-            var newCompany = await flightRepository.AddAsync(dto);
+            var flightCreated = _mapper.Map<Flight>(dto);
+            var newCompany = await _flightRepo.AddAsync(flightCreated);
+            var flight= _mapper.Map<FlightDetialsDTO>(newCompany);
             return CreatedAtAction(nameof(GetFlight), new { id = newCompany.Id }, newCompany);
         }
-        [HttpPut("{id}")]
-        public async Task<ActionResult> UpdateFlight(int id, Flight company)
-        {
-            if (company.Id != id) return BadRequest("ID mismatch");
 
-            await flightRepository.Update(company);
+        [HttpPut("{id}")]
+        public async Task<ActionResult> UpdateFlight(int id, [FromBody] Flight flight)
+        {
+            if (flight.Id != id)
+                return BadRequest("ID mismatch");
+
+            await _flightRepo.Update(flight);
             return NoContent();
         }
 
         [HttpDelete("{id}")]
         public async Task<ActionResult> DeleteFlight(int id)
         {
-            var existing = await flightRepository.GetAsync(id);
-            if (existing == null) return NotFound();
+            var existing = await _flightRepo.GetAsync(id);
+            if (existing == null)
+                return NotFound();
 
-            await flightRepository.Delete(existing);
+            await _flightRepo.Delete(existing);
             return NoContent();
         }
     }

@@ -18,7 +18,8 @@ using TravelBooking.Helper;
 using TravelBooking.Models;
 using TravelBooking.Repository;
 using TravelBooking.Repository.Data;
-using TravelBooking.Repository.Data.Seeds;
+using TravelBooking.Repository.Data.Seeds; 
+using TravelBooking.Service.Services; 
 namespace TravelBooking.APIs
 {
     public class Program
@@ -41,6 +42,8 @@ namespace TravelBooking.APIs
             // add EmailService as IEmailSender
             webApplicationbuilder.Services.AddScoped<IEmailSender, EmailService>();
 
+            // Add the PaymentService as IPaymentService
+            webApplicationbuilder.Services.AddScoped<IPaymentService, PaymentService>(); 
 
             //add Accessor for User
             webApplicationbuilder.Services.AddHttpContextAccessor();
@@ -147,10 +150,9 @@ namespace TravelBooking.APIs
             try
             {
                 await _dbcontext.Database.MigrateAsync();
-                await RoleSeeder.SeedAsync(Services); // assigning roles to the database
-                await TravelContextSeed.SeedAsync(_dbcontext);
+                await RoleSeeder.SeedAsync(Services); // assigning roles to the database 
                 await FlightContextSeed.SeedAsync(_dbcontext);
-            }
+                await TravelContextSeed.SeedAsync(_dbcontext);              }
             catch (Exception ex)
             {
                 logger.LogError(ex, "An error occurred during migration");
