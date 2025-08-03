@@ -14,5 +14,7 @@ namespace TravelBooking.Core.DTOS.CarRentalCompanies
         public string? Location { get; set; } // Location of the car rental company, e.g., "Los Angeles, USA"
         public string? ImageUrl { get; set; } // URL to the company's logo or image
         public string? Rating { get; set; } // Rating out of 5 or a descriptive rating like "Excellent", "Good", etc.
+       
+        public string? AdminId { get; set; }
     }
 }

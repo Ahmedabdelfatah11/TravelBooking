@@ -1,4 +1,7 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using AutoMapper;
+using AutoMapper.QueryableExtensions;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Query;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -15,10 +18,12 @@ namespace TravelBooking.Repository
     public class GenericRepository<T> : IGenericRepository<T> where T : BaseEntity
     {
         private readonly AppDbContext _dbContext;
+        private readonly IMapper _mapper;
 
-        public GenericRepository(AppDbContext dbContext)
+        public GenericRepository(AppDbContext dbContext, IMapper mapper)
         {
             _dbContext = dbContext;
+            _mapper = mapper;
         }
 
         public async Task<IReadOnlyList<T>> GetAllAsync()
@@ -76,5 +81,40 @@ namespace TravelBooking.Repository
         {
             return _dbContext.SaveChangesAsync();
         } 
+
+
+
+        public async Task<IReadOnlyList<HotelCompany>> GetHotelsByAdminIdAsync(string adminId)
+        {
+            return await _dbContext.HotelCompanies
+           .Include(h => h.Rooms)
+           .ThenInclude(h => h.Images) // Eager load Rooms
+           .Where(h => h.AdminId == adminId)
+           .ToListAsync();
+        }
+
+        public async Task<IReadOnlyList<CarRentalCompany>> GetCarRentalByAdminIdAsync(string adminId)
+        {
+            return await _dbContext.CarRentalCompanies
+           .Include(cr => cr.Cars)
+            .Where(cr => cr.AdminId == adminId)
+            .ToListAsync();
+        }
+
+        public async Task<IReadOnlyList<FlightCompany>> GetFlighByAdminIdAsync(string adminId)
+        {
+            return await _dbContext.FlightCompanies
+           .Include(t => t.Flights)
+            .Where(cr => cr.AdminId == adminId)
+            .ToListAsync();
+        }
+
+        public async Task<IReadOnlyList<TourCompany>> GetTourByAdminIdAsync(string adminId)
+        {
+            return await _dbContext.TourCompanies
+          .Include(t => t.Tours)
+           .Where(cr => cr.AdminId == adminId)
+           .ToListAsync();
+        }
     }
 }

@@ -25,10 +25,11 @@ namespace TravelBooking.Models
         [AgeRange(16, 110)]
 
         [DataType(DataType.Date)]
-        public DateTime DateOfBirth { get; set; } 
+        public DateTime DateOfBirth { get; set; }
 
 
         [Required, MaxLength(50), DataType(DataType.Password)]
         public string Password { get; set; } = null!;
+        public int? CompanyId { get; set; }
     }
 }
