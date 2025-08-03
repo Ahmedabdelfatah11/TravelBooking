@@ -32,6 +32,8 @@ namespace TravelBooking.Repository.Migrations
                     Id = table.Column<string>(type: "nvarchar(450)", nullable: false),
                     FirstName = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
                     LastName = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
+                    Address = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    DateOfBirth = table.Column<DateTime>(type: "datetime2", nullable: false),
                     UserName = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
                     NormalizedUserName = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
                     Email = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
@@ -270,7 +272,8 @@ namespace TravelBooking.Repository.Migrations
                     FirstClassPrice = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
                     DepartureAirport = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
                     ArrivalAirport = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
-                    FlightCompanyId = table.Column<int>(type: "int", nullable: false)
+                    FlightCompanyId = table.Column<int>(type: "int", nullable: false),
+                    SelectedSeatClass = table.Column<int>(type: "int", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -497,7 +500,7 @@ namespace TravelBooking.Repository.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "RoomImage",
+                name: "RoomImages",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
@@ -507,9 +510,9 @@ namespace TravelBooking.Repository.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_RoomImage", x => x.Id);
+                    table.PrimaryKey("PK_RoomImages", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_RoomImage_Rooms_RoomId",
+                        name: "FK_RoomImages_Rooms_RoomId",
                         column: x => x.RoomId,
                         principalTable: "Rooms",
                         principalColumn: "Id",
@@ -527,12 +530,13 @@ namespace TravelBooking.Repository.Migrations
                     Status = table.Column<int>(type: "int", nullable: false),
                     BookingType = table.Column<int>(type: "int", nullable: false),
                     SeatClass = table.Column<int>(type: "int", nullable: true),
-                    Price = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
                     RoomId = table.Column<int>(type: "int", nullable: true),
                     CarId = table.Column<int>(type: "int", nullable: true),
                     FlightId = table.Column<int>(type: "int", nullable: true),
                     TourId = table.Column<int>(type: "int", nullable: true),
-                    UserId = table.Column<string>(type: "nvarchar(450)", nullable: true)
+                    UserId = table.Column<string>(type: "nvarchar(450)", nullable: true),
+                    PaymentIntentId = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    ClientSecret = table.Column<string>(type: "nvarchar(max)", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -599,7 +603,7 @@ namespace TravelBooking.Repository.Migrations
                     PaymentMethod = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
                     TransactionId = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
                     PaymentStatus = table.Column<int>(type: "int", nullable: false),
-                    BookingId = table.Column<int>(type: "int", nullable: true)
+                    BookingId = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -742,8 +746,7 @@ namespace TravelBooking.Repository.Migrations
                 name: "IX_Payments_BookingId",
                 table: "Payments",
                 column: "BookingId",
-                unique: true,
-                filter: "[BookingId] IS NOT NULL");
+                unique: true);
 
             migrationBuilder.CreateIndex(
                 name: "IX_Reviews_ApplicationUserId",
@@ -798,8 +801,8 @@ namespace TravelBooking.Repository.Migrations
                 filter: "[HotelCompanyId] IS NOT NULL AND [FlightCompanyId] IS NOT NULL AND [CarRentalCompanyId] IS NOT NULL AND [TourCompanyId] IS NOT NULL");
 
             migrationBuilder.CreateIndex(
-                name: "IX_RoomImage_RoomId",
-                table: "RoomImage",
+                name: "IX_RoomImages_RoomId",
+                table: "RoomImages",
                 column: "RoomId");
 
             migrationBuilder.CreateIndex(
@@ -846,7 +849,7 @@ namespace TravelBooking.Repository.Migrations
                 name: "Reviews");
 
             migrationBuilder.DropTable(
-                name: "RoomImage");
+                name: "RoomImages");
 
             migrationBuilder.DropTable(
                 name: "TourImages");

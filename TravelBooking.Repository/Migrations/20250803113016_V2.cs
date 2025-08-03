@@ -5,7 +5,7 @@
 namespace TravelBooking.Repository.Migrations
 {
     /// <inheritdoc />
-    public partial class Editing2 : Migration
+    public partial class V2 : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)

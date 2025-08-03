@@ -17,7 +17,13 @@ namespace TravelBooking.Core.Specifications.HotelCompanySpecs
                 h.Location.ToLower().Contains(specParams.Search.ToLower()) ||
                 h.Description.ToLower().Contains(specParams.Search.ToLower()))
         {
+            // Replace these lines in the "Get by Id" constructor:
+            // Includes.Add("Rooms");
+            // Includes.Add("Rooms.RoomImages");
+
+            // With these lines:
             Includes.Add(h => h.Rooms);
+
 
             // Pagination
             ApplyPagination(specParams.PageSize * (specParams.PageIndex - 1), specParams.PageSize);
@@ -57,6 +63,7 @@ namespace TravelBooking.Core.Specifications.HotelCompanySpecs
             : base(h => h.Id == id)
         {
             Includes.Add(h => h.Rooms);
+            AddInclude("Rooms.Images");
         }
     }
 }

@@ -44,9 +44,12 @@ namespace TravelBooking.Helper
             CreateMap<HotelCompanyCreateDTO, HotelCompany>();
             CreateMap<HotelCompanyUpdateDTO, HotelCompany>();
 
-
+            #region Room and RoomImage  
             // Room
             CreateMap<Room, RoomToReturnDTO>()
+                 .ForMember(dest => dest.RoomType, opt => opt.MapFrom(src => src.RoomType.ToString()))
+                .ForMember(dest => dest.HotelCompanyName, opt => opt.MapFrom(src => src.Hotel != null ? src.Hotel.Name : string.Empty))
+                .ForMember(dest => dest.HotelCompanyId, opt => opt.MapFrom(src => src.HotelId))
                 .ForMember(dest => dest.RoomImages, opt => opt.MapFrom(src => src.Images));
             CreateMap<RoomCreateDTO, Room>()
                 .ForMember(dest => dest.Images, opt => opt.Ignore()); // We'll map manually
@@ -55,20 +58,12 @@ namespace TravelBooking.Helper
             // RoomImage
             CreateMap<RoomImage, RoomImageReadDTO>();
 
-            #region Room and RoomImage  
-            //  Room Mappings
-            CreateMap<Room, RoomToReturnDTO>()
-                .ForMember(dest => dest.RoomType, opt => opt.MapFrom(src => src.RoomType.ToString()))
-                .ForMember(dest => dest.RoomImages, opt => opt.MapFrom(src => src.Images));
-
-            CreateMap<RoomCreateDTO, Room>()
-                .ForMember(dest => dest.Images, opt => opt.MapFrom(src => src.RoomImages));
 
             CreateMap<RoomUpdateDTO, Room>()
                 .ForMember(dest => dest.Images, opt => opt.MapFrom(src => src.RoomImages));
 
-            //  RoomImage Mappings
-            CreateMap<RoomImage, RoomImageReadDTO>();
+          
+
             CreateMap<RoomImageCreateDTO, RoomImage>();
             #endregion
 
@@ -107,7 +102,9 @@ namespace TravelBooking.Helper
                 .ForMember(dest => dest.Status, opt => opt.MapFrom(src => src.Status.ToString()))
                 .ForMember(dest => dest.Price, opt => opt.MapFrom(src => src.Room != null ? src.Room.Price : 0))
                 .ForMember(dest => dest.RoomId, opt => opt.MapFrom(src => src.RoomId))
-                .ForMember(dest => dest.RoomType, opt => opt.MapFrom(src => src.Room.RoomType.ToString()));
+                .ForMember(dest => dest.RoomType, opt => opt.MapFrom(src => src.Room.RoomType.ToString()))
+                .ForMember(dest => dest.TotalPrice, opt => opt.MapFrom(src => src.TotalPrice))
+                ;
 
             // Car Booking
             CreateMap<CarBookingDto, Booking>()

@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using TravelBooking.APIs.DTOS.Booking.FlightBooking;
 using TravelBooking.APIs.DTOS.Flight;
+using TravelBooking.APIs.DTOS.Tours;
 using TravelBooking.Core.Models;
 using TravelBooking.Core.Repository.Contract;
 using TravelBooking.Core.Specifications.FlightSpecs;
@@ -14,19 +15,19 @@ namespace TravelBooking.APIs.Controllers
     [Route("[controller]")]
     [ApiController]
     public class FlightController : Controller
-    {
+    { 
         private readonly IGenericRepository<Flight> _flightRepo;
         private readonly IGenericRepository<Booking> _bookingRepo;
         private readonly IMapper _mapper;
-
-        public FlightController(IGenericRepository<Flight> flightRepository, IMapper mapper, IGenericRepository<Booking> bookingRepo)
+ 
+        public FlightController(IGenericRepository<Flight> flightRepository , IMapper mapper, IGenericRepository<Booking> bookingRepo)
         {
             _flightRepo = flightRepository;
             _mapper = mapper;
             _bookingRepo = bookingRepo;
         }
-
-        [HttpGet]
+       
+        [HttpGet] 
         public async Task<ActionResult<Pagination<FlightDTO>>> GetAllFlights([FromQuery] FlightSpecParams specParams)
         {
             var spec = new FlightSpecs(specParams);
@@ -126,15 +127,15 @@ namespace TravelBooking.APIs.Controllers
 
             return Ok(result);
         }
-
+ 
         [HttpPost]
-        public async Task<ActionResult<Flight>> AddFlight([FromBody] FlightDTO dto)
+        public async Task<ActionResult<FlightDetialsDTO>> AddFlight([FromBody] FlightCreateDTO dto)
+ 
         {
-            var entity = _mapper.Map<Flight>(dto);
-            var newFlight = await _flightRepo.AddAsync(entity);
-
-            var resultDto = _mapper.Map<FlightDTO>(newFlight);
-            return CreatedAtAction(nameof(GetFlight), new { id = newFlight.Id }, resultDto);
+            var flightCreated = _mapper.Map<Flight>(dto);
+            var newCompany = await _flightRepo.AddAsync(flightCreated);
+            var flight= _mapper.Map<FlightDetialsDTO>(newCompany);
+            return CreatedAtAction(nameof(GetFlight), new { id = newCompany.Id }, newCompany);
         }
 
         [HttpPut("{id}")]

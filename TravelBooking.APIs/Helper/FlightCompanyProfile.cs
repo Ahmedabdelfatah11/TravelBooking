@@ -18,7 +18,7 @@ namespace TravelBooking.APIs.Helper
                 .ForMember(dest => dest.Rating, opt => opt.MapFrom(src => src.Rating))
                 .ForMember(dest => dest.FlightCount, opt => opt.MapFrom(src => src.Flights.Count.ToString()))
                     ;
-            CreateMap<FlightCompany, FlightCompanyDetailsDTO>()
+            CreateMap<FlightCompany, FlightDetailsDTO>()
                 .ForMember(dest => dest.Id, opt => opt.MapFrom(src => src.Id))
                 .ForMember(dest => dest.Name, opt => opt.MapFrom(src => src.Name))
                 .ForMember(dest => dest.Image, opt => opt.MapFrom(src => src.ImageUrl))
