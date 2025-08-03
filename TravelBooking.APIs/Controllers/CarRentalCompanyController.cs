@@ -68,9 +68,8 @@ namespace TravelBooking.APIs.Controllers
             rental.AdminId = dto.AdminId;
 
             var result = await _carRentalRepo.AddAsync(rental);
-            var resultDto = _mapper.Map<CarRentalDto>(result);
-
-            return CreatedAtAction(nameof(GetCarRentalCompanyWithCarsById), new { id = result.Id }, resultDto);
+           
+            return CreatedAtAction(nameof(GetCarRentalCompanyWithCarsById), new { id = result.Id }, result);
         }
 
         [HttpPut("{id}")]
