@@ -100,15 +100,19 @@ namespace TravelBooking.APIs.Controllers
             return CreatedAtAction("GetBookingById", "Booking", new { id = booking.Id }, resultDto);
         }
 
-        //  POST
         [HttpPost]
         [Authorize(Roles = "SuperAdmin,CarRentalAdmin")]
         public async Task<ActionResult> CreateCar(CarCreateUpdateDto dto)
         {
             var car = _mapper.Map<Car>(dto);
-          
+
+            // Assign RentalCompanyId manually if it's ignored in Mapping
+            if (car.RentalCompanyId == 0)
+            {
+                car.RentalCompanyId = dto.RentalCompanyId;
+            }
+
             var result = await _carRepo.AddAsync(car);
-          //  await _carRepo.SaveChangesAsync(); // or CompleteAsync()
             return CreatedAtAction(nameof(GetCar), new { id = car.Id }, _mapper.Map<CarDto>(car));
         }
 

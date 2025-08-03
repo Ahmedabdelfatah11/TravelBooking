@@ -67,7 +67,9 @@ namespace TravelBooking.Repository.Data.Seeds
                     Email = superAdminEmail,
                     EmailConfirmed = true,
                     FirstName = "Super",
-                    LastName = "Admin"
+                    LastName = "Admin",
+                    Address = "Default Address", 
+                    DateOfBirth = new DateTime(1990, 1, 1)
                 };
 
                 var result = await userManager.CreateAsync(superAdmin, superAdminPassword);
