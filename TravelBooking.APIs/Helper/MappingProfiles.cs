@@ -88,7 +88,9 @@ namespace TravelBooking.Helper
             CreateMap<ApplicationUser, UserDto>();
             CreateMap<Booking, BookingDto>()
             .ForMember(dest => dest.CustomerEmail, opt => opt.MapFrom(src => src.User.Email))
-            .ForMember(dest => dest.PaymentStatus, opt => opt.MapFrom(src => src.Payment.PaymentStatus.ToString()));
+            .ForMember(dest => dest.PaymentStatus, opt => opt.MapFrom(src => src.Payment.PaymentStatus.ToString()))
+            .ForMember(dest => dest.TotalPrice, opt => opt.MapFrom(src =>src.TotalPrice))
+            ;
 
 
 

@@ -12,8 +12,8 @@ using TravelBooking.Repository.Data;
 namespace TravelBooking.Repository.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20250731004945_initial version")]
-    partial class initialversion
+    [Migration("20250803163307_intial version")]
+    partial class intialversion
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)

@@ -19,6 +19,8 @@ public class BookingSpecification : BaseSpecifications<Booking>
     public BookingSpecification()
     {
         // For listing with no filter
+        Includes.Add(b => b.User);
+        Includes.Add(b => b.Payment);
     }
 }
 
