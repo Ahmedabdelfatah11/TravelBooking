@@ -7,5 +7,7 @@
         public string? ImageUrl { get; set; }
         public string? Location { get; set; }
         public string? Rating { get; set; }
+        
+        public string? AdminId { get; set; }
     }
 }

@@ -1,4 +1,4 @@
-﻿namespace TravelBooking.APIs.Dtos.HotelCompany
+﻿namespace TravelBooking.APIs.DTOS.HotelCompany
 {
     public class HotelCompanyCreateDTO
     {
@@ -21,5 +21,8 @@
 
         [RatingRangeString] // custom validation
         public string Rating { get; set; }
+
+       
+        public string? AdminId { get; set; }
     }
 }

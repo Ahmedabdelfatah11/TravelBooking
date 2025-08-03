@@ -2,7 +2,7 @@
 
 namespace TravelBooking.APIs.DTOS.FlightCompany
 {
-    public class FlightDetailsDTO
+    public class FlightCompanyDetailsDTO
     {
         public int Id { get; set; }
         public string Image { get; set; }

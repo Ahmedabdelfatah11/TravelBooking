@@ -3,8 +3,9 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
-using TravelBooking.APIs.Dtos.Rooms;
+
 using TravelBooking.APIs.DTOS.Booking.RoomBooking;
+using TravelBooking.APIs.DTOS.Rooms;
 using TravelBooking.APIs.Helper;
 using TravelBooking.Core.Models;
 using TravelBooking.Core.Repository.Contract;
@@ -17,6 +18,7 @@ namespace TravelBooking.APIs.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize(Roles = "SuperAdmin,HotelAdmin")]
     public class RoomController : ControllerBase
     {
         private readonly IGenericRepository<Room> _roomRepo;
@@ -51,6 +53,7 @@ namespace TravelBooking.APIs.Controllers
         /// <param name="specParams">Room specification parameters for filtering and pagination</param>
         /// <returns>Paginated list of rooms</returns>
         [HttpGet]
+        [AllowAnonymous]
         public async Task<ActionResult<Pagination<RoomToReturnDTO>>> GetRooms([FromQuery] RoomSpecParams specParams)
         {
             var spec = new RoomSpecification(specParams);
@@ -70,6 +73,7 @@ namespace TravelBooking.APIs.Controllers
         /// <param name="id">The ID of the room to retrieve</param>
         /// <returns>Room details with hotel and images</returns>
         [HttpGet("{id}")]
+        [AllowAnonymous]
         public async Task<ActionResult<RoomToReturnDTO>> GetRoom(int id)
         {
             var spec = new RoomWithHotelAndImagesSpecification(id);
@@ -82,6 +86,7 @@ namespace TravelBooking.APIs.Controllers
 
         [Authorize]
         [HttpPost("{serviceId}/book")]
+        [Authorize(Roles = "SuperAdmin,HotelAdmin,User")]
         public async Task<IActionResult> BookRoom(int serviceId, [FromBody] RoomBookingDto dto)
         {
             var userId = User.FindFirst("uid")?.Value;
@@ -132,6 +137,7 @@ namespace TravelBooking.APIs.Controllers
         /// <param name="roomDto">Room creation data</param>
         /// <returns>Created room</returns>
         [HttpPost]
+        [Authorize(Roles = "SuperAdmin,HotelAdmin")]
         public async Task<ActionResult<RoomToReturnDTO>> CreateRoom([FromBody] RoomCreateDTO roomDto)
         {
             if (!ModelState.IsValid)
@@ -164,6 +170,7 @@ namespace TravelBooking.APIs.Controllers
         /// <param name="roomDto">Room update data</param>
         /// <returns>No content</returns>
         [HttpPut("{id}")]
+        [Authorize(Roles = "SuperAdmin,HotelAdmin,User")]
         public async Task<ActionResult> UpdateRoom(int id, [FromBody] RoomUpdateDTO roomDto)
         {
             if (!ModelState.IsValid)
@@ -192,6 +199,7 @@ namespace TravelBooking.APIs.Controllers
         /// <param name="id">Room ID</param>
         /// <returns>No content</returns>
         [HttpDelete("{id}")]
+        [Authorize(Roles = "SuperAdmin,HotelAdmin,User")]
         public async Task<ActionResult> DeleteRoom(int id)
         {
             var room = await _roomRepo.GetAsync(id);

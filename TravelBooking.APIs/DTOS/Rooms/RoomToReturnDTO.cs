@@ -1,6 +1,6 @@
 ﻿using TravelBooking.Core.Validations;
 
-namespace TravelBooking.APIs.Dtos.Rooms
+namespace TravelBooking.APIs.DTOS.Rooms
 {
     public class RoomToReturnDTO
     {

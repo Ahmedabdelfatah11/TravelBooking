@@ -4,7 +4,7 @@ using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using TravelBooking.APIs.Dtos.Rooms;
+using TravelBooking.APIs.DTOS.Rooms;
 
 namespace TravelBooking.Core.Validations
 {

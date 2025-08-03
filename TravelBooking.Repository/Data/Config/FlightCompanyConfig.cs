@@ -14,6 +14,11 @@ namespace TravelBooking.Core.Configurations
             builder.Property(fc => fc.Description).HasMaxLength(1000);
             builder.Property(fc => fc.ImageUrl).HasMaxLength(500);
             builder.Property(fc => fc.Location).HasMaxLength(100);
+
+            builder.HasOne(h => h.Admin)
+         .WithOne(u => u.FlightCompany)
+             .HasForeignKey<FlightCompany>(h => h.AdminId)
+              .OnDelete(DeleteBehavior.Restrict);
         }
     }
 }

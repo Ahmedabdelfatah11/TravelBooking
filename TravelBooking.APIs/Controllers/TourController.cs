@@ -16,6 +16,7 @@ namespace TravelBooking.APIs.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize(Roles = "SuperAdmin,TourAdmin")]
     public class TourController : ControllerBase
     {
         private readonly IGenericRepository<Tour> _tourRepo;
@@ -35,6 +36,7 @@ namespace TravelBooking.APIs.Controllers
             _tourCompany = tourCompany;
         }
         [HttpGet]
+        [AllowAnonymous]
         public async Task<ActionResult<Pagination<TourReadDto>>> GetTourCompanies([FromQuery] TourSpecParams specParams)
         {
             var spec = new ToursSpecification(specParams);
@@ -52,6 +54,7 @@ namespace TravelBooking.APIs.Controllers
         [ProducesResponseType(typeof(TourCompanyReadDto), StatusCodes.Status200OK)]
         [ProducesErrorResponseType(typeof(ApiResponse))]
         [HttpGet("{id}")]
+        [AllowAnonymous]
         public async Task<ActionResult<TourReadDto>> GetTourById(int id)
         {
             var spec = new ToursSpecification(id);
@@ -66,6 +69,7 @@ namespace TravelBooking.APIs.Controllers
 
 
         [HttpPost]
+        [Authorize(Roles = "SuperAdmin,TourAdmin")]
         public async Task<ActionResult<TourReadDto>> CreateTour([FromBody] TourCreateDto dto)
         {
             var entity = _mapper.Map<Tour>(dto);
@@ -79,6 +83,7 @@ namespace TravelBooking.APIs.Controllers
         }
         [Authorize]
         [HttpPost("{serviceId}/book")]
+        [Authorize(Roles = "SuperAdmin,TourAdmin,User")]
         public async Task<IActionResult> BookTour(int serviceId/*, [FromBody] TourBookingDto? dto*/)
         {
             var userId = User.FindFirst("uid")?.Value;
@@ -124,6 +129,7 @@ namespace TravelBooking.APIs.Controllers
 
         // PUT: api/TourCompany/5
         [HttpPut("{id}")]
+        [Authorize(Roles = "SuperAdmin,TourAdmin,User")]
         public async Task<ActionResult> UpdateTour(int id, [FromBody] TourUpdateDto dto)
         {
             var existing = await _tourRepo.GetAsync(id);
@@ -136,6 +142,7 @@ namespace TravelBooking.APIs.Controllers
 
         // DELETE: api/TourCompany/5
         [HttpDelete("{id}")]
+        [Authorize(Roles = "SuperAdmin,TourAdmin,User")]
         public async Task<ActionResult> DeleteTour(int id)
         {
             var existing = await _tourRepo.GetAsync(id);

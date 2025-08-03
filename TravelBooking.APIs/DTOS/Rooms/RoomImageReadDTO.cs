@@ -1,6 +1,6 @@
 ﻿using TravelBooking.Core.Models;
 
-namespace TravelBooking.APIs.Dtos.Rooms
+namespace TravelBooking.APIs.DTOS.Rooms
 {
     public class RoomImageReadDTO : BaseEntity
     {
@@ -8,5 +8,6 @@ namespace TravelBooking.APIs.Dtos.Rooms
 
         public int RoomId { get; set; }
         //public Room Room { get; set; }
+
     }
 }

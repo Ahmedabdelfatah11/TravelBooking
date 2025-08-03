@@ -15,6 +15,7 @@ namespace TravelBooking.APIs.Controllers
 {
     [Route("[controller]")]
     [ApiController]
+    [Authorize(Roles = "SuperAdmin,User,FlightAdmin")]
     public class FlightController : Controller
     {
         private readonly IGenericRepository<Flight> _flightRepo;
@@ -29,7 +30,8 @@ namespace TravelBooking.APIs.Controllers
         }
        
         [HttpGet]
-        public async Task<ActionResult<Pagination<FlightDTO>>> GetAllFlights([FromQuery] FlightSpecParams specParams)
+        [AllowAnonymous]
+        public async Task<ActionResult<Pagination<FlightDTO>>> GetAllFlights( [FromQuery]FlightSpecParams specParams )
         {
             var spec = new FlightSpecs(specParams);
             var flights = await _flightRepo.GetAllWithSpecAsync(spec);
@@ -45,7 +47,8 @@ namespace TravelBooking.APIs.Controllers
         }
 
         [HttpGet("{id}")]
-        public async Task<ActionResult<FlightDetialsDTO>> GetFlight(int id)
+        [AllowAnonymous]
+        public async Task<ActionResult<FlightDetialsDTO>> GetFlight( int id )
         {
             var spec = new FlightSpecs(id);
             var flight = await _flightRepo.GetWithSpecAsync(spec);
@@ -58,6 +61,7 @@ namespace TravelBooking.APIs.Controllers
 
         [Authorize]
         [HttpPost("{serviceId}/book")]
+        [Authorize(Roles = "SuperAdmin,User")]
         public async Task<IActionResult> BookFlight(int serviceId, [FromBody] FlightBookingDto dto)
         {
             var userId = User.FindFirst("uid")?.Value;
@@ -129,6 +133,13 @@ namespace TravelBooking.APIs.Controllers
             return Ok(result);  
         }
         [HttpPost]
+
+
+
+
+
+        [HttpPost]
+        [Authorize(Roles = "SuperAdmin,FlightAdmin")]
         public async Task<ActionResult<FlightDetialsDTO>> AddFlight([FromBody] FlightCreateDTO dto)
         {
             var flightCreated = _mapper.Map<Flight>(dto);
@@ -138,6 +149,7 @@ namespace TravelBooking.APIs.Controllers
         }
 
         [HttpPut("{id}")]
+        [Authorize(Roles = "SuperAdmin,FlightAdmin")]
         public async Task<ActionResult> UpdateFlight(int id, [FromBody] Flight flight)
         {
             if (flight.Id != id)
@@ -148,6 +160,7 @@ namespace TravelBooking.APIs.Controllers
         }
 
         [HttpDelete("{id}")]
+        [Authorize(Roles = "SuperAdmin,FlightAdmin")]
         public async Task<ActionResult> DeleteFlight(int id)
         {
             var existing = await _flightRepo.GetAsync(id);

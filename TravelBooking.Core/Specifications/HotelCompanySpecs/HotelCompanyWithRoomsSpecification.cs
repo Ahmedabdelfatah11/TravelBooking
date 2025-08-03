@@ -23,6 +23,9 @@ namespace TravelBooking.Core.Specifications.HotelCompanySpecs
 
             // With these lines:
             Includes.Add(h => h.Rooms);
+            AddInclude("Rooms.Images");
+          
+
 
 
             // Pagination
@@ -64,6 +67,7 @@ namespace TravelBooking.Core.Specifications.HotelCompanySpecs
         {
             Includes.Add(h => h.Rooms);
             AddInclude("Rooms.Images");
+
         }
     }
 }

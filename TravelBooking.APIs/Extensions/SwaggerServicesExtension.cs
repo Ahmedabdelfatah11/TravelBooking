@@ -7,19 +7,20 @@ namespace TravelBooking.Extensions
     {
         public static IServiceCollection AddSwaggerServices(this IServiceCollection services)
         {
-          services.AddEndpointsApiExplorer();
-            //services.AddSwaggerGen();
+            services.AddEndpointsApiExplorer();
+            //  services.AddSwaggerGen();
+
             #region Swagger Setting
             services.AddSwaggerGen(swagger =>
             {
-                //This is to generate the Default UI of Swagger Documentation    
+                //This is to generate the Default UI of Swagger Documentation    
                 swagger.SwaggerDoc("v1", new OpenApiInfo
                 {
                     Version = "v1",
                     Title = "TravelBooking API",
                     Description = " Project"
                 });
-                // To Enable authorization using Swagger (JWT)    
+                // To Enable authorization using Swagger (JWT)    
                 swagger.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme()
                 {
                     Name = "Authorization",
@@ -27,7 +28,7 @@ namespace TravelBooking.Extensions
                     Scheme = "Bearer",
                     BearerFormat = "JWT",
                     In = ParameterLocation.Header,
-                    Description = "Enter 'Bearer' [space] and then your valid token in the text input below.\r\n\r\nExample: \"Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9\"",
+                    Description = "Enter 'Bearer' [space] and then your valid token in the text input below.\r\n\r\nExample: \"Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9\"",
                 });
                 swagger.AddSecurityRequirement(new OpenApiSecurityRequirement
                 {
@@ -45,11 +46,12 @@ namespace TravelBooking.Extensions
                     });
             });
             #endregion
+
             return services;
 
         }
-        public static WebApplication UseSwaggerMiddlewares(this WebApplication app) 
-            {
+        public static WebApplication UseSwaggerMiddlewares(this WebApplication app)
+        {
             app.UseSwagger();
             app.UseSwaggerUI();
             return app;

@@ -1,6 +1,6 @@
-﻿using TravelBooking.APIs.Dtos.Rooms;
+﻿using TravelBooking.APIs.DTOS.Rooms;
 
-namespace TravelBooking.APIs.Dtos.HotelCompany
+namespace TravelBooking.APIs.DTOS.HotelCompany
 {
     public class HotelCompanyReadDTO
     {

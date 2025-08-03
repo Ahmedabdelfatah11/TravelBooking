@@ -17,6 +17,7 @@ namespace TravelBooking.APIs.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize(Roles = "SuperAdmin,User,CarRentalAdmin")]
     public class CarController : ControllerBase
     {
         private readonly IGenericRepository<Car> _carRepo;
@@ -31,6 +32,7 @@ namespace TravelBooking.APIs.Controllers
         }
 
         [HttpGet]
+        [AllowAnonymous]
         public async Task<ActionResult<IReadOnlyList<CarDto>>> GetCars([FromQuery] CarSpecParams specParams)
         {
             var spec = new CarSpecifications(specParams);
@@ -46,6 +48,7 @@ namespace TravelBooking.APIs.Controllers
         }
 
         [HttpGet("{id}")]
+        [AllowAnonymous]
         public async Task<ActionResult<CarDto>> GetCar(int id)
         {
 
@@ -60,6 +63,7 @@ namespace TravelBooking.APIs.Controllers
 
         [Authorize]
         [HttpPost("{serviceId}/book")]
+        [Authorize(Roles = "SuperAdmin,User")]
         public async Task<IActionResult> BookCar(int serviceId, [FromBody] CarBookingDto dto)
         {
             var userId = User.FindFirst("uid")?.Value;
@@ -96,15 +100,19 @@ namespace TravelBooking.APIs.Controllers
             return CreatedAtAction("GetBookingById", "Booking", new { id = booking.Id }, resultDto);
         }
 
-
-
-        //  POST
         [HttpPost]
+        [Authorize(Roles = "SuperAdmin,CarRentalAdmin")]
         public async Task<ActionResult> CreateCar(CarCreateUpdateDto dto)
         {
             var car = _mapper.Map<Car>(dto);
+
+            // Assign RentalCompanyId manually if it's ignored in Mapping
+            if (car.RentalCompanyId == 0)
+            {
+                car.RentalCompanyId = dto.RentalCompanyId;
+            }
+
             var result = await _carRepo.AddAsync(car);
-            //await _carRepo.SaveChangesAsync(); // or CompleteAsync()
             return CreatedAtAction(nameof(GetCar), new { id = car.Id }, _mapper.Map<CarDto>(car));
         }
 
@@ -122,6 +130,7 @@ namespace TravelBooking.APIs.Controllers
         }
 
         [HttpDelete("{id}")]
+        [Authorize(Roles = "SuperAdmin,User,CarRentalAdmin")]
         public async Task<ActionResult> DeleteCar(int id)
         {
             var car = await _carRepo.GetAsync(id);

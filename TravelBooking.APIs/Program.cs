@@ -20,6 +20,8 @@ using TravelBooking.Repository;
 using TravelBooking.Repository.Data;
 using TravelBooking.Repository.Data.Seeds; 
 using TravelBooking.Service.Services; 
+using TravelBooking.Repository.Data.Seeds;
+using TravelBooking.Service.Services.Dashboard;
 namespace TravelBooking.APIs
 {
     public class Program
@@ -125,13 +127,15 @@ namespace TravelBooking.APIs
             {
                 options.AddPolicy("AllowAngularApp", policy =>
                 {
-                    policy.WithOrigins("http://localhost:4200") // angular port
+                    policy.WithOrigins("AllowAll") // angular port
                           .AllowAnyHeader()
                           .AllowAnyMethod()
                           .AllowCredentials(); // Allow credentials if needed
                 });
             });
 
+            // Dashboard
+            webApplicationbuilder.Services.AddScoped<IDashboardService, DashboardService>();
 
             webApplicationbuilder.Services.AddApplicationServices();
        
