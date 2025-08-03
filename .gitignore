@@ -58,7 +58,7 @@ bin/
 *.dll
 *.exe
 *.pdb
-*.json
+# *.json
 *.runtimeconfig.json
 *.deps.json
 *.staticwebassets.endpoints.json
