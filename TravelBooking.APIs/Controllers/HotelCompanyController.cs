@@ -71,8 +71,6 @@ namespace TravelBooking.APIs.Controllers
 
         [HttpPost]
         [Authorize(Roles = "SuperAdmin")]
-        [HttpPost]
-        [Authorize(Roles = "SuperAdmin")]
         public async Task<ActionResult> Create([FromBody] HotelCompanyCreateDTO dto)
         {
             if (!ModelState.IsValid)
