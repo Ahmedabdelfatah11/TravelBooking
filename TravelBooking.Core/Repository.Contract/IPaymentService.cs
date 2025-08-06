@@ -10,7 +10,7 @@ namespace TravelBooking.Core.Repository.Contract
 {
     public interface IPaymentService
     { 
-        Task<Booking?> CreatePaymentIntent(int bookingId);
+        Task<Booking?> CreatePaymentIntent(int bookingId);        
 
     }
 

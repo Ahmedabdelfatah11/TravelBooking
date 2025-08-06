@@ -1,0 +1,204 @@
+{
+  "CarRentalCompanies": [
+    {
+      "Name": "Cairo Luxury Car Rental",
+      "description": "Premium car rental service in Cairo offering luxury vehicles for business and leisure travel. Established since 2010 with excellent customer service.",
+      "Location": "Cairo, Egypt",
+      "ImageUrl": "https://images.unsplash.com/photo-1549924231-f129b911e442?w=500",
+      "Rating": "5"
+    },
+    {
+      "Name": "Alexandria Coastal Rentals",
+      "description": "Specialized car rental service for coastal tours and city exploration in Alexandria. Perfect for visiting historical sites and Mediterranean beaches.",
+      "Location": "Alexandria, Egypt",
+      "ImageUrl": "https://images.unsplash.com/photo-1558618047-3c8c76ca7d13?w=500",
+      "Rating": "4"
+    },
+    {
+      "Name": "Giza Pyramid Car Services",
+      "description": "Expert car rental service near the Giza Pyramids. Offering guided tours and self-drive options for exploring ancient wonders.",
+      "Location": "Giza, Egypt",
+      "ImageUrl": "https://images.unsplash.com/photo-1544636331-e26879cd4d9b?w=500",
+      "Rating": "5"
+    },
+    {
+      "Name": "Luxor Heritage Rentals",
+      "description": "Traditional and modern vehicle rental service in Luxor. Specializing in archaeological site visits and Nile Valley tours.",
+      "Location": "Luxor, Egypt",
+      "ImageUrl": "https://images.unsplash.com/photo-1502920917128-1aa500764cbd?w=500",
+      "Rating": "4"
+    },
+    {
+      "Name": "Aswan Desert Adventures",
+      "description": "Adventure-focused car rental service in Aswan. Offering 4WD vehicles for desert expeditions and cultural tours.",
+      "Location": "Aswan, Egypt",
+      "ImageUrl": "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=500",
+      "Rating": "5"
+    },
+    {
+      "Name": "Red Sea Coastal Drives",
+      "description": "Premium car rental service for Red Sea resort areas. Perfect for beach destinations and resort transfers.",
+      "Location": "Hurghada, Egypt",
+      "ImageUrl": "https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?w=500",
+      "Rating": "4"
+    }
+  ],
+  "Cars": [
+    {
+      "Model": "Toyota Camry 2023",
+      "Price": 850.00,
+      "Description": "Comfortable mid-size sedan perfect for city driving and long trips. Features modern amenities and excellent fuel efficiency.",
+      "IsAvailable": true,
+      "DepartureTime": "2025-08-01T08:00:00",
+      "ArrivalTime": "2025-08-01T18:00:00",
+      "Location": "Cairo Downtown",
+      "ImageUrl": "https://images.unsplash.com/photo-1621007947382-bb3c3994e3fb?w=500",
+      "Capacity": 5,
+      "RentalCompanyId": 1
+    },
+    {
+      "Model": "Mercedes E-Class 2024",
+      "Price": 1500.00,
+      "Description": "Luxury sedan with premium features, leather interior, and advanced safety systems. Ideal for business meetings and special occasions.",
+      "IsAvailable": true,
+      "DepartureTime": "2025-08-02T09:00:00",
+      "ArrivalTime": "2025-08-02T19:00:00",
+      "Location": "Cairo Airport",
+      "ImageUrl": "https://images.unsplash.com/photo-1618843479313-40f8afb4b4d8?w=500",
+      "Capacity": 5,
+      "RentalCompanyId": 1
+    },
+    {
+      "Model": "Honda CR-V 2023",
+      "Price": 950.00,
+      "Description": "Versatile SUV perfect for family trips and exploring Egypt's diverse landscapes. Spacious interior and reliable performance.",
+      "IsAvailable": true,
+      "DepartureTime": "2025-08-03T07:00:00",
+      "ArrivalTime": "2025-08-03T20:00:00",
+      "Location": "New Cairo",
+      "ImageUrl": "https://images.unsplash.com/photo-1606664515524-ed2f786a0bd6?w=500",
+      "Capacity": 7,
+      "RentalCompanyId": 1
+    },
+    {
+      "Model": "Nissan Sunny 2023",
+      "Price": 600.00,
+      "Description": "Economic compact car ideal for city navigation and short trips. Fuel-efficient and easy to park in crowded areas.",
+      "IsAvailable": true,
+      "DepartureTime": "2025-08-04T10:00:00",
+      "ArrivalTime": "2025-08-04T16:00:00",
+      "Location": "Alexandria Corniche",
+      "ImageUrl": "https://images.unsplash.com/photo-1605559424843-9e4c228bf1c2?w=500",
+      "Capacity": 5,
+      "RentalCompanyId": 2
+    },
+    {
+      "Model": "Hyundai Elantra 2024",
+      "Price": 750.00,
+      "Description": "Modern sedan with excellent comfort and technology features. Perfect for coastal drives along the Mediterranean.",
+      "IsAvailable": true,
+      "DepartureTime": "2025-08-05T08:30:00",
+      "ArrivalTime": "2025-08-05T17:30:00",
+      "Location": "Alexandria Port",
+      "ImageUrl": "https://images.unsplash.com/photo-1607853202273-797f1c22a38e?w=500",
+      "Capacity": 5,
+      "RentalCompanyId": 2
+    },
+    {
+      "Model": "Ford Explorer 2023",
+      "Price": 1200.00,
+      "Description": "Large SUV perfect for pyramid tours and desert excursions. Spacious and comfortable for group travel.",
+      "IsAvailable": true,
+      "DepartureTime": "2025-08-06T06:00:00",
+      "ArrivalTime": "2025-08-06T22:00:00",
+      "Location": "Giza Pyramids",
+      "ImageUrl": "https://images.unsplash.com/photo-1606016159991-2df4ac5e4d4c?w=500",
+      "Capacity": 7,
+      "RentalCompanyId": 3
+    },
+    {
+      "Model": "Chevrolet Tahoe 2024",
+      "Price": 1800.00,
+      "Description": "Premium large SUV for luxury desert tours and group transportation. Air-conditioned comfort for hot weather.",
+      "IsAvailable": true,
+      "DepartureTime": "2025-08-07T05:00:00",
+      "ArrivalTime": "2025-08-07T21:00:00",
+      "Location": "Giza Hotels Area",
+      "ImageUrl": "https://images.unsplash.com/photo-1609521263047-f8f205293f24?w=500",
+      "Capacity": 8,
+      "RentalCompanyId": 3
+    },
+    {
+      "Model": "Toyota Prado 2023",
+      "Price": 1100.00,
+      "Description": "Reliable 4WD SUV ideal for archaeological site visits and Valley of the Kings tours. Excellent for rough terrain.",
+      "IsAvailable": true,
+      "DepartureTime": "2025-08-08T07:00:00",
+      "ArrivalTime": "2025-08-08T19:00:00",
+      "Location": "Luxor Temple Area",
+      "ImageUrl": "https://images.unsplash.com/photo-1600712242805-5f78671b24da?w=500",
+      "Capacity": 7,
+      "RentalCompanyId": 4
+    },
+    {
+      "Model": "Mitsubishi Pajero 2023",
+      "Price": 1000.00,
+      "Description": "Robust SUV perfect for Luxor's historical sites and desert landscapes. Comfortable for extended sightseeing tours.",
+      "IsAvailable": true,
+      "DepartureTime": "2025-08-09T06:30:00",
+      "ArrivalTime": "2025-08-09T18:30:00",
+      "Location": "Luxor Airport",
+      "ImageUrl": "https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=500",
+      "Capacity": 7,
+      "RentalCompanyId": 4
+    },
+    {
+      "Model": "Land Cruiser 2024",
+      "Price": 2000.00,
+      "Description": "Ultimate desert adventure vehicle. Perfect for Abu Simbel trips and Nubian village tours. Premium off-road capabilities.",
+      "IsAvailable": true,
+      "DepartureTime": "2025-08-10T04:00:00",
+      "ArrivalTime": "2025-08-10T20:00:00",
+      "Location": "Aswan High Dam Area",
+      "ImageUrl": "https://images.unsplash.com/photo-1544636331-e26879cd4d9b?w=500",
+      "Capacity": 8,
+      "RentalCompanyId": 5
+    },
+    {
+      "Model": "Jeep Wrangler 2023",
+      "Price": 1400.00,
+      "Description": "Adventure SUV for desert exploration and cultural tours. Open-air driving experience in Egypt's beautiful landscapes.",
+      "IsAvailable": true,
+      "DepartureTime": "2025-08-11T08:00:00",
+      "ArrivalTime": "2025-08-11T17:00:00",
+      "Location": "Aswan Souq Area",
+      "ImageUrl": "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=500",
+      "Capacity": 5,
+      "RentalCompanyId": 5
+    },
+    {
+      "Model": "BMW X3 2024",
+      "Price": 1300.00,
+      "Description": "Luxury compact SUV perfect for Red Sea coastal drives and resort transfers. Premium comfort with excellent performance.",
+      "IsAvailable": true,
+      "DepartureTime": "2025-08-12T09:00:00",
+      "ArrivalTime": "2025-08-12T18:00:00",
+      "Location": "Hurghada Marina",
+      "ImageUrl": "https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?w=500",
+      "Capacity": 5,
+      "RentalCompanyId": 6
+    },
+    {
+      "Model": "Audi Q5 2023",
+      "Price": 1250.00,
+      "Description": "Sophisticated SUV for beach destinations and diving excursions. Modern technology and comfort for coastal adventures.",
+      "IsAvailable": true,
+      "DepartureTime": "2025-08-13T10:00:00",
+      "ArrivalTime": "2025-08-13T16:00:00",
+      "Location": "Hurghada Airport",
+      "ImageUrl": "https://images.unsplash.com/photo-1588636142416-d186dd285ca2?w=500",
+      "Capacity": 5,
+      "RentalCompanyId": 6
+    }
+  ]
+}

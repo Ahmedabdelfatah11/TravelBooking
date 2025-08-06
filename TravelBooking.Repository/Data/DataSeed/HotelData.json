@@ -1,0 +1,429 @@
+{
+  "hotelCompanies": [
+    {
+      "id": 1,
+      "name": "Four Seasons Resort Sharm El Sheikh",
+      "description": "A luxurious beachfront resort offering world-class amenities, stunning Red Sea views, and exceptional diving opportunities in the heart of Sharm El Sheikh.",
+      "location": "Sharm El Sheikh, South Sinai",
+      "imageUrl": "https://i.pinimg.com/1200x/9b/6e/29/9b6e29277d41435a48c0b95e0f7578a8.jpg",
+      "rating": "5"
+    },
+    {
+      "id": 2,
+      "name": "Sofitel Winter Palace Luxor",
+      "description": "Historic luxury hotel overlooking the Nile River, perfectly positioned near ancient temples and tombs. A blend of French elegance and Egyptian heritage.",
+      "location": "Luxor, Upper Egypt",
+      "imageUrl": "https://i.pinimg.com/1200x/33/07/08/330708d2461bc38e16ee2587eb7de5d6.jpg",
+      "rating": "5"
+    },
+    {
+      "id": 3,
+      "name": "Steigenberger Hotel El Tahrir",
+      "description": "Modern business hotel in the heart of Downtown Cairo, walking distance from Tahrir Square and the Egyptian Museum.",
+      "location": "Downtown Cairo",
+      "imageUrl": "https://i.pinimg.com/1200x/f4/9c/c9/f49cc99d35ea1388e378273f8bdc72c5.jpg",
+      "rating": "4"
+    },
+    {
+      "id": 4,
+      "name": "Hilton Alexandria Corniche",
+      "description": "Waterfront hotel offering panoramic Mediterranean Sea views, modern amenities, and easy access to Alexandria's historic attractions.",
+      "location": "Alexandria, Mediterranean Coast",
+      "imageUrl": "https://i.pinimg.com/736x/0b/e9/25/0be925359fd2e5b4bd872b28cc71a568.jpg",
+      "rating": "4"
+    },
+    {
+      "id": 5,
+      "name": "Mövenpick Resort Hurghada",
+      "description": "All-inclusive beachfront resort featuring private beach, multiple pools, and world-class spa facilities on the Red Sea coast.",
+      "location": "Hurghada, Red Sea",
+      "imageUrl": "https://i.pinimg.com/1200x/97/cb/b5/97cbb51dd47672b18752b005061df3b1.jpg",
+      "rating": "5"
+    },
+    {
+      "id": 6,
+      "name": "Kempinski Nile Hotel Garden City",
+      "description": "Elegant luxury hotel on the banks of the Nile River in Cairo, offering sophisticated accommodations and fine dining experiences.",
+      "location": "Garden City, Cairo",
+      "imageUrl": "https://i.pinimg.com/1200x/5d/f8/89/5df889a0271c0f05ffedc4b0f0a13efe.jpg",
+      "rating": "5"
+    },
+    {
+      "id": 7,
+      "name": "Siwa Shali Resort",
+      "description": "Eco-friendly desert retreat built with traditional mud-brick architecture, offering unique experiences in the heart of Siwa Oasis.",
+      "location": "Siwa Oasis, Western Desert",
+      "imageUrl": "https://i.pinimg.com/1200x/5f/f7/ab/5ff7ab368732f438c5979e335edc5733.jpg",
+      "rating": "4"
+    },
+    {
+      "id": 8,
+      "name": "Red Sea Palace Resort",
+      "description": "Family-friendly resort with private beach, multiple restaurants, and excellent facilities for water sports and relaxation.",
+      "location": "Marsa Alam, Red Sea",
+      "imageUrl": "https://cf.bstatic.com/xdata/images/hotel/max1024x768/412941319.jpg?k=a6e998317b82b23a9f70b7021498361050267017079851c0e605674d7a50cc99&o=&hp=1",
+      "rating": "4"
+    }
+  ],
+  "rooms": [
+    {
+      "id": 1,
+      "price": 3500.00,
+      "isAvailable": true,
+      "roomType": "Suite",
+      "description": "Spacious deluxe room with Red Sea view, marble bathroom, and private balcony. Includes complimentary WiFi and minibar.",
+      "from": "2025-08-15T14:00:00",
+      "to": "2025-08-20T11:00:00",
+      "hotelId": 1,
+      "images": [
+        {
+          "id": 1,
+          "imageUrl": "https://dynamic-media-cdn.tripadvisor.com/media/photo-o/04/95/c0/ff/red-sea-palace-hotel.jpg?w=700&h=-1&s=1",
+          "roomId": 1
+        },
+        {
+          "id": 2,
+          "imageUrl": "https://dynamic-media-cdn.tripadvisor.com/media/photo-o/04/95/c5/bb/red-sea-palace-hotel.jpg?w=700&h=-1&s=1",
+          "roomId": 1
+        },
+        {
+          "id": 3,
+          "imageUrl": "https://i.pinimg.com/736x/ae/f8/63/aef86386bb7217c6e018c773548ac7da.jpg",
+          "roomId": 1
+        }
+      ]
+    },
+    {
+      "id": 2,
+      "price": 5200.00,
+      "isAvailable": true,
+      "roomType": "Suite",
+      "description": "Presidential suite with panoramic Red Sea views, separate living area, jacuzzi, and butler service.",
+      "from": "2025-09-01T15:00:00",
+      "to": "2025-09-07T12:00:00",
+      "hotelId": 1,
+      "images": [
+        {
+          "id": 4,
+          "imageUrl": "https://i.pinimg.com/1200x/67/c5/b1/67c5b134dc073cbb6f73d1a6e823ac6d.jpg",
+          "roomId": 2
+        },
+        {
+          "id": 5,
+          "imageUrl": "https://i.pinimg.com/1200x/07/26/d6/0726d6acc9f82d08fb014fa63c122bfe.jpg",
+          "roomId": 2
+        }
+      ]
+    },
+    {
+      "id": 3,
+      "price": 2800.00,
+      "isAvailable": false,
+      "roomType": "Single",
+      "description": "Comfortable standard room with garden view, modern amenities, and traditional Egyptian decor.",
+      "from": "2025-08-10T14:00:00",
+      "to": "2025-08-15T11:00:00",
+      "hotelId": 1,
+      "images": [
+        {
+          "id": 6,
+          "imageUrl": "https://www.fourseasons.com/alt/img-opt/~75.701.0,0000-0,0000-1600,0000-900,0000/publish/content/dam/fourseasons/images/web/SHA/SHA_541_aspect16x9.jpg",
+          "roomId": 3
+        }
+      ]
+    },
+    {
+      "id": 4,
+      "price": 4100.00,
+      "isAvailable": true,
+      "roomType": "Double",
+      "description": "Historic deluxe room with Nile view, antique furnishings, and modern comfort in the legendary Winter Palace.",
+      "from": "2025-08-25T14:00:00",
+      "to": "2025-08-30T11:00:00",
+      "hotelId": 2,
+      "images": [
+        {
+          "id": 7,
+          "imageUrl": "https://i.pinimg.com/1200x/c8/86/b9/c886b97cd2d716fc1070714a0902f97a.jpg",
+          "roomId": 4
+        },
+        {
+          "id": 8,
+          "imageUrl": "https://m.ahstatic.com/is/image/accorhotels/aja_p_6078-54:4by3?fmt=jpg&op_usm=1.75,0.3,2,0&resMode=sharp2&iccEmbed=true&icc=sRGB&dpr=on,1.5&wid=335&hei=251&qlt=80",
+          "roomId": 4
+        }
+      ]
+    },
+    {
+      "id": 5,
+      "price": 6800.00,
+      "isAvailable": true,
+      "roomType": "Suite",
+      "description": "Royal suite with panoramic Nile views, marble bathroom, separate sitting area, and 24-hour butler service.",
+      "from": "2025-09-10T15:00:00",
+      "to": "2025-09-17T12:00:00",
+      "hotelId": 2,
+      "images": [
+        {
+          "id": 9,
+          "imageUrl": "https://dynamic-media-cdn.tripadvisor.com/media/photo-o/2e/69/b0/24/suite.jpg?w=900&h=500&s=1",
+          "roomId": 5
+        },
+        {
+          "id": 10,
+          "imageUrl": "https://dynamic-media-cdn.tripadvisor.com/media/photo-o/2e/69/b0/24/suite.jpg?w=900&h=500&s=1",
+          "roomId": 5
+        },
+        {
+          "id": 11,
+          "imageUrl": "https://www.ahstatic.com/photos/1661_rokgb_00_p_1024x768.jpg",
+          "roomId": 5
+        }
+      ]
+    },
+    {
+      "id": 6,
+      "price": 1800.00,
+      "isAvailable": true,
+      "roomType": "Single",
+      "description": "Modern standard room in downtown Cairo with city views, work desk, and complimentary WiFi.",
+      "from": "2025-08-05T14:00:00",
+      "to": "2025-08-08T11:00:00",
+      "hotelId": 3,
+      "images": [
+        {
+          "id": 12,
+          "imageUrl": "https://i.pinimg.com/1200x/c8/e3/08/c8e308934a9cf80f88eb672ac6eec511.jpg",
+          "roomId": 6
+        }
+      ]
+    },
+    {
+      "id": 7,
+      "price": 2400.00,
+      "isAvailable": true,
+      "roomType": "Double",
+      "description": "Upgraded room with panoramic city views, premium amenities, and access to executive lounge.",
+      "from": "2025-08-12T14:00:00",
+      "to": "2025-08-16T11:00:00",
+      "hotelId": 3,
+      "images": [
+        {
+          "id": 13,
+          "imageUrl": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS1RpVwZqPh3anUkxDyhBPIo8u2nM1d7RGuyQ&s",
+          "roomId": 7
+        },
+        {
+          "id": 14,
+          "imageUrl": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ3pXcytplzvkf_0Usf0giM3JqG3500o0cJqA&s",
+          "roomId": 7
+        }
+      ]
+    },
+    {
+      "id": 8,
+      "price": 2200.00,
+      "isAvailable": true,
+      "roomType": "Single",
+      "description": "Comfortable room with Mediterranean Sea view, modern amenities, and access to private beach.",
+      "from": "2025-08-20T14:00:00",
+      "to": "2025-08-25T11:00:00",
+      "hotelId": 4,
+      "images": [
+        {
+          "id": 15,
+          "imageUrl": "https://i.pinimg.com/736x/9a/fc/26/9afc26b5b25e58fa7d96cb1397b9ca3e.jpg",
+          "roomId": 8
+        }
+      ]
+    },
+    {
+      "id": 9,
+      "price": 3200.00,
+      "isAvailable": false,
+      "roomType": "Double",
+      "description": "Spacious deluxe room with sea view balcony, marble bathroom, and executive floor privileges.",
+      "from": "2025-09-05T14:00:00",
+      "to": "2025-09-10T11:00:00",
+      "hotelId": 4,
+      "images": [
+        {
+          "id": 16,
+          "imageUrl": "https://cf.bstatic.com/xdata/images/hotel/max1024x768/576047469.jpg?k=e39c3f105e3740ce200f0ffd9bf84fddfa58e1c22afb2ed97b1e79c3360a0ff0&o=&hp=1",
+          "roomId": 9
+        },
+        {
+          "id": 17,
+          "imageUrl": "https://cf.bstatic.com/xdata/images/hotel/max1024x768/490791237.jpg?k=226cf35ccee14740b871bb6a3ad14d981db583db5d5d7a0fd6a5ff2ced841f6b&o=&hp=1",
+          "roomId": 9
+        }
+      ]
+    },
+    {
+      "id": 10,
+      "price": 2900.00,
+      "isAvailable": true,
+      "roomType": "Single",
+      "description": "All-inclusive standard room with pool or garden view, modern amenities, and access to all resort facilities.",
+      "from": "2025-08-18T14:00:00",
+      "to": "2025-08-23T11:00:00",
+      "hotelId": 5,
+      "images": [
+        {
+          "id": 18,
+          "imageUrl": "https://m.ahstatic.com/is/image/accorhotels/Soma_Bay_xxxxxx_i115621:3by2?wid=364&hei=243&dpr=on,2.625&qlt=75&resMode=sharp2&op_usm=0.5,0.3,2,0&iccEmbed=true&icc=sRGB",
+          "roomId": 10
+        }
+      ]
+    },
+    {
+      "id": 11,
+      "price": 3800.00,
+      "isAvailable": true,
+      "roomType": "Suite",
+      "description": "Premium deluxe room with Red Sea view, private terrace, and upgraded all-inclusive benefits.",
+      "from": "2025-09-15T15:00:00",
+      "to": "2025-09-22T12:00:00",
+      "hotelId": 5,
+      "images": [
+        {
+          "id": 19,
+          "imageUrl": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRid_YPfKuHPR08-tOteR-jQfGhkT57ofT-mA&s",
+          "roomId": 11
+        },
+        {
+          "id": 20,
+          "imageUrl": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQQY4JCcyCh3VdcFLlL6VTZWwtH1NaUr4aJCQ&s",
+          "roomId": 11
+        },
+        {
+          "id": 21,
+          "imageUrl": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT07OQMKuyNGHz2kkMCGJ5f0jqtKlsZXmA7nw&s",
+          "roomId": 11
+        }
+      ]
+    },
+    {
+      "id": 12,
+      "price": 4500.00,
+      "isAvailable": true,
+      "roomType": "Double",
+      "description": "Elegant deluxe room with Nile view, luxury furnishings, and personalized service in the heart of Cairo.",
+      "from": "2025-08-28T14:00:00",
+      "to": "2025-09-02T11:00:00",
+      "hotelId": 6,
+      "images": [
+        {
+          "id": 22,
+          "imageUrl": "https://storage.kempinski.com/cdn-cgi/image/w=960,f=auto,g=auto,fit=scale-down/ki-cms-prod/images/1/2/3/5/65321-1-eng-GB/7b4e9f1a8b79-73654991_4K.jpg",
+          "roomId": 12
+        },
+        {
+          "id": 23,
+          "imageUrl": "https://cf.bstatic.com/xdata/images/hotel/max1024x768/684140170.jpg?k=7561f3397eff5fe0ec3a3c25292f77337c7966275097dd84289a1ee113dbcbc3&o=&hp=1",
+          "roomId": 12
+        }
+      ]
+    },
+    {
+      "id": 13,
+      "price": 7200.00,
+      "isAvailable": false,
+      "roomType": "Suite",
+      "description": "Luxurious Nile suite with panoramic river views, separate living room, and exclusive concierge services.",
+      "from": "2025-09-20T15:00:00",
+      "to": "2025-09-27T12:00:00",
+      "hotelId": 6,
+      "images": [
+        {
+          "id": 24,
+          "imageUrl": "https://storage.kempinski.com/cdn-cgi/image/w=480,h=550,f=auto,g=auto,fit=cover/ki-cms-prod/images/1/5/3/5/65351-1-eng-GB/3598de4d3292-73654993_4K.jpg",
+          "roomId": 13
+        },
+        {
+          "id": 25,
+          "imageUrl": "https://storage.kempinski.com/cdn-cgi/image/w=1920,f=auto,g=auto,fit=scale-down/ki-cms-prod/images/1/9/4/6/66491-1-eng-GB/03847d92edcd-73654061_4K.jpg",
+          "roomId": 13
+        }
+      ]
+    },
+    {
+      "id": 14,
+      "price": 1900.00,
+      "isAvailable": true,
+      "roomType": "Single",
+      "description": "Eco-friendly room built with traditional materials, offering authentic desert experience with modern comfort.",
+      "from": "2025-08-08T14:00:00",
+      "to": "2025-08-12T11:00:00",
+      "hotelId": 7,
+      "images": [
+        {
+          "id": 26,
+          "imageUrl": "https://cf.bstatic.com/xdata/images/hotel/max1024x768/268906607.jpg?k=c718de2ccec7bb46de19074378f68ef34a25cc06345339f6026c9eaa23f4ac47&o=&hp=1",
+          "roomId": 14
+        }
+      ]
+    },
+    {
+      "id": 15,
+      "price": 2600.00,
+      "isAvailable": true,
+      "roomType": "Double",
+      "description": "Spacious deluxe room with oasis view, traditional architecture, and premium desert experience amenities.",
+      "from": "2025-08-22T14:00:00",
+      "to": "2025-08-27T11:00:00",
+      "hotelId": 7,
+      "images": [
+        {
+          "id": 27,
+          "imageUrl": "https://q-xx.bstatic.com/xdata/images/hotel/max500/536142531.jpg?k=6cf9f78c10eed1d7cae20cb88aad6eb82cc1eef4c52309489381090a46399d3b&o=",
+          "roomId": 15
+        },
+        {
+          "id": 28,
+          "imageUrl": "https://i.pinimg.com/736x/b4/f9/f4/b4f9f4a7122ed1bdae670d91a2386354.jpg",
+          "roomId": 15
+        }
+      ]
+    },
+    {
+      "id": 16,
+      "price": 2100.00,
+      "isAvailable": true,
+      "roomType": "Single",
+      "description": "Family-friendly standard room with pool view, modern amenities, and easy beach access.",
+      "from": "2025-08-14T14:00:00",
+      "to": "2025-08-19T11:00:00",
+      "hotelId": 8,
+      "images": [
+        {
+          "id": 29,
+          "imageUrl": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSwM_87vL_rFVgbC77afe1ENSGUKL1lJNG8jA&s",
+          "roomId": 16
+        }
+      ]
+    },
+    {
+      "id": 17,
+      "price": 3100.00,
+      "isAvailable": true,
+      "roomType": "Double",
+      "description": "Premium deluxe room with Red Sea view, private balcony, and upgraded amenities for a perfect beach vacation.",
+      "from": "2025-09-03T14:00:00",
+      "to": "2025-09-08T11:00:00",
+      "hotelId": 8,
+      "images": [
+        {
+          "id": 30,
+          "imageUrl": "https://cf.bstatic.com/xdata/images/hotel/max1024x768/491341636.jpg?k=2acc09eb0cd0ca267a8cf323338a6572c4b0885be6b312d8c97b9acad6905770&o=&hp=1",
+          "roomId": 17
+        },
+        {
+          "id": 31,
+          "imageUrl": "https://cf.bstatic.com/xdata/images/hotel/max1024x768/491341614.jpg?k=9f113bfdf76e92ce0ee690ef567ea84187a0b9725d2a936ed09fbebc9d50bd54&o=&hp=1",
+          "roomId": 17
+        }
+      ]
+    }
+  ]
+}

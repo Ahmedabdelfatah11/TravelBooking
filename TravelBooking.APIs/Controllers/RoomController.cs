@@ -103,16 +103,12 @@ namespace TravelBooking.APIs.Controllers
                 b.RoomId == serviceId &&
                 b.Status != Status.Cancelled &&
                 b.StartDate < dto.EndDate &&
-                dto.StartDate < b.EndDate
+                dto.StartDate < b.EndDate 
             );
 
             
             if (overlapping.Any())
                 return BadRequest("Room already booked for selected dates.");
-
-            int numberOfNights = (dto.EndDate.Date - dto.StartDate.Date).Days;
-            if (numberOfNights == 0) numberOfNights = 1;
-            decimal totalPrice = room.Price * numberOfNights;
 
             var booking = _mapper.Map<Booking>(dto);
             booking.RoomId = serviceId;
@@ -127,6 +123,7 @@ namespace TravelBooking.APIs.Controllers
             booking.Room = room;
 
             var result = _mapper.Map<RoomBookingResultDto>(booking);
+            //booking.Payment.Amount = result.TotalPrice;
             return CreatedAtAction("GetBookingById", "Booking", new { id = booking.Id }, result);
         }
 

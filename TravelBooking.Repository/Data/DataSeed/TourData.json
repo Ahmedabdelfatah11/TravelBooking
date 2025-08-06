@@ -1,0 +1,416 @@
+{
+  "TourCompanies": [
+    {
+      "id": 1,
+      "name": "On The Go Tours",
+      "description": "Award-winning Egypt tours including Nile cruises and pyramid visits with expert local guides.",
+      "imageUrl": "https://www.onthegotours.com/assets/otg/otg-logo-web.svg",
+      "location": "Cairo, Cairo Governorate",
+      "rating": 5
+    },
+    {
+      "id": 2,
+      "name": "Intrepid Travel",
+      "description": "Small group Egypt tours with immersive cultural experiences and sustainability focus.",
+      "imageUrl": "https://www.intrepidtravel.com/files/images/logos/intrepid-logo.png",
+      "location": "Cairo, Cairo Governorate",
+      "rating": 5
+    },
+    {
+      "id": 3,
+      "name": "Insight Vacations",
+      "description": "Premium guided journeys exploring Egypt's wonders in comfort and style.",
+      "imageUrl": "https://tse2.mm.bing.net/th/id/OIP.EOGX5NaAgnSq7ncmRBQVuwHaBc?rs=1&pid=ImgDetMain&o=7&rm=3",
+      "location": "Giza, Giza Governorate",
+      "rating": 4
+    },
+    {
+      "id": 4,
+      "name": "G Adventures",
+      "description": "Adventurous and budget-friendly Egypt trips led by knowledgeable guides.",
+      "imageUrl": "https://th.bing.com/th/id/R.15b9cc7af0b1f95a7355c63f4286e088?rik=qVpsRsH%2fMqtrDg&pid=ImgRaw&r=0",
+      "location": "Cairo, Cairo Governorate",
+      "rating": 4
+    },
+    {
+      "id": 5,
+      "name": "Travco Group",
+      "description": "One of Egypt’s largest travel groups offering everything from beach holidays to cultural tours.",
+      "imageUrl": "https://tse4.mm.bing.net/th/id/OIP.464j9ahh0UpS0z863k631gAAAA?rs=1&pid=ImgDetMain&o=7&rm=3",
+      "location": "Cairo, Cairo Governorate",
+      "rating": 5
+    },
+    {
+      "id": 6,
+      "name": "Memphis Tours",
+      "description": "Tailored trips to Egypt including desert safaris, cruises, and family adventures.",
+      "imageUrl": "https://tse1.mm.bing.net/th/id/OIP.Wi1TsJS2yMMbrLcmHvQpZQHaCT?rs=1&pid=ImgDetMain&o=7&rm=3",
+      "location": "Luxor, Luxor Governorate",
+      "rating": 5
+    },
+    {
+      "id": 7,
+      "name": "Abercrombie & Kent",
+      "description": "Luxury Egypt travel packages with private tours and exclusive access.",
+      "imageUrl": "https://th.bing.com/th/id/R.72429495c503d18d56d975c7cdd17941?rik=rj7Tc1eVgKyeiw&riu=http%3a%2f%2fwww.immihelp.com%2fimages%2fcruiselines%2fabercrombie-kent.jpg&ehk=A2ZjQIXAnLFcpHVQb548mvhKZdLzBppxrO%2fHkYJPytE%3d&risl=&pid=ImgRaw&r=0",
+      "location": "Cairo, Cairo Governorate",
+      "rating": 5
+    },
+    {
+      "id": 8,
+      "name": "Odynovo Tours",
+      "description": "Custom private tours across Egypt from the pyramids to the Red Sea.",
+      "imageUrl": "https://cdn.getyourguide.com/img/profile/5d7a045d62bd5.jpeg/4.jpg",
+      "location": "Giza, Giza Governorate",
+      "rating": 4
+    },
+    {
+      "id": 9,
+      "name": "Look at Egypt Tours",
+      "description": "Local travel company offering multi-day guided tours across Egypt’s top sites.",
+      "imageUrl": "https://images.justlanded.com/directory_images/Egypt/44747/look-at-Egypt-tours/photo/big_scaled_111850_74334_logo.jpg",
+      "location": "Cairo, Cairo Governorate",
+      "rating": 5
+    },
+    {
+      "id": 10,
+      "name": "Beyond the Nile Tours",
+      "description": "Custom tours focused on authentic experiences and personal service.",
+      "imageUrl": "https://beyondtheniletours.com/wp-content/uploads/2024/05/Beyond-the-nile-tours-01-copy-e1735830249329-1024x313.png",
+      "location": "Aswan, Aswan Governorate",
+      "rating": 5
+    },
+    {
+      "id": 11,
+      "name": "True Egypt",
+      "description": "Experts in cultural and historical tours across Egypt with local insights.",
+      "imageUrl": "https://linktr.ee/og/image/true.egypt.jpg",
+      "location": "Cairo, Cairo Governorate",
+      "rating": 3
+    },
+    {
+      "id": 12,
+      "name": "Classic Egypt Tours",
+      "description": "Offering classic sightseeing packages to the pyramids, temples, and tombs.",
+      "imageUrl": "https://i.pinimg.com/736x/3b/27/9a/3b279aa0f6131085fbbffa0a034d4d4b.jpg",
+      "location": "Giza, Giza Governorate",
+      "rating": 2
+    },
+    {
+      "id": 13,
+      "name": "Travel Talk Tours",
+      "description": "Affordable group tours for young travelers interested in adventure and culture.",
+      "imageUrl": "https://tse2.mm.bing.net/th/id/OIP.tEMwXbqJW6GurhfPXIU0kgAAAA?rs=1&pid=ImgDetMain&o=7&rm=3",
+      "location": "Cairo, Cairo Governorate",
+      "rating": 4
+    },
+    {
+      "id": 14,
+      "name": "Urban Adventures Egypt",
+      "description": "Day tours in Cairo and beyond focusing on food, culture, and local life.",
+      "imageUrl": "https://tse3.mm.bing.net/th/id/OIP.WZAkU4kKgNrYtsjG_w5QaAHaHa?rs=1&pid=ImgDetMain&o=7&rm=3",
+      "location": "Cairo, Cairo Governorate",
+      "rating": 5
+    },
+    {
+      "id": 15,
+      "name": "Classic Holidays Egypt",
+      "description": "Trusted Egypt tour company offering customizable holiday packages.",
+      "imageUrl": "https://tse1.mm.bing.net/th/id/OIP.fR1yBwYLpw1Dxg2pDKxoVwAAAA?rs=1&pid=ImgDetMain&o=7&rm=3",
+      "location": "Alexandria, Alexandria Governorate",
+      "rating": 4
+    }
+  ],
+  "Tours": [
+    {
+      "id": 1,
+      "name": "Pyramids & Great Sphinx Half‑Day Tour with Camel Ride",
+      "StartDate": "2025-08-10T08:00:00",
+      "EndDate": "2025-08-10T12:00:00",
+      "Description": "Visit the Pyramids of Giza and the Great Sphinx, enjoy a camel ride at sunrise with a licensed Egyptologist guide.",
+      "Destination": "Giza",
+      "MaxGuests": 15,
+      "price": 1200.00,
+      "Category": "Historical",
+      "TourCompanyId": 1,
+      "TourImages": [
+        {
+          "id": 1,
+          "ImageUrl": "https://travel-buddies.com/wp-content/uploads/2024/12/5_half-day-tour-to-giza-pyramids-great-sphinx-camel-ride-authentic-lunch.jpg",
+          "TourId": 1
+        },
+        {
+          "id": 2,
+          "ImageUrl": "https://tse3.mm.bing.net/th/id/OIP.OOmu6N6zIJf50JO49q4xPwHaE8?w=669&h=446&rs=1&pid=ImgDetMain&o=7&rm=3",
+          "TourId": 1
+        }
+      ]
+    },
+    {
+      "id": 2,
+      "name": "Cairo Museum, Citadel & Old Cairo Walking Tour",
+      "StartDate": "2025-08-11T09:00:00",
+      "EndDate": "2025-08-11T17:00:00",
+      "Description": "Explore the Egyptian Museum, the Citadel of Saladin, and historic Old Cairo including Khan El Khalili.",
+      "Destination": "Cairo",
+      "MaxGuests": 12,
+      "price": 1750.00,
+      "Category": "Cultural",
+      "TourCompanyId": 2,
+      "TourImages": [
+        {
+          "id": 3,
+          "ImageUrl": "https://tse3.mm.bing.net/th/id/OIP.PLJ63RGctUPQKaB6BiGBAQHaEo?rs=1&pid=ImgDetMain&o=7&rm=3",
+          "TourId": 2
+        }
+      ]
+    },
+    {
+      "id": 3,
+      "name": "Giza Sunrise Pyramid Camel or Horse Ride & Breakfast",
+      "StartDate": "2025-08-12T05:00:00",
+      "EndDate": "2025-08-12T09:00:00",
+      "Description": "Sunrise at the pyramids, camel or horse ride around the plateau, followed by local breakfast and panoramic views.",
+      "Destination": "Giza",
+      "MaxGuests": 10,
+      "price": 1000.00,
+      "Category": "Adventure",
+      "TourCompanyId": 3,
+      "TourImages": [
+        {
+          "id": 4,
+          "ImageUrl": "https://tse4.mm.bing.net/th/id/OIP.3gJisIx8CZzIEQ_L7bNwLAHaHa?rs=1&pid=ImgDetMain&o=7&rm=3",
+          "TourId": 3
+        }
+      ]
+    },
+    {
+      "id": 4,
+      "name": "4‑Day Nile Cruise from Luxor to Aswan",
+      "StartDate": "2025-08-13T10:00:00",
+      "EndDate": "2025-08-16T16:00:00",
+      "Description": "Cruise the Nile visiting Luxor, Kom Ombo, Edfu, Philae Island; includes meals, guided temples visits.",
+      "Destination": "Luxor to Aswan",
+      "MaxGuests": 20,
+      "price": 6500.00,
+      "Category": "Relaxation",
+      "TourCompanyId": 4,
+      "TourImages": [
+        {
+          "id": 5,
+          "ImageUrl": "https://th.bing.com/th/id/R.49c8aaf3624ce053f4b5e2807a1fd573?rik=LNwXqlg%2bYRZk3A&pid=ImgRaw&r=0",
+          "TourId": 4
+        }
+      ]
+    },
+    {
+      "id": 5,
+      "name": "Memphis, Sakkara & Dahshur Pyramids Day Tour",
+      "StartDate": "2025-08-14T08:00:00",
+      "EndDate": "2025-08-14T17:00:00",
+      "Description": "See the Step Pyramid at Sakkara, the Bent & Red pyramids of Dahshur, and the ancient capital Memphis.",
+      "Destination": "Saqqara & Giza",
+      "MaxGuests": 12,
+      "price": 1500.00,
+      "Category": "Historical",
+      "TourCompanyId": 5,
+      "TourImages": [
+        {
+          "id": 6,
+          "ImageUrl": "https://media.tacdn.com/media/photo-m/1280/1b/0b/26/96/photo0jpg.jpg",
+          "TourId": 5
+        }
+      ]
+    },
+    {
+      "id": 6,
+      "name": "Private Luxor Day Tour by Flight from Cairo",
+      "StartDate": "2025-08-15T06:00:00",
+      "EndDate": "2025-08-15T22:00:00",
+      "Description": "Fly to Luxor, visit Karnak Temple, Valley of the Kings, Hatshepsut Temple, return by evening.",
+      "Destination": "Luxor",
+      "MaxGuests": 8,
+      "price": 3300.00,
+      "Category": "Cultural",
+      "TourCompanyId": 6,
+      "TourImages": [
+        {
+          "id": 7,
+          "ImageUrl": "https://tse3.mm.bing.net/th/id/OIP.7wHpGQVAAOLTHnNjbCYLtAHaE8?rs=1&pid=ImgDetMain&o=7&rm=3",
+          "TourId": 6
+        }
+      ]
+    },
+    {
+      "id": 7,
+      "name": "Giza Quad Bike Desert Safari Near Pyramids",
+      "StartDate": "2025-08-16T14:00:00",
+      "EndDate": "2025-08-16T18:00:00",
+      "Description": "Thrilling quad bike adventure across the desert near the Giza plateau, with optional camel ride.",
+      "Destination": "Giza Desert",
+      "MaxGuests": 10,
+      "price": 2000.00,
+      "Category": "Adventure",
+      "TourCompanyId": 7,
+      "TourImages": [
+        {
+          "id": 8,
+          "ImageUrl": "https://tse3.mm.bing.net/th/id/OIP.TKfnqMLtkbcxfebXUZ_HmQHaEd?rs=1&pid=ImgDetMain&o=7&rm=3",
+          "TourId": 7
+        }
+      ]
+    },
+    {
+      "id": 8,
+      "name": "Full‑Day Bahariya Oasis Desert Safari from Cairo",
+      "StartDate": "2025-08-17T07:00:00",
+      "EndDate": "2025-08-17T19:00:00",
+      "Description": "Includes 4×4 across White Desert, Magic Crystal Mountain, with Bedouin Lunch and hot springs dip.",
+      "Destination": "Bahariya Oasis",
+      "MaxGuests": 12,
+      "price": 2500.00,
+      "Category": "Nature",
+      "TourCompanyId": 8,
+      "TourImages": [
+        {
+          "id": 9,
+          "ImageUrl": "https://d3rr2gvhjw0wwy.cloudfront.net/uploads/activity_headers/243804/900x600-1-50-1678fefe2ff5c661fd480b575eaa594f.jpg",
+          "TourId": 8
+        }
+      ]
+    },
+    {
+      "id": 9,
+      "name": "Nile Sunset Dinner Cruise in Cairo",
+      "StartDate": "2025-08-18T19:00:00",
+      "EndDate": "2025-08-18T22:00:00",
+      "Description": "Dinner cruise on the Nile with live music, belly dance show, and illuminated Cairo skyline views.",
+      "Destination": "Cairo",
+      "MaxGuests": 50,
+      "price": 600.00,
+      "Category": "Relaxation",
+      "TourCompanyId": 9,
+      "TourImages": [
+        {
+          "id": 10,
+          "ImageUrl": "https://tse4.mm.bing.net/th/id/OIP.6-ljEIV-hJ21-Pgc3RkpMgHaDt?rs=1&pid=ImgDetMain&o=7&rm=3",
+          "TourId": 9
+        }
+      ]
+    },
+    {
+      "id": 10,
+      "name": "Full‑Day Alexandria & Library of Alexandria Tour",
+      "StartDate": "2025-08-19T08:00:00",
+      "EndDate": "2025-08-19T18:00:00",
+      "Description": "Visit Qaitbay Citadel, Catacombs of Kom el Shoqafa, Montazah Palace, and the Bibliotheca Alexandrina.",
+      "Destination": "Alexandria",
+      "MaxGuests": 15,
+      "price": 2200.00,
+      "Category": "Cultural",
+      "TourCompanyId": 10,
+      "TourImages": [
+        {
+          "id": 11,
+          "ImageUrl": "https://tse3.mm.bing.net/th/id/OIP.GrBlo51AmwgUs-hU657GmgHaFj?rs=1&pid=ImgDetMain&o=7&rm=3",
+          "TourId": 10
+        }
+      ]
+    },
+    {
+      "id": 11,
+      "name": "Sound & Light Show at Giza Pyramids",
+      "StartDate": "2025-08-20T20:00:00",
+      "EndDate": "2025-08-20T21:30:00",
+      "Description": "Evening spectacular of lights and narration projected onto the Pyramids of Giza under the stars.",
+      "Destination": "Giza",
+      "MaxGuests": 100,
+      "price": 400.00,
+      "Category": "Cultural",
+      "TourCompanyId": 11,
+      "TourImages": [
+        {
+          "id": 12,
+          "ImageUrl": "https://tse4.mm.bing.net/th/id/OIP.OkakzLXaLtk0wupNQMwNEAHaE8?rs=1&pid=ImgDetMain&o=7&rm=3",
+          "TourId": 11
+        }
+      ]
+    },
+    {
+      "id": 12,
+      "name": "Private Train to Luxor & Valley of the Kings Tour",
+      "StartDate": "2025-08-21T17:00:00",
+      "EndDate": "2025-08-22T12:00:00",
+      "Description": "Overnight sleeper train from Cairo to Luxor, followed by guided visit to the Valley of the Kings.",
+      "Destination": "Luxor",
+      "MaxGuests": 6,
+      "price": 2800.00,
+      "Category": "Historical",
+      "TourCompanyId": 12,
+      "TourImages": [
+        {
+          "id": 13,
+          "ImageUrl": "https://tse1.mm.bing.net/th/id/OIP.mGu6tHONEF4xfZQExf_9pAHaE8?rs=1&pid=ImgDetMain&o=7&rm=3",
+          "TourId": 12
+        }
+      ]
+    },
+    {
+      "id": 13,
+      "name": "Hot Air Balloon Flight over Luxor Temples",
+      "StartDate": "2025-08-22T05:00:00",
+      "EndDate": "2025-08-22T07:00:00",
+      "Description": "Experience sunrise from a hot air balloon floating over the Valley of the Kings and Nile Valley.",
+      "Destination": "Luxor",
+      "MaxGuests": 8,
+      "price": 2000.00,
+      "Category": "Adventure",
+      "TourCompanyId": 13,
+      "TourImages": [
+        {
+          "id": 14,
+          "ImageUrl": "https://tse4.mm.bing.net/th/id/OIP.9-UvhZC1ZxTRQiECW1diOAHaD4?rs=1&pid=ImgDetMain&o=7&rm=3",
+          "TourId": 13
+        }
+      ]
+    },
+    {
+      "id": 14,
+      "name": "St. Catherine Monastery & Mount Sinai Day Trek",
+      "StartDate": "2025-08-23T05:00:00",
+      "EndDate": "2025-08-23T18:00:00",
+      "Description": "Full‑day guided journey to St. Catherine’s Monastery and ascent of Mount Sinai for panoramic views.",
+      "Destination": "Sinai",
+      "MaxGuests": 12,
+      "price": 3000.00,
+      "Category": "Nature",
+      "TourCompanyId": 14,
+      "TourImages": [
+        {
+          "id": 15,
+          "ImageUrl": "https://dynamic-media-cdn.tripadvisor.com/media/photo-o/15/34/fa/37/st-catherine-s-monastery.jpg?w=900&h=-1&s=1",
+          "TourId": 14
+        }
+      ]
+    },
+    {
+      "id": 15,
+      "name": "Sharm El‑Sheikh Snorkeling & Desert Experience",
+      "StartDate": "2025-08-24T09:00:00",
+      "EndDate": "2025-08-24T17:00:00",
+      "Description": "Morning snorkeling at Ras Mohamed National Park, followed by ATV desert safari and BBQ lunch.",
+      "Destination": "Sharm El Sheikh",
+      "MaxGuests": 10,
+      "price": 1800.00,
+      "Category": "Nature",
+      "TourCompanyId": 15,
+      "TourImages": [
+        {
+          "id": 16,
+          "ImageUrl": "https://tse1.mm.bing.net/th/id/OIP.xMgwRoEBRLZ409egXMH4jgHaE8?rs=1&pid=ImgDetMain&o=7&rm=3",
+          "TourId": 15
+        }
+      ]
+    }
+  ]
+}
