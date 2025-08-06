@@ -13,8 +13,7 @@ namespace TravelBooking.Core.Specifications.TourCompanySpecs
            : base(x =>
                (string.IsNullOrEmpty(specParams.Search) || x.Name.ToLower().Contains(specParams.Search)) &&
                (string.IsNullOrEmpty(specParams.Location) || x.Location.ToLower() == specParams.Location) &&
-               (string.IsNullOrEmpty(specParams.Rating) || x.rating == specParams.Rating)
-           )
+                (!specParams.Rating.HasValue || x.Rating == specParams.Rating))
         {
 
         }

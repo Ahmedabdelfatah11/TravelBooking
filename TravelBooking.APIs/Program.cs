@@ -121,16 +121,16 @@ namespace TravelBooking.APIs
             //});
 
             // adding Email service
-           webApplicationbuilder.Services.AddTransient<IEmailSender, EmailService>(); 
-            
+           webApplicationbuilder.Services.AddTransient<IEmailSender, EmailService>();
+
             webApplicationbuilder.Services.AddCors(options =>
             {
                 options.AddPolicy("AllowAngularApp", policy =>
                 {
-                    policy.WithOrigins("AllowAll") // angular port
+                    policy.WithOrigins("http://localhost:56292", "http://localhost:4200")
                           .AllowAnyHeader()
                           .AllowAnyMethod()
-                          .AllowCredentials(); // Allow credentials if needed
+                          .AllowCredentials();
                 });
             });
 
@@ -156,7 +156,8 @@ namespace TravelBooking.APIs
                 await _dbcontext.Database.MigrateAsync();
                 await RoleSeeder.SeedAsync(Services); // assigning roles to the database 
                 await FlightContextSeed.SeedAsync(_dbcontext);
-                await TravelContextSeed.SeedAsync(_dbcontext);              }
+                await TravelContextSeed.SeedAsync(_dbcontext); 
+            }
             catch (Exception ex)
             {
                 logger.LogError(ex, "An error occurred during migration");

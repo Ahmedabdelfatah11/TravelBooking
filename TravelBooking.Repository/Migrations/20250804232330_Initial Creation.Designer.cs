@@ -12,7 +12,7 @@ using TravelBooking.Repository.Data;
 namespace TravelBooking.Repository.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20250802213806_Initial Creation")]
+    [Migration("20250804232330_Initial Creation")]
     partial class InitialCreation
     {
         /// <inheritdoc />
@@ -717,8 +717,8 @@ namespace TravelBooking.Repository.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<int?>("Category")
-                        .HasColumnType("int");
+                    b.Property<string>("Category")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Description")
                         .HasMaxLength(1000)
@@ -770,7 +770,8 @@ namespace TravelBooking.Repository.Migrations
                         .HasColumnType("nvarchar(1000)");
 
                     b.Property<string>("ImageUrl")
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(500)
+                        .HasColumnType("nvarchar(500)");
 
                     b.Property<string>("Location")
                         .HasMaxLength(100)
@@ -781,8 +782,8 @@ namespace TravelBooking.Repository.Migrations
                         .HasMaxLength(100)
                         .HasColumnType("nvarchar(100)");
 
-                    b.Property<string>("rating")
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<int?>("Rating")
+                        .HasColumnType("int");
 
                     b.HasKey("Id");
 

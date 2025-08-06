@@ -14,8 +14,7 @@ namespace TravelBooking.Repository.TourCompanySpecs
             : base(x =>
                 (string.IsNullOrEmpty(specParams.Search) || x.Name.ToLower().Contains(specParams.Search)) &&
                 (string.IsNullOrEmpty(specParams.Location) || x.Location.ToLower() == specParams.Location) &&
-                (string.IsNullOrEmpty(specParams.Rating) || x.rating == specParams.Rating)
-            )
+                      (!specParams.Rating.HasValue || x.Rating == specParams.Rating))
         {
             Includes.Add(x => x.Tours);
             if (!string.IsNullOrEmpty(specParams.Sort))
@@ -29,10 +28,10 @@ namespace TravelBooking.Repository.TourCompanySpecs
                         AddOrderByDesc(x => x.Name);
                         break;
                     case "ratingasc":
-                        AddOrderBy(x => x.rating);
+                        AddOrderBy(x => x.Rating);
                         break;
                     case "ratingdesc":
-                        AddOrderByDesc(x => x.rating);
+                        AddOrderByDesc(x => x.Rating);
                         break;
                     default:
                         AddOrderBy(x => x.Name);

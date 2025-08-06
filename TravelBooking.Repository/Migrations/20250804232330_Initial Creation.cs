@@ -240,9 +240,9 @@ namespace TravelBooking.Repository.Migrations
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Name = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
                     Description = table.Column<string>(type: "nvarchar(1000)", maxLength: 1000, nullable: true),
-                    ImageUrl = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    ImageUrl = table.Column<string>(type: "nvarchar(500)", maxLength: 500, nullable: true),
                     Location = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: true),
-                    rating = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Rating = table.Column<int>(type: "int", nullable: true),
                     AdminId = table.Column<string>(type: "nvarchar(450)", nullable: true)
                 },
                 constraints: table =>
@@ -513,7 +513,7 @@ namespace TravelBooking.Repository.Migrations
                     Destination = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: true),
                     MaxGuests = table.Column<int>(type: "int", nullable: false),
                     Price = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
-                    Category = table.Column<int>(type: "int", nullable: true),
+                    Category = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     TourCompanyId = table.Column<int>(type: "int", nullable: true)
                 },
                 constraints: table =>

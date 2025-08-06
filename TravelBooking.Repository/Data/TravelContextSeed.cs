@@ -125,8 +125,72 @@ namespace TravelBooking.Repository.Data
                     await context.SaveChangesAsync();
                 }
             }
+            // Seed Tour Companies
+            if (!context.TourCompanies.Any())
+            {
+                var tourJson = await File.ReadAllTextAsync("../TravelBooking.Repository/Data/DataSeed/TourData.json");
+                var tourSeed = JsonSerializer.Deserialize<TourSeedDataModel>(tourJson, options);
+
+                if (tourSeed?.TourCompanies is not null && tourSeed.TourCompanies.Count > 0)
+                {
+                    foreach (var company in tourSeed.TourCompanies)
+                    {
+                        var tourCompany = new TourCompany
+                        {
+                            Name = company.Name,
+                            Description = company.Description,
+                            ImageUrl = company.ImageUrl,
+                            Location = company.Location,
+                            Rating = company.rating,
+                            //AdminId = company.AdminId
+                        };
+
+                        await context.Set<TourCompany>().AddAsync(tourCompany);
+                    }
+
+                    await context.SaveChangesAsync();
+                }
+            }
+
+            // Seed Tours
+            if (!context.Tours.Any())
+            {
+                var tourJson = await File.ReadAllTextAsync("../TravelBooking.Repository/Data/DataSeed/TourData.json");
+                var tourSeed = JsonSerializer.Deserialize<TourSeedDataModel>(tourJson, options);
+
+                if (tourSeed?.Tours is not null && tourSeed.Tours.Count > 0)
+                {
+                    foreach (var tourData in tourSeed.Tours)
+                    {
+                        if (!Enum.TryParse<TourCategory>(tourData.Category, out var parsedCategory))
+                            continue; // skip invalid category
+
+                        var tour = new Tour
+                        {
+                            Name = tourData.Name,
+                            StartDate = tourData.StartDate,
+                            EndDate = tourData.EndDate,
+                            Description = tourData.Description,
+                            Destination = tourData.Destination,
+                            MaxGuests = tourData.MaxGuests,
+                            Price = tourData.Price,
+                            Category = parsedCategory,
+                            TourCompanyId = tourData.TourCompanyId,
+                            TourImages = tourData.TourImages.Select(img => new TourImage
+                            {
+                                ImageUrl = img.ImageUrl
+                            }).ToList()
+                        };
+
+                        await context.Set<Tour>().AddAsync(tour);
+                    }
+
+                    await context.SaveChangesAsync();
+                }
+            }
+
         }
-    
-}
+
+    }
 }
 

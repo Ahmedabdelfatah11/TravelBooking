@@ -12,6 +12,8 @@ namespace TravelBooking.Core.Configurations
 
             builder.Property(tc => tc.Name).IsRequired().HasMaxLength(100);
             builder.Property(tc => tc.Description).HasMaxLength(1000);
+            builder.Property(tc => tc.ImageUrl).HasMaxLength(500);
+            builder.Property(tc => tc.Rating).IsRequired(false);
             builder.Property(tc => tc.Location).HasMaxLength(100);
             builder.HasOne(h => h.Admin)
             .WithOne(u => u.TourCompany)
