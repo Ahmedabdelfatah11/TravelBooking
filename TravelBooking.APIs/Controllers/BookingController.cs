@@ -1,32 +1,31 @@
-﻿using AutoMapper;
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
+﻿
 using Microsoft.AspNetCore.Mvc;
 using TravelBooking.APIs.DTOS.Booking;
-using TravelBooking.APIs.DTOS.Flight;
-using TravelBooking.APIs.DTOS.Rooms;
-using TravelBooking.APIs.DTOS.Tours;
-using TravelBooking.Core.DTOS.CarRentalCompanies;
-using TravelBooking.Core.DTOS.Cars;
+
 using TravelBooking.Core.Models;
-using TravelBooking.Core.Repository.Contract;
-using TravelBooking.Core.Specifications.CarSpecs;
-using TravelBooking.Core.Specifications.FlightSpecs;
-using TravelBooking.Core.Specifications.RoomSpecs;
-using TravelBooking.Core.Specifications.TourSpecs;
 using TravelBooking.Repository.Data;
+
+using TravelBooking.Core.DTOS.Cars;
+
+using TravelBooking.Core.Repository.Contract;
+using AutoMapper;
+using TravelBooking.Core.Specifications.CarSpecs;
+using TravelBooking.Core.Specifications.RoomSpecs;
+using TravelBooking.Core.Specifications.FlightSpecs;
+using TravelBooking.Core.Specifications.TourSpecs;
+using TravelBooking.APIs.DTOS.Flight;
+using TravelBooking.APIs.DTOS.Tours;
+using TravelBooking.APIs.DTOS.Rooms;
 
 
 namespace TravelBooking.APIs.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
-    [Authorize(Roles = "SuperAdmin,User,HotelAdmin,TourAdmin,FlightAdmin,CarAdmin")]
     public class BookingController : ControllerBase
     {
         private readonly IGenericRepository<Booking> _bookingRepo;
         private readonly IMapper _mapper;
-        private readonly AppDbContext _context;
         private readonly IGenericRepository<Room> _roomRepo;
         private readonly IGenericRepository<Car> _carRepo;
         private readonly IGenericRepository<Flight> _flightRepo;
@@ -47,7 +46,6 @@ namespace TravelBooking.APIs.Controllers
         }
 
         [HttpGet("{id}")]
-        [Authorize(Roles = "SuperAdmin,User,HotelAdmin,TourAdmin,FlightAdmin,CarAdmin")]
         public async Task<ActionResult<BookingDto>> GetBookingById(int id)
         {
             var spec = new BookingSpecification(id);
@@ -87,7 +85,6 @@ namespace TravelBooking.APIs.Controllers
 
         // GET: api/booking
         [HttpGet]
-        [Authorize(Roles = "SuperAdmin,User,HotelAdmin,TourAdmin,FlightAdmin,CarAdmin")]
         public async Task<ActionResult<IEnumerable<BookingDto>>> GetAllBookings()
         {
             var bookingSpec = new BookingSpecification();
@@ -148,7 +145,6 @@ namespace TravelBooking.APIs.Controllers
 
         // DELETE: api/booking/{id}
         [HttpDelete("{id}")]
-        [Authorize(Roles = "SuperAdmin,User,HotelAdmin,TourAdmin,FlightAdmin,CarAdmin")]
         public async Task<IActionResult> DeleteBookingById(int id)
         {
             var booking = await _bookingRepo.GetAsync(id);

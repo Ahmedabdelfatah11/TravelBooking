@@ -45,7 +45,8 @@ namespace TravelBooking.APIs
             webApplicationbuilder.Services.AddScoped<IEmailSender, EmailService>();
 
             // Add the PaymentService as IPaymentService
-            webApplicationbuilder.Services.AddScoped<IPaymentService, PaymentService>(); 
+            webApplicationbuilder.Services.AddScoped<IPaymentService, PaymentService>();
+            webApplicationbuilder.Services.AddScoped<IRoomService, RoomService>();
 
             //add Accessor for User
             webApplicationbuilder.Services.AddHttpContextAccessor();
@@ -127,10 +128,10 @@ namespace TravelBooking.APIs
             {
                 options.AddPolicy("AllowAngularApp", policy =>
                 {
-                    policy.WithOrigins("AllowAll") // angular port
-                          .AllowAnyHeader()
-                          .AllowAnyMethod()
-                          .AllowCredentials(); // Allow credentials if needed
+                    policy.AllowAnyOrigin()
+                     .AllowAnyHeader()
+                     .AllowAnyMethod();
+                    // Allow credentials if needed
                 });
             });
 

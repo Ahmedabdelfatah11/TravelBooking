@@ -28,7 +28,7 @@ namespace TravelBooking.APIs.Helper
             return favoritet.CompanyType.ToLower() switch
             {
                 "hotel" => favoritet.HotelCompany?.Name,
-                "flight" => favoritet.FlightCompany?.Name,
+                "flight" => favoritet.Flight?.FlightCompany?.Name,
                 "carrental" => favoritet.CarRentalCompany?.Name,
                 "tour" => favoritet.TourCompany?.Name,
                 _ => null
@@ -40,7 +40,7 @@ namespace TravelBooking.APIs.Helper
             return favoritet.CompanyType.ToLower() switch
             {
                 "hotel" => favoritet.HotelCompany?.Description,
-                "flight" => favoritet.FlightCompany?.Description,
+                "flight" => favoritet.Flight?.FlightCompany?.Description,
                 "carrental" => favoritet.CarRentalCompany?.description,
                 "tour" => favoritet.TourCompany?.Description,
                 _ => null
@@ -52,7 +52,7 @@ namespace TravelBooking.APIs.Helper
             return favoritet.CompanyType.ToLower() switch
             {
                 "hotel" => favoritet.HotelCompany?.ImageUrl,
-                "flight" => favoritet.FlightCompany?.ImageUrl,
+                "flight" => favoritet.Flight?.FlightCompany?.ImageUrl,
                 "carrental" => favoritet.CarRentalCompany?.ImageUrl,
                 "tour" => favoritet.TourCompany?.ImageUrl,
                 _ => null
@@ -64,7 +64,7 @@ namespace TravelBooking.APIs.Helper
             return favoritet.CompanyType.ToLower() switch
             {
                 "hotel" => favoritet.HotelCompany?.Location,
-                "flight" => favoritet.FlightCompany?.Location,
+                "flight" => favoritet.Flight?.FlightCompany?.Location,
                 "carrental" => favoritet.CarRentalCompany?.Location,
                 "tour" => favoritet.TourCompany?.Location,
                 _ => null

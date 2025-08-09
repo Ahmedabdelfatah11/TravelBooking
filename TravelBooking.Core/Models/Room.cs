@@ -35,6 +35,6 @@ namespace TravelBooking.Core.Models
         public int? HotelId { get; set; }
         public HotelCompany? Hotel { get; set; }
         public ICollection<RoomImage> Images { get; set; } = new List<RoomImage>();
-
+        public ICollection<Booking> Bookings { get; set; } = new List<Booking>();
     }
 }

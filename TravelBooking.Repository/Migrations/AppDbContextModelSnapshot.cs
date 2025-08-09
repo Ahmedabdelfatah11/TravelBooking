@@ -239,6 +239,9 @@ namespace TravelBooking.Repository.Migrations
                     b.Property<int?>("RoomId")
                         .HasColumnType("int");
 
+                    b.Property<int?>("RoomId1")
+                        .HasColumnType("int");
+
                     b.Property<int?>("SeatClass")
                         .HasColumnType("int");
 
@@ -261,6 +264,8 @@ namespace TravelBooking.Repository.Migrations
                     b.HasIndex("FlightId");
 
                     b.HasIndex("RoomId");
+
+                    b.HasIndex("RoomId1");
 
                     b.HasIndex("TourId");
 
@@ -973,6 +978,10 @@ namespace TravelBooking.Repository.Migrations
                         .HasForeignKey("RoomId")
                         .OnDelete(DeleteBehavior.Restrict);
 
+                    b.HasOne("TravelBooking.Core.Models.Room", null)
+                        .WithMany("Bookings")
+                        .HasForeignKey("RoomId1");
+
                     b.HasOne("TravelBooking.Core.Models.Tour", "Tour")
                         .WithMany()
                         .HasForeignKey("TourId")
@@ -1028,7 +1037,7 @@ namespace TravelBooking.Repository.Migrations
                         .WithMany("favoritets")
                         .HasForeignKey("CarRentalCompanyId1");
 
-                    b.HasOne("TravelBooking.Core.Models.FlightCompany", "FlightCompany")
+                    b.HasOne("Flight", "Flight")
                         .WithMany()
                         .HasForeignKey("FlightCompanyId")
                         .OnDelete(DeleteBehavior.SetNull);
@@ -1063,7 +1072,7 @@ namespace TravelBooking.Repository.Migrations
 
                     b.Navigation("CarRentalCompany");
 
-                    b.Navigation("FlightCompany");
+                    b.Navigation("Flight");
 
                     b.Navigation("HotelCompany");
 
@@ -1248,6 +1257,8 @@ namespace TravelBooking.Repository.Migrations
 
             modelBuilder.Entity("TravelBooking.Core.Models.Room", b =>
                 {
+                    b.Navigation("Bookings");
+
                     b.Navigation("Images");
                 });
 

@@ -42,8 +42,6 @@ namespace TravelBooking.APIs.Controllers
             }
             return true;
         }
-
-
         [HttpGet]
         [AllowAnonymous]
         public async Task<ActionResult<Pagination<HotelCompanyReadDTO>>> GetAll([FromQuery] HotelCompanySpecParams specParams)
