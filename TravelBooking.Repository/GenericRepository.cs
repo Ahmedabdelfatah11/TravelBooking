@@ -116,5 +116,12 @@ namespace TravelBooking.Repository
            .Where(cr => cr.AdminId == adminId)
            .ToListAsync();
         }
+
+
+        // using Dasboard
+        public async Task<int> GetCountAsync(Expression<Func<T, bool>> predicate)
+        {
+            return await _dbContext.Set<T>().CountAsync(predicate);
+        }
     }
 }

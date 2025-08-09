@@ -136,6 +136,14 @@ namespace TravelBooking.APIs
 
             // Dashboard
             webApplicationbuilder.Services.AddScoped<IDashboardService, DashboardService>();
+            //Dasboard Hotel Admin
+            webApplicationbuilder.Services.AddScoped<IHotelAdminDashboardService, HotelAdminDashboardService>();
+            //Dasboard Tour Admin
+            webApplicationbuilder.Services.AddScoped<ITourAdminDashboardService, TourAdminDashboardService>();
+            //Dasboard Flight Admin
+            webApplicationbuilder.Services.AddScoped<IFlightAdminDashboardService, FlightAdminDashboardService>();
+            //Dasboard Car Admin
+            webApplicationbuilder.Services.AddScoped<ICarRentalAdminDashboardService, CarRentalAdminDashboardService>();
 
             webApplicationbuilder.Services.AddApplicationServices();
        

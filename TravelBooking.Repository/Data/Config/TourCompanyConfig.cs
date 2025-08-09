@@ -18,6 +18,7 @@ namespace TravelBooking.Core.Configurations
             builder.HasOne(h => h.Admin)
             .WithOne(u => u.TourCompany)
          .HasForeignKey<TourCompany>(h => h.AdminId)
+          .IsRequired(false)
           .OnDelete(DeleteBehavior.Restrict);
         }
     }
