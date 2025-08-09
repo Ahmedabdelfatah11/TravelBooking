@@ -45,7 +45,8 @@ namespace TravelBooking.APIs
             webApplicationbuilder.Services.AddScoped<IEmailSender, EmailService>();
 
             // Add the PaymentService as IPaymentService
-            webApplicationbuilder.Services.AddScoped<IPaymentService, PaymentService>(); 
+            webApplicationbuilder.Services.AddScoped<IPaymentService, PaymentService>();
+            webApplicationbuilder.Services.AddScoped<IRoomService, RoomService>();
 
             //add Accessor for User
             webApplicationbuilder.Services.AddHttpContextAccessor();
@@ -131,6 +132,10 @@ namespace TravelBooking.APIs
                           .AllowAnyHeader()
                           .AllowAnyMethod()
                           .AllowCredentials();
+                    policy.AllowAnyOrigin()
+                     .AllowAnyHeader()
+                     .AllowAnyMethod();
+
                 });
             });
 

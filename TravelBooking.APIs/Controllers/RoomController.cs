@@ -13,6 +13,7 @@ using TravelBooking.Core.Specifications;
 using TravelBooking.Core.Specifications.RoomSpecs;
 using TravelBooking.Errors;
 using TravelBooking.Helper;
+using static TravelBooking.Service.Services.RoomService;
 
 namespace TravelBooking.APIs.Controllers
 {
@@ -26,7 +27,7 @@ namespace TravelBooking.APIs.Controllers
         private readonly IGenericRepository<HotelCompany> _hotelRepo;
         private readonly IGenericRepository<Booking> _bookingRepo;
         private readonly IMapper _mapper;
-
+        private readonly IRoomService _roomService;
         /// <summary>
         /// Initializes a new instance of the <see cref="RoomController"/> class.
         /// </summary>
@@ -38,13 +39,16 @@ namespace TravelBooking.APIs.Controllers
                               IGenericRepository<RoomImage> roomImageRepo,
                               IGenericRepository<HotelCompany> hotelRepo,
                                 IGenericRepository<Booking> bookingRepo,
-                              IMapper mapper)
+                              IMapper mapper,
+                              IRoomService roomService)
+
         {
             _roomRepo = roomRepo;
             _roomImageRepo = roomImageRepo;
             _hotelRepo = hotelRepo;
             _bookingRepo = bookingRepo;
             _mapper = mapper;
+            _roomService = roomService;
         }
 
         /// <summary>
@@ -67,6 +71,17 @@ namespace TravelBooking.APIs.Controllers
             return Ok(new Pagination<RoomToReturnDTO>(specParams.PageIndex, specParams.PageSize, totalItems, data));
         }
 
+        
+        [HttpGet("{roomId}/available-dates")]
+        [AllowAnonymous]
+        public async Task<ActionResult<List<DateRange>>> GetAvailableDates(
+            int roomId,
+            [FromQuery] DateTime start,
+            [FromQuery] DateTime end)
+        {
+            var ranges = await _roomService.GetAvailableDateRanges(roomId, start.ToLocalTime(), end.ToLocalTime());
+            return Ok(ranges);
+        }
         /// <summary>
         /// Get room by ID
         /// </summary>
@@ -84,9 +99,10 @@ namespace TravelBooking.APIs.Controllers
             return Ok(_mapper.Map<Room, RoomToReturnDTO>(room));
         }
 
-        [Authorize]
+        //[Authorize]
         [HttpPost("{serviceId}/book")]
-        [Authorize(Roles = "SuperAdmin,HotelAdmin,User")]
+        //[Authorize(Roles = "SuperAdmin,User,HotelAdmin")]
+        [AllowAnonymous]
         public async Task<IActionResult> BookRoom(int serviceId, [FromBody] RoomBookingDto dto)
         {
             var userId = User.FindFirst("uid")?.Value;
@@ -119,6 +135,7 @@ namespace TravelBooking.APIs.Controllers
             
 
             await _bookingRepo.AddAsync(booking);
+            
 
             booking.Room = room;
 

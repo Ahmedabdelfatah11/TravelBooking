@@ -12,7 +12,7 @@ namespace TravelBooking.APIs.DTOS.Booking
         public DateTime StartDate { get; set; }
         public DateTime EndDate { get; set; }
 
-        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        //[JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
         public decimal? TotalPrice { get; set; }
         public object? AgencyDetails { get; set; }
         public string? PaymentIntentId { get; set; }

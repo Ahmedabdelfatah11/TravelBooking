@@ -25,7 +25,7 @@ namespace TravelBooking.Repository.Data.Config
                 .HasForeignKey(f => f.HotelCompanyId)
                 .OnDelete(DeleteBehavior.SetNull);
 
-            builder.HasOne(f => f.FlightCompany)
+            builder.HasOne(f => f.Flight)
                   .WithMany()
                   .HasForeignKey(f => f.FlightCompanyId)
                   .OnDelete(DeleteBehavior.SetNull);

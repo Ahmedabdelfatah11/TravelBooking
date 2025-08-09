@@ -44,7 +44,8 @@ namespace TravelBooking.APIs.Controllers
                 var query = _context.Favorites
                     .Include(f => f.User)
                     .Include(f => f.HotelCompany)
-                    .Include(f => f.FlightCompany)
+                    .Include(f => f.Flight)
+                    .Include(f => f.Flight.FlightCompany)
                     .Include(f => f.CarRentalCompany)
                     .Include(f => f.TourCompany)
                     .Include(f => f.Tour)
@@ -94,7 +95,8 @@ namespace TravelBooking.APIs.Controllers
                 var query = _context.Favorites
                     .Include(f => f.User)
                     .Include(f => f.HotelCompany)
-                    .Include(f => f.FlightCompany)
+                    .Include(f => f.Flight)
+                    .Include(f => f.Flight.FlightCompany)
                     .Include(f => f.CarRentalCompany)
                     .Include(f => f.TourCompany)
                     .Where(f => f.UserId == userId && f.CompanyType.ToLower() == companyType.ToLower())
@@ -370,7 +372,8 @@ namespace TravelBooking.APIs.Controllers
             return await _context.Favorites
                 .Include(f => f.User)
                 .Include(f => f.HotelCompany)
-                .Include(f => f.FlightCompany)
+                .Include(f => f.Flight)
+                .Include(f => f.Flight.FlightCompany)
                 .Include(f => f.CarRentalCompany)
                 .Include(f => f.TourCompany)
                 .Include(f => f.Tour)
