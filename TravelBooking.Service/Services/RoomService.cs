@@ -26,11 +26,22 @@ namespace TravelBooking.Service.Services
 
             foreach (var booking in bookings)
             {
+                // تأكد أن فيه فراغ حقيقي
                 if (current < booking.StartDate)
                 {
-                    availableRanges.Add(new DateRange(current, booking.StartDate.AddDays(-1)));
+                    // ممكن يكون فيه فراغ
+                    var gapEnd = booking.StartDate.AddDays(-1);
+                    if (current <= gapEnd)
+                    {
+                        availableRanges.Add(new DateRange(current, gapEnd));
+                    }
                 }
-                current = booking.EndDate.AddDays(1); // نبدأ من اليوم التالي
+                // انتقل بعد نهاية الحجز
+                current = booking.EndDate.AddDays(1);
+
+                // لو تخطينا النهاية، نوقف
+                if (current > end)
+                    break;
             }
 
             // بعد آخر حجز
