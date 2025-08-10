@@ -1,4 +1,5 @@
-﻿using AutoMapper;
+
+using AutoMapper;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.UI.Services;
@@ -44,7 +45,7 @@ namespace TravelBooking.Core.Models.Services
         private readonly IGenericRepository<CarRentalCompany> _carRentalCompanyRepo;
         private readonly IGenericRepository<TourCompany> _tourCompanyRepo;
 
-        public AuthService(UserManager<ApplicationUser> userManager, IMapper mapper, 
+        public AuthService(UserManager<ApplicationUser> userManager, IMapper mapper,
              IOptions<JWT> jwt, RoleManager<IdentityRole> roleManager, ILogger<AuthService> logger
             , SignInManager<ApplicationUser> signInManager, IHttpContextAccessor httpAccessor,
              IEmailSender emailSender,
@@ -236,7 +237,7 @@ namespace TravelBooking.Core.Models.Services
 
             _logger.LogInformation($"Password reset token generated for user {user.UserName}: {token}");
 
-            await SendResetPasswordEmail(user, token);  
+            await SendResetPasswordEmail(user, token);
 
             return new AuthModel
             {
@@ -276,12 +277,12 @@ namespace TravelBooking.Core.Models.Services
                 Message = "Password has been reset successfully.",
                 IsAuthenticated = true
             };
-        } 
+        }
         private async Task SendConfirmationEmail(ApplicationUser user, string code)
         {
             var request = _httpAccessor.HttpContext?.Request;
             var origin = $"{request?.Scheme}://{request?.Host}";// Get the origin URL from the request  //GET from frontend 
-            var confirmUrl = $"http://localhost:4200/confirm-email?userId={user.Id}&code={code}"; 
+            var confirmUrl = $"http://localhost:4200/confirm-email?userId={user.Id}&code={code}";
 
             var emailBody = EmailBodyBuilder.BuildEmailBody("EmailConfirmation",
                 new Dictionary<string, string>
@@ -302,7 +303,7 @@ namespace TravelBooking.Core.Models.Services
                 new Dictionary<string, string>
                 {
                     { "{{name}}", user.UserName! },
-                    { "{{reset_url}}", resetUrl} 
+                    { "{{reset_url}}", resetUrl}
                 });
 
             await _emailSender.SendEmailAsync(user.Email!, "Travel Booking: Reset Password", emailBody);
@@ -326,8 +327,8 @@ namespace TravelBooking.Core.Models.Services
                 new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
                 new Claim(JwtRegisteredClaimNames.Email,user.Email),
                 new Claim("uid", user.Id),
-                new Claim(ClaimTypes.NameIdentifier, user.Id), 
-                new Claim(ClaimTypes.Email, user.Email),      
+                new Claim(ClaimTypes.NameIdentifier, user.Id),
+                new Claim(ClaimTypes.Email, user.Email),
             }
             .Union(userClaims)
             .Union(roleClaims)
@@ -607,3 +608,4 @@ namespace TravelBooking.Core.Models.Services
 
     }
 }
+
