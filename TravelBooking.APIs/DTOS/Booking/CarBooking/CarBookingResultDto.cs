@@ -2,7 +2,7 @@
 {
     public class CarBookingResultDto
     {
-        public int BookingId { get; set; }
+        public int Id { get; set; }
         public string Status { get; set; }
         public decimal Price { get; set; }
         public DateTime StartDate { get; set; }

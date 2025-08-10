@@ -131,7 +131,7 @@ namespace TravelBooking.Helper
                 .ForMember(dest => dest.CarId, opt => opt.Ignore())
                 .ForMember(dest => dest.BookingType, opt => opt.Ignore());
             CreateMap<Booking, CarBookingResultDto>()
-                .ForMember(dest => dest.BookingId, opt => opt.MapFrom(src => src.Id))
+                .ForMember(dest => dest.Id, opt => opt.MapFrom(src => src.Id))
                 .ForMember(dest => dest.Status, opt => opt.MapFrom(src => src.Status.ToString()))
                 .ForMember(dest => dest.Price, opt => opt.MapFrom(src => src.Car != null ? src.Car.Price : 0))
                 .ForMember(dest => dest.CarId, opt => opt.MapFrom(src => src.CarId))

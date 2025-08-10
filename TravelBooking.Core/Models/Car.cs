@@ -10,6 +10,7 @@ namespace TravelBooking.Core.Models
 {
     public class Car : BaseEntity
     {
+        public int Id { get; set; } // Unique identifier for the car
         public string? Model { get; set; }
         public decimal? Price { get; set; }
         public string? Description { get; set; }
