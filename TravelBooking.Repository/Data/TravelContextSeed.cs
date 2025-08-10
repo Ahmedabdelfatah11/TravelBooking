@@ -68,26 +68,24 @@ namespace TravelBooking.Repository.Data
                     await context.SaveChangesAsync();
                 }
             }
-            // Seed Hotel Companies
             if (!context.HotelCompanies.Any())
             {
-                var roomsData = await File.ReadAllTextAsync("../TravelBooking.Repository/Data/DataSeed/HotelAndRoom.json");
-
-                var seedData = JsonSerializer.Deserialize<SeedDataModel>(roomsData, options);
+                var hotelData = await File.ReadAllTextAsync("../TravelBooking.Repository/Data/DataSeed/HotelData.json");
+                var seedData = JsonSerializer.Deserialize<HotelSeedDataModel>(hotelData, options);
 
                 if (seedData?.HotelCompanies is not null && seedData.HotelCompanies.Count > 0)
                 {
-                    var hotelCompanies = seedData.HotelCompanies.Select(h => new HotelCompany
+                    var hotelCompanies = seedData.HotelCompanies.Select(hc => new HotelCompany
                     {
-                        Name = h.Name,
-                        Description = h.Description,
-                        Location = h.Location,
-                        ImageUrl = h.ImageUrl,
-                        Rating = h.Rating
+                        Name = hc.Name,
+                        Description = hc.Description,
+                        Location = hc.Location,
+                        ImageUrl = hc.ImageUrl,
+                        Rating = hc.Rating
                     }).ToList();
 
-                    foreach (var hotel in hotelCompanies)
-                        await context.Set<HotelCompany>().AddAsync(hotel);
+                    foreach (var company in hotelCompanies)
+                        await context.Set<HotelCompany>().AddAsync(company);
 
                     await context.SaveChangesAsync();
                 }
@@ -96,13 +94,12 @@ namespace TravelBooking.Repository.Data
             // Seed Rooms with Images
             if (!context.Rooms.Any())
             {
-                var roomsData = await File.ReadAllTextAsync("../TravelBooking.Repository/Data/DataSeed/HotelAndRoom.json");
-                var seedData = JsonSerializer.Deserialize<SeedDataModel>(roomsData, options); // ✅ Now using options
+                var hotelData = await File.ReadAllTextAsync("../TravelBooking.Repository/Data/DataSeed/HotelData.json");
+                var seedData = JsonSerializer.Deserialize<HotelSeedDataModel>(hotelData, options);
 
                 if (seedData?.Rooms is not null && seedData.Rooms.Count > 0)
                 {
                     var rooms = new List<Room>();
-
                     foreach (var roomData in seedData.Rooms)
                     {
                         var room = new Room
@@ -111,13 +108,14 @@ namespace TravelBooking.Repository.Data
                             IsAvailable = roomData.IsAvailable,
                             RoomType = roomData.RoomType,
                             Description = roomData.Description,
+                            From = roomData.From,
+                            To = roomData.To,
                             HotelId = roomData.HotelId,
                             Images = roomData.Images?.Select(img => new RoomImage
                             {
                                 ImageUrl = img.ImageUrl
                             }).ToList() ?? new List<RoomImage>()
                         };
-
                         rooms.Add(room);
                     }
 
@@ -128,6 +126,7 @@ namespace TravelBooking.Repository.Data
                 }
             }
         }
-    }
+    
+}
 }
 

@@ -14,6 +14,8 @@ namespace TravelBooking.Core.Specifications
         public List<Expression<Func<T, object>>> Includes { get; set; } = new List<Expression<Func<T, object>>>();
         public Expression<Func<T, object>> OrderBy { get; set ; }
         public Expression<Func<T, object>> OrderByDesc { get ;set ; }
+        public List<string> IncludeStrings { get; set; } = new List<string>();
+
         public int Skip { get ; set; }
         public int Take { get ; set; }
         public bool IsPaginationEnabled { get ; set; }
@@ -43,6 +45,10 @@ namespace TravelBooking.Core.Specifications
         public void AddInclude(Expression<Func<T, object>> includeExpression)
         {
             Includes.Add(includeExpression);
+        }
+        public void AddInclude(string includeString)
+        {
+            IncludeStrings.Add(includeString);
         }
 
 

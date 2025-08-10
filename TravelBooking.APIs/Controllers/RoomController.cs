@@ -101,14 +101,21 @@ namespace TravelBooking.APIs.Controllers
                 dto.StartDate < b.EndDate
             );
 
+            
             if (overlapping.Any())
                 return BadRequest("Room already booked for selected dates.");
+
+            int numberOfNights = (dto.EndDate.Date - dto.StartDate.Date).Days;
+            if (numberOfNights == 0) numberOfNights = 1;
+            decimal totalPrice = room.Price * numberOfNights;
 
             var booking = _mapper.Map<Booking>(dto);
             booking.RoomId = serviceId;
             booking.UserId = userId;
             booking.BookingType = BookingType.Room;
             booking.Status = Status.Pending;
+            
+            
 
             await _bookingRepo.AddAsync(booking);
 
