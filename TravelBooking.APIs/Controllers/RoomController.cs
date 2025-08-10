@@ -1,3 +1,4 @@
+
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
@@ -99,6 +100,7 @@ namespace TravelBooking.APIs.Controllers
             return Ok(_mapper.Map<Room, RoomToReturnDTO>(room));
         }
 
+
         //[Authorize]
         [HttpPost("{serviceId}/book")]
         //[Authorize(Roles = "SuperAdmin,User,HotelAdmin")]
@@ -143,9 +145,6 @@ namespace TravelBooking.APIs.Controllers
             //booking.Payment.Amount = result.TotalPrice;
             return CreatedAtAction("GetBookingById", "Booking", new { id = booking.Id }, result);
         }
-
-
-
 
 
         /// <summary>
@@ -227,3 +226,9 @@ namespace TravelBooking.APIs.Controllers
         }
     }
 }
+
+
+
+    
+
+

@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace TravelBooking.Repository.Migrations
 {
     /// <inheritdoc />
-    public partial class Initialversion : Migration
+    public partial class initialversion : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)

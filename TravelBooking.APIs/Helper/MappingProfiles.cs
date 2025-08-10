@@ -1,5 +1,3 @@
-
-
 using TravelBooking.Core.Models;
 using TravelBooking.Core.DTOS.CarRentalCompanies;
 using TravelBooking.Core.DTOS.Cars;
@@ -8,7 +6,7 @@ using TravelBooking.APIs.DTOS.Booking.RoomBooking;
 using TravelBooking.APIs.DTOS.Booking.CarBooking;
 using TravelBooking.APIs.DTOS.Booking.FlightBooking;
 using TravelBooking.APIs.DTOS.Booking.TourBooking;
-using AutoMapper; 
+using AutoMapper;
 using TravelBooking.APIs.DTOS.Tours;
 using TravelBooking.APIs.DTOS.TourCompany;
 using TravelBooking.Core.Models;
@@ -58,23 +56,9 @@ namespace TravelBooking.Helper
                   .ForMember(dest => dest.RoomType, opt => opt.MapFrom(src => src.RoomType.ToString()))
                      .ForMember(dest => dest.RoomImages, opt => opt.MapFrom(src => src.Images))
                    .ForMember(dest => dest.HotelCompanyId, opt => opt.MapFrom(src => src.HotelId))  
-                  .ForMember(dest => dest.HotelCompanyName, opt => opt.MapFrom(src => src.Hotel.Name));  
+                  .ForMember(dest => dest.HotelCompanyName, opt => opt.MapFrom(src => src.Hotel.Name));
             CreateMap<RoomCreateDTO, Room>()
-                .ForMember(dest => dest.Images, opt => opt.Ignore()); // We'll map manually
-            #endregion
-
-
-            // RoomImage
-            CreateMap<RoomImage, RoomImageReadDTO>();
-
-            #region Room and RoomImage  
-            //  Room Mappings
-            //CreateMap<Room, RoomToReturnDTO>()
-            //    .ForMember(dest => dest.RoomType, opt => opt.MapFrom(src => src.RoomType.ToString()))
-            //    .ForMember(dest => dest.RoomImages, opt => opt.MapFrom(src => src.Images));
-
-            CreateMap<RoomCreateDTO, Room>()
-                .ForMember(dest => dest.Images, opt => opt.MapFrom(src => src.RoomImages));
+                  .ForMember(dest => dest.Images, opt => opt.MapFrom(src => src.RoomImages));
 
             CreateMap<RoomUpdateDTO, Room>()
                 .ForMember(dest => dest.Images, opt => opt.MapFrom(src => src.RoomImages));
@@ -82,7 +66,9 @@ namespace TravelBooking.Helper
             //  RoomImage Mappings
 
             CreateMap<RoomImageCreateDTO, RoomImage>();
+            CreateMap<RoomImage, RoomImageReadDTO>();
             #endregion
+
 
             //Car Mappings
             CreateMap<Car, CarDto>().ReverseMap();
@@ -154,8 +140,9 @@ namespace TravelBooking.Helper
                 .ForMember(dest => dest.ArrivalTime, opt => opt.MapFrom(src => src.Flight.ArrivalTime))
                 .ForMember(dest => dest.DepartureAirport, opt => opt.MapFrom(src => src.Flight.DepartureAirport))
                 .ForMember(dest => dest.ArrivalAirport, opt => opt.MapFrom(src => src.Flight.ArrivalAirport))
-                .ForMember(dest => dest.FlightId, opt => opt.MapFrom(src => src.FlightId))
-                .ForMember(dest => dest.SeatClass , opt => opt.MapFrom(src => src.SeatClass))
+                .ForMember(dest => dest.FlightId, opt => opt.MapFrom(src => src.FlightId)) 
+
+                .ForMember(dest => dest.SeatClass, opt => opt.MapFrom(src => src.SeatClass)) 
                 .ForMember(dest => dest.Price, opt => opt.MapFrom(src => src.TotalPrice))
                 ;
 
