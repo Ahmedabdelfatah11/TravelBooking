@@ -1,4 +1,5 @@
 using AutoMapper;
+using ContactUsAPI.Services;
 using Jwt.Helper;
 using Jwt.Settings;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -9,6 +10,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
 using System.Text.Json.Serialization;
+using TravelBooking.Core.Interfaces_Or_Repository;
 using TravelBooking.Core.Models.Services;
 using TravelBooking.Core.Repository.Contract;
 using TravelBooking.Core.Services;
@@ -44,6 +46,8 @@ namespace TravelBooking.APIs
 
             // Add the PaymentService as IPaymentService
             webApplicationbuilder.Services.AddScoped<IPaymentService, PaymentService>();
+            // add SmtpEmailService as IEmailService
+            webApplicationbuilder.Services.AddScoped<IEmailService, SmtpEmailService>();
 
             //add Accessor for User
             webApplicationbuilder.Services.AddHttpContextAccessor();

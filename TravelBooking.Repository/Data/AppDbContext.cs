@@ -42,5 +42,6 @@ namespace TravelBooking.Repository.Data
 
         public DbSet<Favoritet> Favorites { get; set; }
         public DbSet<Review> Reviews { get; set; }
+        public DbSet<ContactMessage> ContactMessages { get; set; }
     }
 }
