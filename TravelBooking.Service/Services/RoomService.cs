@@ -12,14 +12,15 @@ namespace TravelBooking.Service.Services
     public class RoomService : IRoomService
     {
         private readonly IGenericRepository<Booking> _bookingRepo;
-        public RoomService(IGenericRepository<Booking> bookingRepo) {
-            _bookingRepo = bookingRepo ;
+        public RoomService(IGenericRepository<Booking> bookingRepo)
+        {
+            _bookingRepo = bookingRepo;
         }
-        
+
         public async Task<List<DateRange>> GetAvailableDateRanges(int roomId, DateTime start, DateTime end)
         {
             var spec = new BookingByRoomAndDateRangeSpec(roomId, start, end);
-            var bookings = await _bookingRepo.GetAllWithSpecAsync(spec); 
+            var bookings = await _bookingRepo.GetAllWithSpecAsync(spec);
 
             var availableRanges = new List<DateRange>();
             DateTime current = start;
@@ -28,12 +29,19 @@ namespace TravelBooking.Service.Services
             {
                 if (current < booking.StartDate)
                 {
-                    availableRanges.Add(new DateRange(current, booking.StartDate.AddDays(-1)));
+                    var gapEnd = booking.StartDate.AddDays(-1);
+                    if (current <= gapEnd)
+                    {
+                        availableRanges.Add(new DateRange(current, gapEnd));
+                    }
                 }
-                current = booking.EndDate.AddDays(1); // نبدأ من اليوم التالي
+                current = booking.EndDate.AddDays(1);
+
+
+                if (current > end)
+                    break;
             }
 
-            // بعد آخر حجز
             if (current <= end)
             {
                 availableRanges.Add(new DateRange(current, end));

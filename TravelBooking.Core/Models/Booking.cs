@@ -16,19 +16,16 @@ namespace TravelBooking.Core.Models
         Room,
         Car,
         Flight,
-        Tour
-    }
-     
-
+        Tour 
+    }  
     public class Booking : BaseEntity
     {
         public DateTime StartDate { get; set; }
         public DateTime EndDate { get; set; }
-        public Status Status { get; set; }  
-        public BookingType BookingType { get; set; }
-
-        public SeatClass? SeatClass { get; set; } 
-
+        public Status Status { get; set; }
+        public BookingType BookingType { get; set; } 
+        public SeatClass? SeatClass { get; set; }
+          
         public int? RoomId { get; set; }
         public Room? Room { get; set; }
 
@@ -43,13 +40,12 @@ namespace TravelBooking.Core.Models
         public ICollection<TourBookingTicket> BookingTickets { get; set; } = new List<TourBookingTicket>();
 
         public string? UserId { get; set; }
-        public ApplicationUser? User { get; set; }
+        public ApplicationUser? User { get; set; } 
 
         public Payment? Payment { get; set; }
 
         public string? PaymentIntentId { get; set; }
-        public string? ClientSecret { get; set; }
-
+        public string? ClientSecret { get; set; }  
         [NotMapped]
         public decimal TotalPrice
         {
@@ -85,7 +81,7 @@ namespace TravelBooking.Core.Models
 
                 return total;
             }
-        }
+        } 
     }
 
 }

@@ -1,5 +1,4 @@
-
-﻿using AutoMapper;
+using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using TravelBooking.APIs.DTOS.Booking.FlightBooking;
@@ -21,7 +20,7 @@ namespace TravelBooking.APIs.Controllers
         private readonly IGenericRepository<Flight> _flightRepo;
         private readonly IGenericRepository<Booking> _bookingRepo;
         private readonly IMapper _mapper;
-
+ 
         public FlightController(IGenericRepository<Flight> flightRepository , IMapper mapper, IGenericRepository<Booking> bookingRepo)
         {
             _flightRepo = flightRepository;
@@ -29,6 +28,7 @@ namespace TravelBooking.APIs.Controllers
             _bookingRepo = bookingRepo;
         }
        
+
         [HttpGet]
         [AllowAnonymous]
         public async Task<ActionResult<Pagination<FlightDTO>>> GetAllFlights( [FromQuery]FlightSpecParams specParams )
@@ -51,6 +51,7 @@ namespace TravelBooking.APIs.Controllers
         public async Task<ActionResult<FlightDetialsDTO>> GetFlight( int id )
         {
             var spec = new FlightSpecs(id);
+
             var flight = await _flightRepo.GetWithSpecAsync(spec);
             if (flight == null)
                 return NotFound($"Flight with ID {id} not found.");
@@ -130,23 +131,20 @@ namespace TravelBooking.APIs.Controllers
             result.BookingId = booking.Id;
             result.Price = price;
 
-            return Ok(result);  
+            return Ok(result);
         }
-        [HttpPost]
-
-
-
-
 
         [HttpPost]
         [Authorize(Roles = "SuperAdmin,FlightAdmin")]
         public async Task<ActionResult<FlightDetialsDTO>> AddFlight([FromBody] FlightCreateDTO dto)
+
         {
             var flightCreated = _mapper.Map<Flight>(dto);
             var newCompany = await _flightRepo.AddAsync(flightCreated);
             var flight= _mapper.Map<FlightDetialsDTO>(newCompany);
             return CreatedAtAction(nameof(GetFlight), new { id = newCompany.Id }, newCompany);
         }
+
 
         [HttpPut("{id}")]
         [Authorize(Roles = "SuperAdmin,FlightAdmin")]
@@ -156,12 +154,14 @@ namespace TravelBooking.APIs.Controllers
                 return BadRequest("ID mismatch");
 
             await _flightRepo.Update(flight);
+
             return NoContent();
         }
 
         [HttpDelete("{id}")]
         [Authorize(Roles = "SuperAdmin,FlightAdmin")]
         public async Task<ActionResult> DeleteFlight(int id)
+
         {
             var existing = await _flightRepo.GetAsync(id);
             if (existing == null)
