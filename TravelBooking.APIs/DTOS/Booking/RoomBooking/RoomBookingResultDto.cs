@@ -9,6 +9,7 @@
         public DateTime EndDate { get; set; }
         public int RoomId { get; set; }
         public string RoomType { get; set; }
+        public decimal TotalPrice { get; set; }
     }
 
 }

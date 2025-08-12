@@ -32,6 +32,7 @@ namespace TravelBooking.Repository.Data
         public DbSet<Flight> Flights { get; set; }
         public DbSet<FlightCompany> FlightCompanies { get; set; }
         public DbSet<Room> Rooms { get; set; }
+        public DbSet<RoomImage> RoomImages { get; set; }
         public DbSet<HotelCompany> HotelCompanies { get; set; }
         public DbSet<Payment> Payments { get; set; }
         public DbSet<Tour> Tours { get; set; }
@@ -41,5 +42,6 @@ namespace TravelBooking.Repository.Data
 
         public DbSet<Favoritet> Favorites { get; set; }
         public DbSet<Review> Reviews { get; set; }
+        public DbSet<ContactMessage> ContactMessages { get; set; }
     }
 }

@@ -1,4 +1,5 @@
 ﻿
+using System.IdentityModel.Tokens.Jwt;
 using TravelBooking.Models;
 using TravelBooking.Models.ResetPassword;
 
@@ -14,5 +15,6 @@ namespace TravelBooking.Core.Services
 
         Task<AuthModel> ForgotPassword(ForgotPasswordModel model);
         Task<AuthModel> ResetPassword(ResetPasswordModel model);
+        Task<JwtSecurityToken> CreateJwtToken(ApplicationUser user);
     }
 }
