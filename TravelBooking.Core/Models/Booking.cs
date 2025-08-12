@@ -40,6 +40,7 @@ namespace TravelBooking.Core.Models
 
         public int? TourId { get; set; }
         public Tour? Tour { get; set; }
+        public ICollection<TourBookingTicket> BookingTickets { get; set; } = new List<TourBookingTicket>();
 
         public string? UserId { get; set; }
         public ApplicationUser? User { get; set; }
@@ -86,4 +87,5 @@ namespace TravelBooking.Core.Models
             }
         }
     }
+
 }

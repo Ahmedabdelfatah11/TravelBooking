@@ -156,7 +156,8 @@ namespace TravelBooking.APIs.Controllers
                 // Check if user already reviewed this company
                 var existingReview = await CheckReviewExists(userId, createDto);
                 if (existingReview)
-                    return Conflict("You have already reviewed this company");
+                     return Conflict(new { message = "You already Entered a Review Before" });
+
 
                 // Verify company exists
                 var companyExists = await VerifyCompanyExists(createDto);
@@ -338,7 +339,7 @@ namespace TravelBooking.APIs.Controllers
             [FromQuery] int? hotelId = null,
             [FromQuery] int? flightId = null,
             [FromQuery] int? carRentalId = null,
-            [FromQuery] int? tourId = null)
+            [FromQuery] int? tourCompanyId = null)
         {
             try
             {
@@ -355,7 +356,7 @@ namespace TravelBooking.APIs.Controllers
                         r.HotelCompanyId == hotelId &&
                         r.FlightCompanyId == flightId &&
                         r.CarRentalCompanyId == carRentalId &&
-                        r.TourCompanyId == tourId)
+                        r.TourCompanyId == tourCompanyId)
                     .AsNoTracking()
                     .ToListAsync();
 

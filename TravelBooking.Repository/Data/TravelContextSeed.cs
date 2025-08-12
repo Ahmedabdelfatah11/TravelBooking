@@ -173,13 +173,34 @@ namespace TravelBooking.Repository.Data
                             Description = tourData.Description,
                             Destination = tourData.Destination,
                             MaxGuests = tourData.MaxGuests,
+                            MinGroupSize=tourData.MinGroupSize,
+                            MaxGroupSize = tourData.MaxGroupSize,
                             Price = tourData.Price,
+                            ImageUrl = tourData.ImageUrl, 
                             Category = parsedCategory,
+                            Languages = tourData.Languages,
                             TourCompanyId = tourData.TourCompanyId,
                             TourImages = tourData.TourImages.Select(img => new TourImage
                             {
                                 ImageUrl = img.ImageUrl
+                            }).ToList(),
+                             IncludedItems = tourData.IncludedItems,
+                            ExcludedItems = tourData.ExcludedItems,
+                            Questions = tourData.Questions.Select(q => new TourQuestion
+                            {
+                                QuestionText = q.QuestionText,
+                                AnswerText = q.AnswerText
+                            }).ToList(),
+                           
+                            TourTickets = tourData.TourTickets.Select(t => new TourTicket
+                            {
+                                Type = t.TicketType,
+                                Price = t.Price,
+                                MaxQuantity = t.MaxQuantity,
+                                IsActive = t.IsActive
                             }).ToList()
+
+
                         };
 
                         await context.Set<Tour>().AddAsync(tour);

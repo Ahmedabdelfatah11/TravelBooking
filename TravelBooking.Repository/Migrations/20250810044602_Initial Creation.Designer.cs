@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using TravelBooking.Repository.Data;
 
@@ -11,9 +12,11 @@ using TravelBooking.Repository.Data;
 namespace TravelBooking.Repository.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250810044602_Initial Creation")]
+    partial class InitialCreation
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -382,7 +385,8 @@ namespace TravelBooking.Repository.Migrations
 
                     b.Property<string>("CompanyType")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
 
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("datetime2");
@@ -403,10 +407,6 @@ namespace TravelBooking.Repository.Migrations
                         .HasColumnType("int");
 
                     b.Property<int?>("TourCompanyId1")
-                        .HasColumnType("int");
-
-                    b.Property<int>("TourId")
-                        .HasMaxLength(50)
                         .HasColumnType("int");
 
                     b.Property<string>("UserId")
@@ -432,11 +432,6 @@ namespace TravelBooking.Repository.Migrations
                     b.HasIndex("TourCompanyId");
 
                     b.HasIndex("TourCompanyId1");
-
-                    b.HasIndex("TourId");
-
-                    b.HasIndex("UserId", "TourId")
-                        .IsUnique();
 
                     b.HasIndex("UserId", "HotelCompanyId", "FlightCompanyId", "CarRentalCompanyId", "TourCompanyId")
                         .IsUnique()
@@ -879,12 +874,12 @@ namespace TravelBooking.Repository.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<string>("AnswerText")
+                    b.Property<string>("Answer")
                         .IsRequired()
                         .HasMaxLength(1000)
                         .HasColumnType("nvarchar(1000)");
 
-                    b.Property<string>("QuestionText")
+                    b.Property<string>("Question")
                         .IsRequired()
                         .HasMaxLength(500)
                         .HasColumnType("nvarchar(500)");
@@ -1174,12 +1169,6 @@ namespace TravelBooking.Repository.Migrations
                         .WithMany("favoritets")
                         .HasForeignKey("TourCompanyId1");
 
-                    b.HasOne("TravelBooking.Core.Models.Tour", "Tour")
-                        .WithMany()
-                        .HasForeignKey("TourId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
                     b.HasOne("TravelBooking.Models.ApplicationUser", "User")
                         .WithMany()
                         .HasForeignKey("UserId")
@@ -1191,8 +1180,6 @@ namespace TravelBooking.Repository.Migrations
                     b.Navigation("FlightCompany");
 
                     b.Navigation("HotelCompany");
-
-                    b.Navigation("Tour");
 
                     b.Navigation("TourCompany");
 

@@ -24,6 +24,10 @@ namespace TravelBooking.Core.Models
         public int? TourCompanyId { get; set; }
         [Required]
         [StringLength(50)]
+        [ForeignKey("Tour")]
+        public int? TourId { get; set; }
+
+        public virtual Tour Tour { get; set; }
         public string CompanyType { get; set; } = string.Empty;// "Hotel", "Flight", "CarRental", "Tour"
         public DateTime CreatedAt { get; set; } = DateTime.UtcNow.Date;
         public virtual ApplicationUser User { get; set; }

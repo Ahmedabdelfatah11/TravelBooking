@@ -48,18 +48,19 @@
       "location": "Luxor, Luxor Governorate",
       "rating": 5
     },
-    {
+
+     {
       "id": 7,
-      "name": "Abercrombie & Kent",
-      "description": "Luxury Egypt travel packages with private tours and exclusive access.",
-      "imageUrl": "https://th.bing.com/th/id/R.72429495c503d18d56d975c7cdd17941?rik=rj7Tc1eVgKyeiw&riu=http%3a%2f%2fwww.immihelp.com%2fimages%2fcruiselines%2fabercrombie-kent.jpg&ehk=A2ZjQIXAnLFcpHVQb548mvhKZdLzBppxrO%2fHkYJPytE%3d&risl=&pid=ImgRaw&r=0",
+      "name": "Urban Adventures Egypt",
+      "description": "Day tours in Sini and beyond focusing on food, culture, and local life.",
+      "imageUrl": "https://tse3.mm.bing.net/th/id/OIP.WZAkU4kKgNrYtsjG_w5QaAHaHa?rs=1&pid=ImgDetMain&o=7&rm=3",
       "location": "Cairo, Cairo Governorate",
       "rating": 5
     },
     {
       "id": 8,
       "name": "Odynovo Tours",
-      "description": "Custom private tours across Egypt from the pyramids to the Red Sea.",
+      "description": "Custom private tours across Egypt ",
       "imageUrl": "https://cdn.getyourguide.com/img/profile/5d7a045d62bd5.jpeg/4.jpg",
       "location": "Giza, Giza Governorate",
       "rating": 4
@@ -90,30 +91,22 @@
     },
     {
       "id": 12,
-      "name": "Classic Egypt Tours",
-      "description": "Offering classic sightseeing packages to the pyramids, temples, and tombs.",
-      "imageUrl": "https://i.pinimg.com/736x/3b/27/9a/3b279aa0f6131085fbbffa0a034d4d4b.jpg",
-      "location": "Giza, Giza Governorate",
-      "rating": 2
-    },
-    {
-      "id": 13,
       "name": "Travel Talk Tours",
       "description": "Affordable group tours for young travelers interested in adventure and culture.",
       "imageUrl": "https://tse2.mm.bing.net/th/id/OIP.tEMwXbqJW6GurhfPXIU0kgAAAA?rs=1&pid=ImgDetMain&o=7&rm=3",
       "location": "Cairo, Cairo Governorate",
       "rating": 4
     },
-    {
-      "id": 14,
-      "name": "Urban Adventures Egypt",
-      "description": "Day tours in Cairo and beyond focusing on food, culture, and local life.",
-      "imageUrl": "https://tse3.mm.bing.net/th/id/OIP.WZAkU4kKgNrYtsjG_w5QaAHaHa?rs=1&pid=ImgDetMain&o=7&rm=3",
+      {
+      "id": 13,
+      "name": "Abercrombie & Kent",
+      "description": "Luxury Egypt travel packages with private tours and exclusive access.",
+      "imageUrl": "https://th.bing.com/th/id/R.72429495c503d18d56d975c7cdd17941?rik=rj7Tc1eVgKyeiw&riu=http%3a%2f%2fwww.immihelp.com%2fimages%2fcruiselines%2fabercrombie-kent.jpg&ehk=A2ZjQIXAnLFcpHVQb548mvhKZdLzBppxrO%2fHkYJPytE%3d&risl=&pid=ImgRaw&r=0",
       "location": "Cairo, Cairo Governorate",
       "rating": 5
     },
     {
-      "id": 15,
+      "id": 14,
       "name": "Classic Holidays Egypt",
       "description": "Trusted Egypt tour company offering customizable holiday packages.",
       "imageUrl": "https://tse1.mm.bing.net/th/id/OIP.fR1yBwYLpw1Dxg2pDKxoVwAAAA?rs=1&pid=ImgDetMain&o=7&rm=3",
@@ -129,22 +122,70 @@
       "EndDate": "2025-08-10T12:00:00",
       "Description": "Visit the Pyramids of Giza and the Great Sphinx, enjoy a camel ride at sunrise with a licensed Egyptologist guide.",
       "Destination": "Giza",
-      "MaxGuests": 15,
+      "MaxGuests": 25,
+      "MinGroupSize":6,
+      "MaxGroupSize":8,
       "price": 1200.00,
+      "ImageUrl": "https://media.tacdn.com/media/attractions-splice-spp-674x446/0f/03/5f/fc.jpg",
       "Category": "Historical",
+      "Languages":"English",
       "TourCompanyId": 1,
       "TourImages": [
         {
           "id": 1,
-          "ImageUrl": "https://travel-buddies.com/wp-content/uploads/2024/12/5_half-day-tour-to-giza-pyramids-great-sphinx-camel-ride-authentic-lunch.jpg",
+          "ImageUrl": "https://thumbs.dreamstime.com/b/great-sphinx-giza-view-93661237.jpg",
           "TourId": 1
         },
         {
           "id": 2,
-          "ImageUrl": "https://tse3.mm.bing.net/th/id/OIP.OOmu6N6zIJf50JO49q4xPwHaE8?w=669&h=446&rs=1&pid=ImgDetMain&o=7&rm=3",
+          "ImageUrl": "https://static.toiimg.com/photo/msid-52554527,width-96,height-65.cms",
+          "TourId": 1
+        },
+        {
+          "id": 3,
+          "ImageUrl": "https://c4.wallpaperflare.com/wallpaper/777/970/539/great-sphinx-giza-egypt-hd-pyramid-and-sphinx-building-wallpaper-preview.jpg",
           "TourId": 1
         }
-      ]
+        ,
+        {
+          "id": 4,
+          "ImageUrl": "https://www.tripsofourlife.com/wp-content/uploads/2018/01/exofyllo-1.jpg",
+          "TourId": 1
+        }
+        ,
+        {
+          "id": 5,
+          "ImageUrl": "https://liveandletsfly.com/wp-content/uploads/2023/03/How-Much-Time-To-Visit-Pyramids-Of-Egpyt-24-1024x768.jpeg",
+          "TourId": 1
+        }
+        ,
+        {
+          "id": 6,
+          "ImageUrl": "https://st2.depositphotos.com/32224188/43286/i/450/depositphotos_432862054-stock-photo-the-great-sphinx-of-giza.jpg",
+          "TourId": 1
+        }
+      ],
+      "TourTickets": [
+  { "Type": "Adult", "Price": 1200.00, "MaxQuantity": 15, "IsActive": true },
+  { "Type": "Child", "Price": 600.00, "MaxQuantity": 5, "IsActive": true },
+  { "Type": "VIP", "Price": 2000.00, "MaxQuantity": 5, "IsActive": true }
+],
+"IncludedItems": [
+  "Licensed Egyptologist guide",
+  "Camel ride",
+  "Entrance fees to Pyramids & Sphinx",
+  "Hotel pickup and drop-off"
+],
+"ExcludedItems": [
+  "Gratuities",
+  "Personal expenses",
+  "Lunch"
+],
+"Questions": [
+  { "Question": "Is the camel ride optional?", "Answer": "Yes, you can opt out and walk instead." },
+  { "Question": "Are entrance fees included?", "Answer": "Yes, all site entry fees are covered." }
+]
+
     },
     {
       "id": 2,
@@ -153,17 +194,70 @@
       "EndDate": "2025-08-11T17:00:00",
       "Description": "Explore the Egyptian Museum, the Citadel of Saladin, and historic Old Cairo including Khan El Khalili.",
       "Destination": "Cairo",
-      "MaxGuests": 12,
+      "MaxGuests": 50,
+       "MinGroupSize":6,
+      "MaxGroupSize":8,
       "price": 1750.00,
+      "ImageUrl": "https://www.kemetexperience.com/wp-content/uploads/2019/08/Cairo-Citadel-in-old-Cairo.jpg",
       "Category": "Cultural",
+      "Languages":"English",
       "TourCompanyId": 2,
       "TourImages": [
         {
-          "id": 3,
-          "ImageUrl": "https://tse3.mm.bing.net/th/id/OIP.PLJ63RGctUPQKaB6BiGBAQHaEo?rs=1&pid=ImgDetMain&o=7&rm=3",
+          "id": 7,
+          "ImageUrl": "https://media.tacdn.com/media/attractions-splice-spp-674x446/06/70/0e/41.jpg",
+          "TourId": 2
+        },
+        {
+          "id": 8,
+          "ImageUrl": "https://img.freepik.com/premium-photo/mosque-muhammad-ali-is-located-cairo-capital-egypt_556412-1115.jpg",
           "TourId": 2
         }
-      ]
+        ,
+        {
+          "id": 9,
+          "ImageUrl": "https://egyptmagictours.com/wp-content/uploads/2021/07/img_8864-870x500.jpg",
+          "TourId": 2
+        }
+        ,
+        {
+          "id": 10,
+          "ImageUrl": "https://images.tripadeal.com.au/cdn-cgi/image/format=auto,width=800/https://cstad.s3.ap-southeast-2.amazonaws.com/4502_Cairo_Markets.jpg",
+          "TourId": 2
+        }
+        ,
+        {
+          "id": 11,
+          "ImageUrl": "https://www.tripsinegypt.co.uk/wp-content/uploads/2020/04/Khan-El-Khalili-at-Night-Things-to-Do-in-Cairo-at-Night-Trips-in-Egypt.jpg",
+          "TourId": 2
+        }
+        ,
+        {
+          "id": 12,
+          "ImageUrl": "https://media1.thrillophilia.com/filestore/s83bjbhcglrkdxmvmuichjylqi95_1613995810_shutterstock_1174403305.jpg?w=753&h=450&dpr=2.0",
+          "TourId": 2
+        }
+      ],
+      "TourTickets": [
+  { "Type": "Adult", "Price": 1750.00, "MaxQuantity": 10, "IsActive": true },
+  { "Type": "Student", "Price": 1200.00, "MaxQuantity": 40, "IsActive": true }
+],
+"IncludedItems": [
+  "Museum entry ticket",
+  "Citadel access",
+  "Walking tour of Old Cairo",
+  "Licensed guide"
+],
+"ExcludedItems": [
+  "Meals",
+  "Shopping expenses",
+  "Tips"
+],
+"Questions": [
+  { "Question": "Is this a private tour?", "Answer": "No, it's a small group tour." },
+  { "Question": "Can I join midway?", "Answer": "No, all guests must start together." }
+]
+
     },
     {
       "id": 3,
@@ -172,17 +266,66 @@
       "EndDate": "2025-08-12T09:00:00",
       "Description": "Sunrise at the pyramids, camel or horse ride around the plateau, followed by local breakfast and panoramic views.",
       "Destination": "Giza",
-      "MaxGuests": 10,
+      "MaxGuests": 30,
+       "MinGroupSize":6,
+      "MaxGroupSize":8,
       "price": 1000.00,
+      "ImageUrl": "https://cdn.getyourguide.com/image/format=auto,fit=crop,gravity=auto,quality=60,width=450,height=450,dpr=2/tour_img/e19044eb0e9587549187cf92b6ac71cd74fc68cc1639528ae7878e6c88a96413.jpeg",
       "Category": "Adventure",
+      "Languages":"English",
       "TourCompanyId": 3,
       "TourImages": [
         {
-          "id": 4,
-          "ImageUrl": "https://tse4.mm.bing.net/th/id/OIP.3gJisIx8CZzIEQ_L7bNwLAHaHa?rs=1&pid=ImgDetMain&o=7&rm=3",
+          "id": 13,
+          "ImageUrl": "https://images.pexels.com/photos/16959212/pexels-photo-16959212/free-photo-of-man-on-camel-by-pyramid-in-giza.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1",
+          "TourId": 3
+        },
+        {
+          "id": 14,
+          "ImageUrl": "https://cairoprivatetours.com/wp-content/uploads/2020/02/Screenshot_20200915-184134_Instagram.jpg",
+          "TourId": 3
+        },
+        {
+          "id": 15,
+          "ImageUrl": "https://i.pinimg.com/736x/a4/72/5f/a4725f8aeab27fc2164f7dd8e4420a4e.jpg",
+          "TourId": 3
+        },
+        {
+          "id": 16,
+          "ImageUrl": "https://images.squarespace-cdn.com/content/v1/6549c9f55994b43ba3f22aab/3d233fcd-9818-4851-be9d-0d936077e176/Pyramids+breakfast.jpg",
+          "TourId": 3
+        },
+        {
+          "id": 17,
+          "ImageUrl": "https://dynamic-media-cdn.tripadvisor.com/media/photo-o/16/f6/e6/cd/breakfast-with-a-view.jpg?w=500&h=-1&s=1",
+          "TourId": 3
+        },
+        {
+          "id": 18,
+          "ImageUrl": "https://egyptplanners.com/wp-content/uploads/2023/12/Restaurant-Near-Pyramids-700x500.jpg",
           "TourId": 3
         }
-      ]
+      
+      ],
+      "TourTickets": [
+  { "Type": "Adult", "Price": 1000.00, "MaxQuantity": 20, "IsActive": true },
+  { "Type": "Child", "Price": 500.00, "MaxQuantity": 10, "IsActive": true }
+],
+"IncludedItems": [
+  "Camel or horse ride",
+  "Local breakfast",
+  "Sunrise view",
+  "Guide assistance"
+],
+"ExcludedItems": [
+  "Hotel transfer",
+  "Extra beverages",
+  "Tips"
+],
+"Questions": [
+  { "Question": "Can I choose between camel and horse?", "Answer": "Yes, selection is available on-site." },
+  { "Question": "Is breakfast vegetarian?", "Answer": "Vegetarian options are available upon request." }
+]
     },
     {
       "id": 4,
@@ -191,17 +334,68 @@
       "EndDate": "2025-08-16T16:00:00",
       "Description": "Cruise the Nile visiting Luxor, Kom Ombo, Edfu, Philae Island; includes meals, guided temples visits.",
       "Destination": "Luxor to Aswan",
-      "MaxGuests": 20,
+      "MaxGuests": 30,
+       "MinGroupSize":6,
+      "MaxGroupSize":8,
       "price": 6500.00,
+      "ImageUrl": "https://th.bing.com/th/id/R.49c8aaf3624ce053f4b5e2807a1fd573?rik=LNwXqlg%2bYRZk3A&pid=ImgRaw&r=0",
       "Category": "Relaxation",
+       "Languages":"English",
       "TourCompanyId": 4,
       "TourImages": [
         {
-          "id": 5,
-          "ImageUrl": "https://th.bing.com/th/id/R.49c8aaf3624ce053f4b5e2807a1fd573?rik=LNwXqlg%2bYRZk3A&pid=ImgRaw&r=0",
+          "id": 19,
+          "ImageUrl": "https://d3rr2gvhjw0wwy.cloudfront.net/uploads/activity_headers/51056/2000x2000-0-70-0e2eda7d18d60d50265ffd8910d6437c.jpg",
+          "TourId": 4
+        },
+        {
+          "id": 20,
+          "ImageUrl": "https://www.elmondotravel.org/wp-content/uploads/2022/08/1-9.jpg",
+          "TourId": 4
+        },
+        {
+          "id": 21,
+          "ImageUrl": "https://nilecruisetrips.com/wp-content/uploads/2023/07/A-wonderful-shot-of-one-of-the-wonderful-Nile-cruises.jpg",
           "TourId": 4
         }
-      ]
+        ,
+        {
+          "id": 22,
+          "ImageUrl": "https://unitedguidestravel.com/wp-content/uploads/2022/04/Oberoi-Zahra-Nile-Cruise.png",
+          "TourId": 4
+        }
+        ,
+        {
+          "id": 23,
+          "ImageUrl": "https://traveldoortours.com/wp-content/uploads/2023/05/nile-cruise-tour-in-aswan.jpg",
+          "TourId": 4
+        }
+        ,
+        {
+          "id": 24,
+          "ImageUrl": "https://www.fotolog.com/wp-content/uploads/2022/06/Nile-River-Cruise.jpg",
+          "TourId": 4
+        }
+      ],
+      "TourTickets": [
+  { "Type": "Standard Cabin", "Price": 6500.00, "MaxQuantity": 22, "IsActive": true },
+  { "Type": "Suite", "Price": 9500.00, "MaxQuantity": 8, "IsActive": true }
+],
+"IncludedItems": [
+  "Accommodation on cruise ship",
+  "All meals",
+  "Temple visits with guide",
+  "Transportation between sites"
+],
+"ExcludedItems": [
+  "Drinks",
+  "Tips for crew",
+  "Optional excursions"
+],
+"Questions": [
+  { "Question": "Are cabins shared?", "Answer": "No, each booking gets a private cabin." },
+  { "Question": "Is Wi-Fi available?", "Answer": "Limited Wi-Fi is available onboard." }
+]
     },
     {
       "id": 5,
@@ -210,17 +404,67 @@
       "EndDate": "2025-08-14T17:00:00",
       "Description": "See the Step Pyramid at Sakkara, the Bent & Red pyramids of Dahshur, and the ancient capital Memphis.",
       "Destination": "Saqqara & Giza",
-      "MaxGuests": 12,
+      "MaxGuests": 30,
+       "MinGroupSize":6,
+      "MaxGroupSize":8,
       "price": 1500.00,
+      "ImageUrl": "https://memphistoursofegypt.com/wp-content/uploads/2021/09/Skara3.jpg",
       "Category": "Historical",
+       "Languages":"English",
       "TourCompanyId": 5,
       "TourImages": [
         {
-          "id": 6,
+          "id": 25,
+          "ImageUrl": "https://sakkaradance.com/wp-content/uploads/2019/04/Pyramid-saqqara-1024x680.jpg",
+          "TourId": 5
+        },
+        {
+          "id": 26,
+          "ImageUrl": "https://media.tacdn.com/media/attractions-splice-spp-674x446/06/6a/a9/b1.jpg",
+          "TourId": 5
+        },
+        {
+          "id": 27,
           "ImageUrl": "https://media.tacdn.com/media/photo-m/1280/1b/0b/26/96/photo0jpg.jpg",
           "TourId": 5
         }
-      ]
+        ,
+        {
+          "id": 28,
+          "ImageUrl": "https://tse2.mm.bing.net/th/id/OIP.vUAoDPJutJKeikRYK4fMxgHaFj?cb=thfvnext&w=650&h=488&rs=1&pid=ImgDetMain&o=7&rm=3",
+          "TourId": 5
+        }
+        ,
+        {
+          "id": 29,
+          "ImageUrl": "https://live.staticflickr.com/2121/2524952882_98b41df6d8_b.jpg",
+          "TourId": 5
+        }
+        ,
+        {
+          "id": 30,
+          "ImageUrl": "https://www.thoughtco.com/thmb/rOS98ijS1pQCzwTkfw5zl3hQ3Zw=/2542x0/filters:no_upscale():max_bytes(150000):strip_icc()/pyramid-in-an-arid-landscape--the-step-pyramid-of-zoser--saqqara--egypt-56805130-5c7d8e4c46e0fb0001d83db4.jpg",
+          "TourId": 5
+        }
+      ],
+      "TourTickets": [
+  { "Type": "Adult", "Price": 1500.00, "MaxQuantity": 20, "IsActive": true },
+  { "Type": "Child", "Price": 750.00, "MaxQuantity": 10, "IsActive": true }
+],
+"IncludedItems": [
+  "Transportation",
+  "Guide services",
+  "Entry to all pyramid sites"
+],
+"ExcludedItems": [
+  "Lunch",
+  "Personal shopping",
+  "Tips"
+],
+"Questions": [
+  { "Question": "Is the Bent Pyramid climbable?", "Answer": "No, it's view-only for safety." },
+  { "Question": "Are restrooms available?", "Answer": "Yes, at designated stops." }
+]
     },
     {
       "id": 6,
@@ -229,36 +473,137 @@
       "EndDate": "2025-08-15T22:00:00",
       "Description": "Fly to Luxor, visit Karnak Temple, Valley of the Kings, Hatshepsut Temple, return by evening.",
       "Destination": "Luxor",
-      "MaxGuests": 8,
+      "MaxGuests": 50,
+       "MinGroupSize":6,
+      "MaxGroupSize":8,
       "price": 3300.00,
+      "ImageUrl": "https://tse3.mm.bing.net/th/id/OIP.K5Cz7XQuV6vJNkTi38m64wHaE7?cb=thfvnext&rs=1&pid=ImgDetMain&o=7&rm=3",
       "Category": "Cultural",
+       "Languages":"Arabic",
       "TourCompanyId": 6,
       "TourImages": [
         {
-          "id": 7,
-          "ImageUrl": "https://tse3.mm.bing.net/th/id/OIP.7wHpGQVAAOLTHnNjbCYLtAHaE8?rs=1&pid=ImgDetMain&o=7&rm=3",
+          "id": 31,
+          "ImageUrl": "https://www.thediscoveriesof.com/wp-content/uploads/2023/10/Medinat-Habu-shutterstock_1583802715.jpg.webp",
           "TourId": 6
         }
-      ]
+        ,
+        {
+          "id": 32,
+          "ImageUrl": "https://www.thediscoveriesof.com/wp-content/uploads/2022/07/Luxor-Temple-shutterstock_1997301695.jpg",
+          "TourId": 6
+        }
+        ,
+        {
+          "id": 33,
+          "ImageUrl": "https://deih43ym53wif.cloudfront.net/karnak-temple-egypt-shutterstock_441338173_40eadea599.jpeg",
+          "TourId": 6
+        }
+        ,
+        {
+          "id": 34,
+          "ImageUrl": "https://egyptescapes.com/wp-content/uploads/2022/04/AdobeStock_276788225.jpg",
+          "TourId": 6
+        }
+        ,
+        {
+          "id": 35,
+          "ImageUrl": "https://i0.wp.com/theadventurousfeet.com/wp-content/uploads/2020/04/egypt-2-1.jpg?w=900&ssl=1",
+          "TourId": 6
+        }
+        ,
+        {
+          "id": 36,
+          "ImageUrl": "https://static.wixstatic.com/media/eb1c0a_241a3979fdba46fc9cb45ea0d7286a26~mv2.jpg/v1/fill/w_1200,h_627,al_c,q_85/eb1c0a_241a3979fdba46fc9cb45ea0d7286a26~mv2.jpg",
+          "TourId": 6
+        }
+        
+      ],
+      "TourTickets": [
+  { "Type": "Adult", "Price": 3300.00, "MaxQuantity": 40, "IsActive": true },
+  { "Type": "Senior", "Price": 2800.00, "MaxQuantity": 10, "IsActive": true }
+],
+"IncludedItems": [
+  "Round-trip flight from Cairo",
+  "Temple entry",
+  "Licensed guide",
+  "Transportation in Luxor"
+],
+"ExcludedItems": [
+  "Meals",
+  "Tips",
+  "Flight insurance"
+],
+"Questions": [
+  { "Question": "Is the flight included?", "Answer": "Yes, round-trip airfare is covered." },
+  { "Question": "Can I extend my stay in Luxor?", "Answer": "Yes, but must be arranged separately." }
+]
     },
     {
       "id": 7,
-      "name": "Giza Quad Bike Desert Safari Near Pyramids",
-      "StartDate": "2025-08-16T14:00:00",
-      "EndDate": "2025-08-16T18:00:00",
-      "Description": "Thrilling quad bike adventure across the desert near the Giza plateau, with optional camel ride.",
-      "Destination": "Giza Desert",
-      "MaxGuests": 10,
-      "price": 2000.00,
-      "Category": "Adventure",
+      "name": "St. Catherine Monastery & Mount Sinai Day Trek",
+      "StartDate": "2025-08-23T05:00:00",
+      "EndDate": "2025-08-23T18:00:00",
+      "Description": "Full‑day guided journey to St. Catherine’s Monastery and ascent of Mount Sinai for panoramic views.",
+      "Destination": "Sinai",
+      "MaxGuests": 45,
+       "MinGroupSize":6,
+      "MaxGroupSize":8,
+      "price": 3000.00,
+      "ImageUrl": "https://dynamic-media-cdn.tripadvisor.com/media/photo-o/15/34/fa/37/st-catherine-s-monastery.jpg?w=900&h=-1&s=1",
+      "Category": "Nature",
+       "Languages":"English",
       "TourCompanyId": 7,
       "TourImages": [
         {
-          "id": 8,
-          "ImageUrl": "https://tse3.mm.bing.net/th/id/OIP.TKfnqMLtkbcxfebXUZ_HmQHaEd?rs=1&pid=ImgDetMain&o=7&rm=3",
+          "id": 37,
+          "ImageUrl": "https://th.bing.com/th/id/R.5d60aa8c1b06682043f14b249884c214?rik=O5KFNvz5eHK%2bZQ&riu=http%3a%2f%2fwww.rtw.co.il%2fwp-content%2fuploads%2f2019%2f05%2fCatherine-Monastery.jpg&ehk=LbjQQPl9zzEsrIJcNI4PpExPv5g9miysDFfGVbuciPY%3d&risl=&pid=ImgRaw&r=0",
+          "TourId": 7
+        },
+        {
+          "id": 38,
+          "ImageUrl": "https://i.pinimg.com/originals/f6/a6/68/f6a6685c2e89ab8368789c0dc1a56673.jpg",
+          "TourId": 7
+        },
+        {
+          "id": 39,
+          "ImageUrl": "https://data.globalhighlights.com/image/tours/eg-rl-1-banner-mobile.jpg",
+          "TourId": 7
+        },
+        {
+          "id": 40,
+          "ImageUrl": "https://dynamic-media-cdn.tripadvisor.com/media/photo-o/25/93/f9/91/caption.jpg?w=1200&h=-1&s=1",
+          "TourId": 7
+        },
+        {
+          "id": 41,
+          "ImageUrl": "https://media.istockphoto.com/id/533054889/photo/mount-sinai-egypt.jpg?s=612x612&w=0&k=20&c=hvz9q7ykk24XZ7eaQnEopIjJsBIPMAtaVHanzu_ufks=",
+          "TourId": 7
+        },
+        {
+          "id": 42,
+          "ImageUrl": "https://static3.depositphotos.com/1003780/183/i/450/depositphotos_1832269-stock-photo-mount-sinai-sunrise.jpg",
           "TourId": 7
         }
-      ]
+      ],
+      "TourTickets": [
+      { "Type": "Adult", "Price": 3000.00, "MaxQuantity": 30, "IsActive": true },
+      { "Type": "Student", "Price": 2200.00, "MaxQuantity": 15, "IsActive": true }
+],
+"IncludedItems": [
+  "Transportation",
+  "Guide for monastery and trek",
+  "Entrance fees"
+],
+"ExcludedItems": [
+  "Meals",
+  "Hiking gear",
+  "Tips"
+],
+"Questions": [
+  { "Question": "Is the hike difficult?", "Answer": "Moderate difficulty; suitable for fit travelers." },
+  { "Question": "Is sunrise guaranteed?", "Answer": "Weather permitting, but usually visible." }
+]
     },
     {
       "id": 8,
@@ -267,150 +612,352 @@
       "EndDate": "2025-08-17T19:00:00",
       "Description": "Includes 4×4 across White Desert, Magic Crystal Mountain, with Bedouin Lunch and hot springs dip.",
       "Destination": "Bahariya Oasis",
-      "MaxGuests": 12,
+      "MaxGuests": 60,
+       "MinGroupSize":6,
+      "MaxGroupSize":8,
       "price": 2500.00,
+      "ImageUrl": "https://youregypttours.com/storage/2664/1675522939bahariya-oasis-desert-2-overnights-trip-from-cairo.jpg",
       "Category": "Nature",
+       "Languages":"Arabic",
       "TourCompanyId": 8,
       "TourImages": [
         {
-          "id": 9,
+          "id": 43,
           "ImageUrl": "https://d3rr2gvhjw0wwy.cloudfront.net/uploads/activity_headers/243804/900x600-1-50-1678fefe2ff5c661fd480b575eaa594f.jpg",
           "TourId": 8
         }
-      ]
+        ,
+        {
+          "id": 44,
+          "ImageUrl": "https://unilandtours.com/wp-content/uploads/2023/02/Agabat-Oasis-in-Egypt.jpg",
+          "TourId": 8
+        }
+        ,
+        {
+          "id": 45,
+          "ImageUrl": "https://cdn.getyourguide.com/img/tour/5e52b7d31918c.jpeg/146.jpg",
+          "TourId": 8
+        }
+        ,
+        {
+          "id": 46,
+          "ImageUrl": "https://landioustravel.com/wp-content/uploads/2020/11/bahariya-_oasis_white_desert-e1617541372588.jpg",
+          "TourId": 8
+        }
+        ,
+        {
+          "id": 47,
+          "ImageUrl": "https://egyptplanners.com/wp-content/uploads/2023/03/camping-in-the-black-desert-of-bahariya-oasis.jpg",
+          "TourId": 8
+        }
+        ,
+        {
+          "id": 48,
+          "ImageUrl": "https://www.kemet.travel/wp-content/uploads/2021/03/B8A43BE7-4F3A-4B05-B4AA-0BBF0E7E1F94-scaled.jpeg",
+          "TourId": 8
+        }
+        
+      ],
+      "TourTickets": [
+      { "Type": "Explorer", "Price": 2500.00, "MaxQuantity": 40, "IsActive": true },
+      { "Type": "Child", "Price": 1500.00, "MaxQuantity": 20, "IsActive": true }
+],
+"IncludedItems": [
+  "4×4 vehicle",
+  "Bedouin lunch",
+  "Hot springs visit",
+  "Desert guide"
+],
+"ExcludedItems": [
+  "Snacks",
+  "Personal gear",
+  "Tips"
+],
+"Questions": [
+  { "Question": "Is swimming allowed in hot springs?", "Answer": "Yes, bring swimwear." },
+  { "Question": "Are ATVs included?", "Answer": "No, this tour uses 4×4 vehicles only." }
+]
     },
     {
       "id": 9,
-      "name": "Nile Sunset Dinner Cruise in Cairo",
+      "name": "Nile Dinner Cruise in Cairo",
       "StartDate": "2025-08-18T19:00:00",
       "EndDate": "2025-08-18T22:00:00",
       "Description": "Dinner cruise on the Nile with live music, belly dance show, and illuminated Cairo skyline views.",
       "Destination": "Cairo",
       "MaxGuests": 50,
+       "MinGroupSize":6,
+      "MaxGroupSize":8,
       "price": 600.00,
+      "ImageUrl": "https://www.sharm-club.com/assets/images/cities/cairo/nile-dinner-cruise-the-pharaohs-ship.jpg",
       "Category": "Relaxation",
+       "Languages":"English",
       "TourCompanyId": 9,
       "TourImages": [
         {
-          "id": 10,
-          "ImageUrl": "https://tse4.mm.bing.net/th/id/OIP.6-ljEIV-hJ21-Pgc3RkpMgHaDt?rs=1&pid=ImgDetMain&o=7&rm=3",
+          "id": 49,
+          "ImageUrl": "https://nilecruisebooking.com/wp-content/uploads/2018/01/r5-1.jpg",
+          "TourId": 9
+        },
+        {
+          "id": 50,
+          "ImageUrl": "https://www.sharm-club.com/assets/images/cities/cairo/nile-dinner-cruise-cairo.jpg",
           "TourId": 9
         }
-      ]
+        ,
+        {
+          "id": 51,
+          "ImageUrl": "https://elitepyramids.com/wp-content/uploads/2023/10/caption-870x555.jpeg",
+          "TourId": 9
+        }
+        ,
+        {
+          "id": 52,
+          "ImageUrl": "https://dhowcruisecreek.com/wp-content/uploads/2016/11/Standard-Dhow-Cruise-Marina-Dinner-Package.jpg",
+          "TourId": 9
+        }
+        ,
+        {
+          "id": 53,
+          "ImageUrl": "https://media-cdn.tripadvisor.com/media/photo-s/11/a5/38/57/cairo-dinner-cruise.jpg",
+          "TourId": 9
+        }
+        ,
+        {
+          "id": 54,
+          "ImageUrl": "https://tse3.mm.bing.net/th/id/OIP.64d1bJf6Q5idZlRADZ5NbAHaEK?cb=thfvnext&rs=1&pid=ImgDetMain&o=7&rm=3",
+          "TourId": 9
+        }
+      ],
+      "TourTickets": [
+      { "Type": "Standard", "Price": 600.00, "MaxQuantity": 40, "IsActive": true },
+      { "Type": "VIP Table", "Price": 1200.00, "MaxQuantity": 10, "IsActive": true }
+],
+"IncludedItems": [
+  "Dinner buffet",
+  "Live entertainment",
+  "Cruise on the Nile"
+],
+"ExcludedItems": [
+  "Alcoholic drinks",
+  "Transportation to dock",
+  "Tips"
+],
+"Questions": [
+  { "Question": "Is there a dress code?", "Answer": "Smart casual is recommended." },
+  { "Question": "Can I reserve a window seat?", "Answer": "Yes, VIP tables offer premium views." }
+]
     },
     {
       "id": 10,
-      "name": "Full‑Day Alexandria & Library of Alexandria Tour",
-      "StartDate": "2025-08-19T08:00:00",
-      "EndDate": "2025-08-19T18:00:00",
-      "Description": "Visit Qaitbay Citadel, Catacombs of Kom el Shoqafa, Montazah Palace, and the Bibliotheca Alexandrina.",
-      "Destination": "Alexandria",
-      "MaxGuests": 15,
-      "price": 2200.00,
-      "Category": "Cultural",
-      "TourCompanyId": 10,
-      "TourImages": [
-        {
-          "id": 11,
-          "ImageUrl": "https://tse3.mm.bing.net/th/id/OIP.GrBlo51AmwgUs-hU657GmgHaFj?rs=1&pid=ImgDetMain&o=7&rm=3",
-          "TourId": 10
-        }
-      ]
-    },
-    {
-      "id": 11,
       "name": "Sound & Light Show at Giza Pyramids",
       "StartDate": "2025-08-20T20:00:00",
       "EndDate": "2025-08-20T21:30:00",
       "Description": "Evening spectacular of lights and narration projected onto the Pyramids of Giza under the stars.",
       "Destination": "Giza",
       "MaxGuests": 100,
+       "MinGroupSize":6,
+      "MaxGroupSize":8,
       "price": 400.00,
+      "ImageUrl": "https://th.bing.com/th/id/R.3a46a4ccb5da2ed934c2ea4d40cc0d10?rik=YvMApSIWhXnmxg&riu=http%3a%2f%2fwww.egyptkeytours.com%2fwp-content%2fuploads%2f2017%2f09%2fsound-light-show.jpg&ehk=%2bNN9WlE0PePrIg08qCq%2fHY0aGvfZHv2VPzIwVRWTb3w%3d&risl=&pid=ImgRaw&r=0",
       "Category": "Cultural",
-      "TourCompanyId": 11,
+       "Languages":"English",
+      "TourCompanyId": 10,
       "TourImages": [
         {
-          "id": 12,
-          "ImageUrl": "https://tse4.mm.bing.net/th/id/OIP.OkakzLXaLtk0wupNQMwNEAHaE8?rs=1&pid=ImgDetMain&o=7&rm=3",
-          "TourId": 11
-        }
-      ]
-    },
-    {
-      "id": 12,
-      "name": "Private Train to Luxor & Valley of the Kings Tour",
-      "StartDate": "2025-08-21T17:00:00",
-      "EndDate": "2025-08-22T12:00:00",
-      "Description": "Overnight sleeper train from Cairo to Luxor, followed by guided visit to the Valley of the Kings.",
-      "Destination": "Luxor",
-      "MaxGuests": 6,
-      "price": 2800.00,
-      "Category": "Historical",
-      "TourCompanyId": 12,
-      "TourImages": [
+          "id": 55,
+          "ImageUrl": "https://media.tacdn.com/media/attractions-splice-spp-674x446/07/a2/64/6e.jpg",
+          "TourId": 10
+        },
         {
-          "id": 13,
-          "ImageUrl": "https://tse1.mm.bing.net/th/id/OIP.mGu6tHONEF4xfZQExf_9pAHaE8?rs=1&pid=ImgDetMain&o=7&rm=3",
-          "TourId": 12
+          "id": 56,
+          "ImageUrl": "https://egyptplanners.com/wp-content/uploads/2022/12/a-great-shot-of-the-sphinx-with-the-pyramid-of-khafre-from-the-sound-and-light-show.jpg",
+          "TourId": 10
         }
-      ]
+        ,
+        {
+          "id": 57,
+          "ImageUrl": "https://media-cdn.tripadvisor.com/media/attractions-splice-spp-720x480/0a/ae/45/82.jpg",
+          "TourId": 10
+        }
+        ,
+        {
+          "id": 58,
+          "ImageUrl": "https://www.trivaeg.com/wp-content/uploads/2019/09/tour_img-2449620-145.jpg",
+          "TourId": 10
+        }
+        ,
+        {
+          "id": 59,
+          "ImageUrl": "https://magicalegypttours.com/wp-content/uploads/2024/03/Sound-and-light-show-in-Cairo-Giza-Egypt.jpg",
+          "TourId": 10
+        }
+        ,
+        {
+          "id": 60,
+          "ImageUrl": "https://www.theglobeandmail.com/resizer/oHXgGcmwqvOQ-PfDLG6LXKQ7kPQ=/1200x761/filters:quality(80)/arc-anglerfish-tgam-prod-tgam.s3.amazonaws.com/public/KPQ35VT26FF35IZQ6WYASLPSKQ",
+          "TourId": 10
+        }
+      ],
+      "TourTickets": [
+       { "Type": "General Admission", "Price": 400.00, "MaxQuantity": 80, "IsActive": true },
+       { "Type": "Front Row", "Price": 600.00, "MaxQuantity": 20, "IsActive": true }
+],
+"IncludedItems": [
+  "Show ticket",
+  "Seating",
+  "Narrated history"
+],
+"ExcludedItems": [
+  "Transportation",
+  "Snacks",
+  "Souvenirs"
+],
+"Questions": [
+  { "Question": "Is the show in English?", "Answer": "Yes, with multilingual options available." },
+  { "Question": "Can I bring a camera?", "Answer": "Yes, but flash photography is discouraged." }
+]
     },
     {
-      "id": 13,
+      "id": 11,
       "name": "Hot Air Balloon Flight over Luxor Temples",
       "StartDate": "2025-08-22T05:00:00",
       "EndDate": "2025-08-22T07:00:00",
       "Description": "Experience sunrise from a hot air balloon floating over the Valley of the Kings and Nile Valley.",
       "Destination": "Luxor",
-      "MaxGuests": 8,
+       "Languages":"English",
+      "MaxGuests": 60,
+       "MinGroupSize":6,
+      "MaxGroupSize":8,
       "price": 2000.00,
+      "ImageUrl": "https://th.bing.com/th/id/R.b9a3f4c32e8882e0fee8f03afe07fbc2?rik=Nj5kkgpAHPE0ng&pid=ImgRaw&r=0",
       "Category": "Adventure",
-      "TourCompanyId": 13,
+      "TourCompanyId": 11,
       "TourImages": [
         {
-          "id": 14,
-          "ImageUrl": "https://tse4.mm.bing.net/th/id/OIP.9-UvhZC1ZxTRQiECW1diOAHaD4?rs=1&pid=ImgDetMain&o=7&rm=3",
-          "TourId": 13
+          "id": 61,
+          "ImageUrl": "https://travel-buddies.com/wp-content/uploads/2025/01/3_sunrise-hot-air-balloon-rides-in-luxor.jpg",
+          "TourId": 11
         }
-      ]
-    },
-    {
-      "id": 14,
-      "name": "St. Catherine Monastery & Mount Sinai Day Trek",
-      "StartDate": "2025-08-23T05:00:00",
-      "EndDate": "2025-08-23T18:00:00",
-      "Description": "Full‑day guided journey to St. Catherine’s Monastery and ascent of Mount Sinai for panoramic views.",
-      "Destination": "Sinai",
-      "MaxGuests": 12,
-      "price": 3000.00,
-      "Category": "Nature",
-      "TourCompanyId": 14,
-      "TourImages": [
+        ,
         {
-          "id": 15,
-          "ImageUrl": "https://dynamic-media-cdn.tripadvisor.com/media/photo-o/15/34/fa/37/st-catherine-s-monastery.jpg?w=900&h=-1&s=1",
-          "TourId": 14
+          "id": 62,
+          "ImageUrl": "https://photos.smugmug.com/photos/i-w8dz3dZ/0/4d708ed5/L/i-w8dz3dZ-L.jpg",
+          "TourId": 11
         }
-      ]
+        ,
+        {
+          "id": 63,
+          "ImageUrl": "https://nomadicated.com/wp-content/uploads/2023/12/Hot-Air-Balloon-in-the-Valley-of-the-Kings-Egypt-1024x683.jpg",
+          "TourId": 11
+        }
+        ,
+        {
+          "id": 64,
+          "ImageUrl": "https://www.connollycove.com/wp-content/uploads/2023/03/Air-Ballooning-in-Luxor-2-min-scaled.jpg",
+          "TourId": 11
+        }
+        ,
+        {
+          "id": 65,
+          "ImageUrl": "https://egypttimetravel.com/wp-content/uploads/2023/07/great-view-of-the-hot-air-balloon-over-karnak-temple.jpg",
+          "TourId": 11
+        }
+        ,
+        {
+          "id": 66,
+          "ImageUrl": "https://res.cloudinary.com/manawa/image/private/f_auto,c_limit,w_1920,q_auto/w1schlzfq69kqe5h52gz",
+          "TourId": 11
+        }
+      ],
+      "TourTickets": [
+      { "Type": "Standard Balloon", "Price": 2000.00, "MaxQuantity": 40, "IsActive": true },
+      { "Type": "Private Basket", "Price": 3000.00, "MaxQuantity": 20, "IsActive": true }
+],
+"IncludedItems": [
+  "Balloon flight",
+  "Safety briefing",
+  "Pilot and crew"
+],
+"ExcludedItems": [
+  "Hotel transfer",
+  "Breakfast",
+  "Tips"
+],
+"Questions": [
+  { "Question": "Is it safe?", "Answer": "Yes, operated by certified pilots." },
+  { "Question": "Can I bring a child?", "Answer": "Minimum age is 6 years." }
+]
     },
     {
-      "id": 15,
+      "id": 12,
       "name": "Sharm El‑Sheikh Snorkeling & Desert Experience",
       "StartDate": "2025-08-24T09:00:00",
       "EndDate": "2025-08-24T17:00:00",
       "Description": "Morning snorkeling at Ras Mohamed National Park, followed by ATV desert safari and BBQ lunch.",
       "Destination": "Sharm El Sheikh",
-      "MaxGuests": 10,
+      "MaxGuests": 70,
+       "MinGroupSize":6,
+      "MaxGroupSize":8,
       "price": 1800.00,
+      "ImageUrl": "https://tse4.mm.bing.net/th/id/OIP.i7vd1-8_HkV5I0mXdL4cHwHaE8?cb=thfvnext&rs=1&pid=ImgDetMain&o=7&rm=3",
       "Category": "Nature",
-      "TourCompanyId": 15,
+       "Languages":"Arabic",
+      "TourCompanyId": 12,
       "TourImages": [
         {
-          "id": 16,
-          "ImageUrl": "https://tse1.mm.bing.net/th/id/OIP.xMgwRoEBRLZ409egXMH4jgHaE8?rs=1&pid=ImgDetMain&o=7&rm=3",
-          "TourId": 15
+          "id": 67,
+          "ImageUrl": "https://arangrant.com/wp-content/uploads/sites/3/2024/01/Fiji.png",
+          "TourId": 12
+        },
+        {
+          "id": 68,
+          "ImageUrl": "https://media.agriinvestor.com/uploads/2024/04/GettyImages-521462194.jpg",
+          "TourId": 12
         }
-      ]
+        ,
+        {
+          "id": 69,
+          "ImageUrl": "https://www.thecooldown.com/wp-content/uploads/2024/08/Great-Barrier-Reefimage.jpg",
+          "TourId": 12
+        }
+        ,
+        {
+          "id": 70,
+          "ImageUrl": "https://www.crif.ae/media/5s0ghtna/information-1200.jpg",
+          "TourId": 12
+        }
+        ,
+        {
+          "id": 71,
+          "ImageUrl": "https://www.excursions.vip/wp-content/uploads/2020/03/WhatsApp-Image-2020-03-08-at-5.13.41-AM-1.jpeg",
+          "TourId": 12
+        }
+        ,
+        {
+          "id": 72,
+          "ImageUrl": "https://www.excursions.vip/wp-content/uploads/2020/03/WhatsApp-Image-2020-03-08-at-5.13.41-AM-1.jpeg",
+          "TourId": 12
+        }
+      ],"TourTickets": [
+      { "Type": "Explorer Pass", "Price": 1800.00, "MaxQuantity": 60, "IsActive": true },
+      { "Type": "Child", "Price": 1200.00, "MaxQuantity": 10, "IsActive": true }
+],
+"IncludedItems": [
+  "Snorkeling gear",
+  "ATV desert ride",
+  "BBQ lunch",
+  "Guide"
+],
+"ExcludedItems": [
+  "Underwater camera",
+  "Drinks",
+  "Tips"
+],
+"Questions": [
+  { "Question": "Do I need to know swimming?", "Answer": "Basic swimming is recommended for snorkeling." },
+  { "Question": "Are ATVs shared?", "Answer": "No, each guest gets their own ATV." }
+]
     }
   ]
 }

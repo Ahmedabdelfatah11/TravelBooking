@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using TravelBooking.APIs.DTOS.Booking;
 using TravelBooking.APIs.DTOS.Flight;
 using TravelBooking.APIs.DTOS.Rooms;
@@ -157,6 +158,60 @@ namespace TravelBooking.APIs.Controllers
 
             await _bookingRepo.Delete(booking);
             return NoContent();
+        }
+
+        [HttpPost("confirm/{bookingId}")]
+        public async Task<IActionResult> ConfirmBooking(int bookingId)
+        {
+            var booking = await _context.Bookings
+                .Include(b => b.BookingTickets)
+                .ThenInclude(bt => bt.Ticket)
+                .FirstOrDefaultAsync(b => b.Id == bookingId);
+
+            if (booking == null || booking.Status != Status.Pending)
+                return BadRequest("Invalid booking");
+
+            booking.Status = Status.Confirmed;
+
+            foreach (var bt in booking.BookingTickets)
+            {
+                bt.IsIssued = true;
+            }
+
+            await _context.SaveChangesAsync();
+            return Ok("Booking confirmed and tickets issued");
+        }
+        [HttpPost("cancel/{bookingId}")]
+        public async Task<IActionResult> CancelBooking(int bookingId)
+        {
+            var booking = await _context.Bookings
+                .Include(b => b.BookingTickets)
+                .FirstOrDefaultAsync(b => b.Id == bookingId);
+
+            if (booking == null || booking.Status != Status.Confirmed)
+                return BadRequest("Invalid booking");
+
+            booking.Status = Status.Cancelled;
+
+            foreach (var bt in booking.BookingTickets)
+            {
+                bt.IsIssued = false;
+            }
+
+            await _context.SaveChangesAsync();
+            return Ok("Booking canceled and tickets revoked");
+        }
+
+        [HttpGet("user/{userId}/tickets")]
+        public async Task<IActionResult> GetUserTickets(string userId)
+        {
+            var tickets = await _context.TourBookingTickets
+                .Include(bt => bt.Ticket)
+                .Include(bt => bt.Booking)
+                .Where(bt => bt.Booking.UserId == userId && bt.IsIssued)
+                .ToListAsync();
+
+            return Ok(tickets);
         }
     }
 }

@@ -17,10 +17,11 @@ namespace TravelBooking.APIs.Helper
                 .ForMember(dest => dest.UserName, opt => opt.MapFrom(src => src.User != null ? src.User.UserName : null))
                 .ForMember(dest => dest.UserEmail, opt => opt.MapFrom(src => src.User != null ? src.User.Email : null));
 
-            CreateMap<CreateFavoriteTDto, Favoritet>()
+            CreateMap<CreateFavoriteDto, Favoritet>()
                 .ForMember(dest => dest.Id, opt => opt.Ignore())
                 .ForMember(dest => dest.UserId, opt => opt.Ignore())
-                .ForMember(dest => dest.CreatedAt, opt => opt.MapFrom(src => DateTime.UtcNow));
+                .ForMember(dest => dest.CreatedAt, opt => opt.MapFrom(src => DateTime.UtcNow))
+                .ForMember(dest => dest.TourId, opt => opt.MapFrom(src => src.TourId));
         }
 
         private static string? GetCompanyName(Favoritet favoritet)

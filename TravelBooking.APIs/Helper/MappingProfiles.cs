@@ -15,6 +15,7 @@ using TravelBooking.Core.Models;
 using TravelBooking.Models;
 using TravelBooking.APIs.DTOS.HotelCompany;
 using TravelBooking.APIs.DTOS.Rooms;
+using TravelBooking.APIs.DTOS.TourTickets;
 
 namespace TravelBooking.Helper
 {
@@ -37,10 +38,15 @@ namespace TravelBooking.Helper
             CreateMap<Tour, TourReadDto>()
                 .ForMember(dest => dest.Category, opt => opt.MapFrom(src => src.Category.ToString()))
                 .ForMember(dest => dest.TourCompanyName, opt => opt.MapFrom(src => src.TourCompany.Name))
-                .ForMember(dest => dest.ImageUrls, opt => opt.MapFrom(src => src.TourImages));
+                .ForMember(dest => dest.ImageUrls, opt => opt.MapFrom(src => src.TourImages))
+                .ForMember(dest => dest.IncludedItems, opt => opt.MapFrom(src => src.IncludedItems))
+                .ForMember(dest => dest.ExcludedItems, opt => opt.MapFrom(src => src.ExcludedItems))
+                .ForMember(dest => dest.Questions, opt => opt.MapFrom(src => src.Questions))
+                    .ForMember(dest => dest.Tickets, opt => opt.MapFrom(src => src.TourTickets));
 
             CreateMap<TourCreateDto, Tour>();
             CreateMap<TourUpdateDto, Tour>();
+            CreateMap<TourQuestion, TourQuestionDto>().ReverseMap();
 
             //  HotelCompany
             CreateMap<HotelCompany, HotelCompanyReadDTO>();
@@ -170,6 +176,9 @@ namespace TravelBooking.Helper
                 .ForMember(dest => dest.TourName, opt => opt.MapFrom(src => src.Tour != null ? src.Tour.Name : string.Empty))
                 .ForMember(dest => dest.Destination, opt => opt.MapFrom(src => src.Tour != null ? src.Tour.Destination : string.Empty));
 
+            //Tour Ticket
+            CreateMap<TourTicket, TourTicketDto>().ReverseMap();
+            CreateMap<TourTicketCreateDto, TourTicket>();
         }
     }
 }

@@ -14,13 +14,13 @@ namespace TravelBooking.APIs.Controllers
     [ApiController]
     [Authorize(Roles = "SuperAdmin,User")]
 
-    public class FavoritetController : ControllerBase
+    public class FavoriteController : ControllerBase
     {
         private readonly AppDbContext _context;
         private readonly IMapper _mapper;
-        private readonly ILogger<FavoritetController> _logger;
+        private readonly ILogger<FavoriteController> _logger;
 
-        public FavoritetController(AppDbContext context, IMapper mapper, ILogger<FavoritetController> logger)
+        public FavoriteController(AppDbContext context, IMapper mapper, ILogger<FavoriteController> logger)
         {
             _context = context;
             _mapper = mapper;
@@ -47,6 +47,7 @@ namespace TravelBooking.APIs.Controllers
                     .Include(f => f.FlightCompany)
                     .Include(f => f.CarRentalCompany)
                     .Include(f => f.TourCompany)
+                    .Include(f => f.Tour)
                     .Where(f => f.UserId == userId)
                     .OrderByDescending(f => f.CreatedAt)
                     .AsNoTracking();
@@ -125,7 +126,7 @@ namespace TravelBooking.APIs.Controllers
         /// </summary>
         [HttpPost]
         [Authorize(Roles = "SuperAdmin,User")]
-        public async Task<ActionResult<FavoritetDto>> AddFavorite([FromBody] CreateFavoriteTDto createDto)
+        public async Task<ActionResult<FavoritetDto>> AddFavorite([FromBody] CreateFavoriteDto createDto)
         {
             try
             {
@@ -177,6 +178,8 @@ namespace TravelBooking.APIs.Controllers
             }
         }
 
+
+
         /// <summary>
         /// Remove a favorite by ID
         /// </summary>
@@ -212,6 +215,35 @@ namespace TravelBooking.APIs.Controllers
         /// <summary>
         /// Check if a company is in user's favorites
         /// </summary>
+        ///[HttpPost("check")]
+        ///[Authorize(Roles = "SuperAdmin,User")]
+        ///public async Task<ActionResult<bool>> CheckFavorite([FromBody] FavoriteCheckDto checkDto)
+        ///{
+        ///    try
+        ///    {
+        ///        var userId = GetUserId();
+        ///        if (userId == null) return Unauthorized("User not authenticated");
+         
+        ///        if (!checkDto.IsValid())
+        ///            return BadRequest("Invalid favorite data - provide exactly one company ID");
+         
+        ///        var exists = await _context.Favorites
+        ///            .AnyAsync(f => f.UserId == userId &&
+        ///                f.HotelCompanyId == checkDto.HotelCompanyId &&
+        ///                f.FlightCompanyId == checkDto.FlightCompanyId &&
+        ///                f.CarRentalCompanyId == checkDto.CarRentalCompanyId &&
+        ///                f.TourCompanyId == checkDto.TourCompanyId &&
+        ///                f.TourId == checkDto.TourId);
+         
+         
+        ///        return Ok(exists);
+        ///    }
+        ///    catch (Exception ex)
+        ///    {
+        ///        _logger.LogError(ex, "Error checking favorite for user {UserId}", GetUserId());
+        ///        return StatusCode(500, "Internal server error");
+        ///    }
+        ///}
         [HttpPost("check")]
         [Authorize(Roles = "SuperAdmin,User")]
         public async Task<ActionResult<bool>> CheckFavorite([FromBody] FavoriteCheckDto checkDto)
@@ -224,13 +256,17 @@ namespace TravelBooking.APIs.Controllers
                 if (!checkDto.IsValid())
                     return BadRequest("Invalid favorite data - provide exactly one company ID");
 
-                var exists = await _context.Favorites
-                    .AnyAsync(f => f.UserId == userId &&
-                        f.HotelCompanyId == checkDto.HotelCompanyId &&
-                        f.FlightCompanyId == checkDto.FlightCompanyId &&
-                        f.CarRentalCompanyId == checkDto.CarRentalCompanyId &&
-                        f.TourCompanyId == checkDto.TourCompanyId);
+                var dto = new CreateFavoriteDto
+                {
+                    HotelCompanyId = checkDto.HotelCompanyId,
+                    FlightCompanyId = checkDto.FlightCompanyId,
+                    CarRentalCompanyId = checkDto.CarRentalCompanyId,
+                    TourCompanyId = checkDto.TourCompanyId,
+                    TourId = checkDto.TourId,
+                    CompanyType = checkDto.CompanyType
+                };
 
+                var exists = await CheckFavoriteExists(userId, dto);
                 return Ok(exists);
             }
             catch (Exception ex)
@@ -279,17 +315,41 @@ namespace TravelBooking.APIs.Controllers
             return validTypes.Contains(companyType.ToLower());
         }
 
-        private async Task<bool> CheckFavoriteExists(string userId, CreateFavoriteTDto dto)
+        private async Task<bool> CheckFavoriteExists(string userId, CreateFavoriteDto dto)
         {
-            return await _context.Favorites
-                .AnyAsync(f => f.UserId == userId &&
-                    f.HotelCompanyId == dto.HotelCompanyId &&
-                    f.FlightCompanyId == dto.FlightCompanyId &&
-                    f.CarRentalCompanyId == dto.CarRentalCompanyId &&
-                    f.TourCompanyId == dto.TourCompanyId);
+            var companyType = dto.CompanyType.ToLower();
+
+            return companyType switch
+            {
+                "hotel" => dto.HotelCompanyId.HasValue &&
+                           await _context.Favorites.AnyAsync(f =>
+                               f.UserId == userId &&
+                               f.CompanyType.ToLower() == "hotel" &&
+                               f.HotelCompanyId == dto.HotelCompanyId),
+
+                "flight" => dto.FlightCompanyId.HasValue &&
+                            await _context.Favorites.AnyAsync(f =>
+                                f.UserId == userId &&
+                                f.CompanyType.ToLower() == "flight" &&
+                                f.FlightCompanyId == dto.FlightCompanyId),
+
+                "carrental" => dto.CarRentalCompanyId.HasValue &&
+                               await _context.Favorites.AnyAsync(f =>
+                                   f.UserId == userId &&
+                                   f.CompanyType.ToLower() == "carrental" &&
+                                   f.CarRentalCompanyId == dto.CarRentalCompanyId),
+
+                "tour" => dto.TourId.HasValue &&
+                          await _context.Favorites.AnyAsync(f =>
+                              f.UserId == userId &&
+                              f.CompanyType.ToLower() == "tour" &&
+                              f.TourId == dto.TourId),
+
+                _ => false
+            };
         }
 
-        private async Task<bool> VerifyCompanyExists(CreateFavoriteTDto dto)
+        private async Task<bool> VerifyCompanyExists(CreateFavoriteDto dto)
         {
             return dto.CompanyType.ToLower() switch
             {
@@ -299,8 +359,8 @@ namespace TravelBooking.APIs.Controllers
                            await _context.FlightCompanies.AnyAsync(f => f.Id == dto.FlightCompanyId),
                 "carrental" => dto.CarRentalCompanyId.HasValue &&
                               await _context.CarRentalCompanies.AnyAsync(c => c.Id == dto.CarRentalCompanyId),
-                "tour" => dto.TourCompanyId.HasValue &&
-                         await _context.TourCompanies.AnyAsync(t => t.Id == dto.TourCompanyId),
+                "tour" => dto.TourId.HasValue &&
+                              await _context.Tours.AnyAsync(t => t.Id == dto.TourId),
                 _ => false
             };
         }
@@ -313,6 +373,7 @@ namespace TravelBooking.APIs.Controllers
                 .Include(f => f.FlightCompany)
                 .Include(f => f.CarRentalCompany)
                 .Include(f => f.TourCompany)
+                .Include(f => f.Tour)
                 .AsNoTracking()
                 .FirstOrDefaultAsync(f => f.Id == id);
         }

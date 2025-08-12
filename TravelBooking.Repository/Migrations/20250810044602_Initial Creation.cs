@@ -512,9 +512,15 @@ namespace TravelBooking.Repository.Migrations
                     Description = table.Column<string>(type: "nvarchar(1000)", maxLength: 1000, nullable: true),
                     Destination = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: true),
                     MaxGuests = table.Column<int>(type: "int", nullable: false),
+                    MinGroupSize = table.Column<int>(type: "int", nullable: false),
+                    MaxGroupSize = table.Column<int>(type: "int", nullable: false),
                     Price = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
+                    ImageUrl = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Category = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    TourCompanyId = table.Column<int>(type: "int", nullable: true)
+                    Languages = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    TourCompanyId = table.Column<int>(type: "int", nullable: true),
+                    IncludedItems = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    ExcludedItems = table.Column<string>(type: "nvarchar(max)", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -621,6 +627,50 @@ namespace TravelBooking.Repository.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "TourQuestion",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Question = table.Column<string>(type: "nvarchar(500)", maxLength: 500, nullable: false),
+                    Answer = table.Column<string>(type: "nvarchar(1000)", maxLength: 1000, nullable: false),
+                    TourId = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_TourQuestion", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_TourQuestion_Tours_TourId",
+                        column: x => x.TourId,
+                        principalTable: "Tours",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "TourTickets",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Type = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
+                    Price = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
+                    TourId = table.Column<int>(type: "int", nullable: false),
+                    MaxQuantity = table.Column<int>(type: "int", nullable: false),
+                    IsActive = table.Column<bool>(type: "bit", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_TourTickets", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_TourTickets_Tours_TourId",
+                        column: x => x.TourId,
+                        principalTable: "Tours",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Payments",
                 columns: table => new
                 {
@@ -642,6 +692,34 @@ namespace TravelBooking.Repository.Migrations
                         principalTable: "Bookings",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "TourBookingTickets",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    BookingId = table.Column<int>(type: "int", nullable: false),
+                    TicketId = table.Column<int>(type: "int", nullable: false),
+                    Quantity = table.Column<int>(type: "int", nullable: false),
+                    IsIssued = table.Column<bool>(type: "bit", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_TourBookingTickets", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_TourBookingTickets_Bookings_BookingId",
+                        column: x => x.BookingId,
+                        principalTable: "Bookings",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_TourBookingTickets_TourTickets_TicketId",
+                        column: x => x.TicketId,
+                        principalTable: "TourTickets",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateIndex(
@@ -860,6 +938,16 @@ namespace TravelBooking.Repository.Migrations
                 column: "HotelId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_TourBookingTickets_BookingId",
+                table: "TourBookingTickets",
+                column: "BookingId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_TourBookingTickets_TicketId",
+                table: "TourBookingTickets",
+                column: "TicketId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_TourCompanies_AdminId",
                 table: "TourCompanies",
                 column: "AdminId",
@@ -872,9 +960,19 @@ namespace TravelBooking.Repository.Migrations
                 column: "TourId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_TourQuestion_TourId",
+                table: "TourQuestion",
+                column: "TourId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Tours_TourCompanyId",
                 table: "Tours",
                 column: "TourCompanyId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_TourTickets_TourId",
+                table: "TourTickets",
+                column: "TourId");
         }
 
         /// <inheritdoc />
@@ -908,13 +1006,22 @@ namespace TravelBooking.Repository.Migrations
                 name: "RoomImages");
 
             migrationBuilder.DropTable(
+                name: "TourBookingTickets");
+
+            migrationBuilder.DropTable(
                 name: "TourImages");
+
+            migrationBuilder.DropTable(
+                name: "TourQuestion");
 
             migrationBuilder.DropTable(
                 name: "AspNetRoles");
 
             migrationBuilder.DropTable(
                 name: "Bookings");
+
+            migrationBuilder.DropTable(
+                name: "TourTickets");
 
             migrationBuilder.DropTable(
                 name: "Cars");

@@ -87,6 +87,17 @@ namespace TravelBooking.APIs.Controllers
         {
             var entity = _mapper.Map<Tour>(dto);
             var result = await _tourRepo.AddAsync(entity);
+            if (dto.Tickets != null && dto.Tickets.Any())
+            {
+                foreach (var ticketDto in dto.Tickets)
+                {
+                    var ticket = _mapper.Map<TourTicket>(ticketDto);
+                    ticket.TourId = result.Id;
+                    await _context.TourTickets.AddAsync(ticket);
+                }
+                await _context.SaveChangesAsync();
+            }
+
 
             // Load TourCompany so AutoMapper can project its Name
             result.TourCompany = await _tourCompany.GetAsync(dto.TourCompanyId.Value);
@@ -97,7 +108,7 @@ namespace TravelBooking.APIs.Controllers
         [Authorize]
         [HttpPost("{serviceId}/book")]
         [Authorize(Roles = "SuperAdmin,TourAdmin,User")]
-        public async Task<IActionResult> BookTour(int serviceId/*, [FromBody] TourBookingDto? dto*/)
+        public async Task<IActionResult> BookTour(int serviceId, [FromBody] TourBookingDto dto)
         {
             var userId = User.FindFirst("uid")?.Value;
             if (string.IsNullOrEmpty(userId))
@@ -106,11 +117,9 @@ namespace TravelBooking.APIs.Controllers
             var tour = await _tourRepo.GetAsync(serviceId);
             if (tour == null) return NotFound(new ApiResponse(404));
 
-            // Validate that the tour date is valid (optional but recommended)
             if (tour.StartDate >= tour.EndDate)
                 return BadRequest("Invalid tour date range.");
 
-            // Check for overlapping bookings
             var existingBookings = await _bookingRepo.GetAllAsync(b =>
                 b.TourId == serviceId &&
                 b.Status != Status.Cancelled &&
@@ -119,6 +128,24 @@ namespace TravelBooking.APIs.Controllers
             );
             if (existingBookings.Any())
                 return BadRequest("Tour already booked in selected time frame.");
+
+            foreach (var ticketRequest in dto.Tickets)
+            {
+                var ticket = await _context.TourTickets
+                    .FirstOrDefaultAsync(t =>
+                        t.TourId == serviceId &&
+                        t.Type == ticketRequest.Type &&
+                        t.IsActive);
+
+                if (ticket == null)
+                    return BadRequest($"Ticket type '{ticketRequest.Type}' not found.");
+
+                if (ticket.MaxQuantity < ticketRequest.Quantity)
+                    return BadRequest($"Not enough '{ticket.Type}' tickets available.");
+
+                ticket.MaxQuantity -= ticketRequest.Quantity;
+                _context.TourTickets.Update(ticket);
+            }
 
             var booking = new Booking
             {
@@ -131,11 +158,13 @@ namespace TravelBooking.APIs.Controllers
             };
 
             await _bookingRepo.AddAsync(booking);
-            booking.Tour = tour;
+            await _context.SaveChangesAsync(); // ✅ Save ticket updates + booking
 
+            booking.Tour = tour;
             var result = _mapper.Map<TourBookingResultDto>(booking);
             return CreatedAtAction("GetBookingById", "Booking", new { id = booking.Id }, result);
         }
+
 
 
 
