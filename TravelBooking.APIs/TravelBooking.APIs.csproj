@@ -9,6 +9,7 @@
 
 	<ItemGroup>
 		<PackageReference Include="AutoMapper" Version="15.0.1" />
+		<PackageReference Include="Google.Cloud.AIPlatform.V1" Version="3.42.0" />
 		<PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="9.0.7" />
 		<PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="9.0.7">
 			<PrivateAssets>all</PrivateAssets>

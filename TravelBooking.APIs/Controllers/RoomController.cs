@@ -146,7 +146,6 @@ namespace TravelBooking.APIs.Controllers
             return CreatedAtAction("GetBookingById", "Booking", new { id = booking.Id }, result);
         }
 
-
         /// <summary>
         /// Create a new room
         /// </summary>

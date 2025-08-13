@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
+using System.Reflection.PortableExecutable;
 using System.Text;
 using System.Text.Json.Serialization;
 using TravelBooking.Core.Interfaces_Or_Repository;
@@ -56,6 +57,12 @@ namespace TravelBooking.APIs
 
             // add SmtpEmailService as IEmailService
             webApplicationbuilder.Services.AddScoped<IEmailService, SmtpEmailService>();
+            // Enhanced ChatBot Services
+            webApplicationbuilder.Services.AddScoped<GeminiService>();
+            webApplicationbuilder.Services.AddScoped<ChatHistoryService>();
+            webApplicationbuilder.Services.AddScoped<MultiRetrieverService>();
+            webApplicationbuilder.Services.AddScoped<ChatService>();
+            webApplicationbuilder.Services.AddScoped<DatabaseChatIntegrationService>();
 
             //add Accessor for User
             webApplicationbuilder.Services.AddHttpContextAccessor();
@@ -146,6 +153,11 @@ namespace TravelBooking.APIs
                     // .AllowAnyMethod();
                 });
             });
+            // Caching
+            webApplicationbuilder.Services.AddMemoryCache();
+            webApplicationbuilder.Services.AddResponseCaching();
+
+            
 
             // Dashboard
             webApplicationbuilder.Services.AddScoped<IDashboardService, DashboardService>();
@@ -189,13 +201,16 @@ namespace TravelBooking.APIs
             {
                 app.UseSwaggerMiddlewares();
             }
-
+            // Response Caching
+            
             app.UseHttpsRedirection();
             app.UseStaticFiles();
+            app.MapStaticAssets();
 
             app.UseAuthentication();
 
             app.UseAuthorization();
+            app.UseResponseCaching();
             app.MapControllers();
 
             app.Run();
