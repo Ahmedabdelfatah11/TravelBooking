@@ -155,17 +155,45 @@ namespace TravelBooking.Repository.Data
         public string? Description { get; set; } = string.Empty;
         public string? Destination { get; set; } = string.Empty;
         public int MaxGuests { get; set; }
+        public int MinGroupSize { get; set; } // Minimum allowed group size
+        public int MaxGroupSize { get; set; }
         [JsonPropertyName("price")]
 
         public decimal Price { get; set; }
+        public string? ImageUrl { get; set; } // Primary image for quick access
+
         public string Category { get; set; } = string.Empty;
+        public string Languages { get; set; }
         public int? TourCompanyId { get; set; }
         public List<TourImageSeedModel> TourImages { get; set; } = new();
+        public List<string> IncludedItems { get; set; } = new();
+        public List<string> ExcludedItems { get; set; } = new();
+        public List<TourQuestionSeedModel> Questions { get; set; } = new();
+        public List<TourTicketSeedModel> TourTickets { get; set; } = new();
+
     }
+
+    public class TourQuestionSeedModel
+    {
+        [JsonPropertyName("Question")]
+
+        public string QuestionText { get; set; } = string.Empty;
+        [JsonPropertyName("Answer")]
+        public string AnswerText { get; set; } = string.Empty;
+    }
+
 
     public class TourImageSeedModel
     {
         public string ImageUrl { get; set; } = string.Empty;
+    }
+    public class TourTicketSeedModel
+    {
+        [JsonPropertyName("Type")]
+        public string TicketType { get; set; }
+        public decimal Price { get; set; }
+        public int AvailableQuantity { get; set; }
+        public bool IsActive { get; set; } = true;
     }
 
 }

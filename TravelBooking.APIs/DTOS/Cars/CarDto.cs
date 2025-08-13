@@ -9,8 +9,10 @@ using TravelBooking.Core.Models;
 namespace TravelBooking.Core.DTOS.Cars
 {
     public class CarDto
-    { 
-        public string? Id { get; set; } // Unique identifier for the car
+
+    {
+        [Required]
+        public int Id { get; set; }
         public string? Model { get; set; }
         public decimal? Price { get; set; }
         public string? Description { get; set; }

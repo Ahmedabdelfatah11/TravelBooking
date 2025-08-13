@@ -12,6 +12,9 @@ namespace TravelBooking.Core.Specifications.BookingWithIncludesSpecification
         public BookingWithIncludesSpecification(int bookingId)
      : base(b => b.Id == bookingId)
         {
+            AddInclude(b => b.Payment);
+            AddInclude(b => b.BookingTickets);
+            AddInclude($"{nameof(Booking.BookingTickets)}.{nameof(TourBookingTicket.Ticket)}");
             AddInclude(b => b.User);
             AddInclude(b => b.Room);
             AddInclude(b => b.Car);

@@ -22,7 +22,11 @@ namespace TravelBooking.Repository.Data
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
-
+            modelBuilder.Entity<ChatMessage>()
+               .HasOne(cm => cm.User)
+               .WithMany()
+               .HasForeignKey(cm => cm.UserId)
+               .OnDelete(DeleteBehavior.Cascade);
             // Apply configurations for entities
             modelBuilder.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly());
         }
@@ -42,5 +46,10 @@ namespace TravelBooking.Repository.Data
 
         public DbSet<Favoritet> Favorites { get; set; }
         public DbSet<Review> Reviews { get; set; }
+        public DbSet<TourTicket> TourTickets { get; set; }
+        public DbSet<TourBookingTicket> TourBookingTickets { get; set; }
+        public DbSet<ContactMessage> ContactMessages { get; set; }
+
+        public DbSet<ChatMessage> ChatMessages => Set<ChatMessage>();
     }
 }

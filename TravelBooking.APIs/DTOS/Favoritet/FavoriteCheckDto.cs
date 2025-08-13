@@ -7,10 +7,11 @@
         public int? FlightCompanyId { get; set; }
         public int? CarRentalCompanyId { get; set; }
         public int? TourCompanyId { get; set; }
+        public int? TourId { get; set; }
 
         public bool IsValid()
         {
-            var companyIds = new[] { HotelCompanyId, FlightCompanyId, CarRentalCompanyId, TourCompanyId };
+            var companyIds = new[] { HotelCompanyId, FlightCompanyId, CarRentalCompanyId, TourCompanyId,TourId };
             return companyIds.Count(id => id.HasValue) == 1;
         }
     }

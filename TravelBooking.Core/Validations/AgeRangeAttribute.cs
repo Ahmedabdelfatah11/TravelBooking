@@ -17,6 +17,8 @@
 
         protected override ValidationResult IsValid(object? value, ValidationContext validationContext)
         {
+            if (value == null)
+                return ValidationResult.Success;
             if (value is not DateTime dateOfBirth)
                 return new ValidationResult("Invalid date format.");
 

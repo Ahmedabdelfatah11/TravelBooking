@@ -6,12 +6,15 @@ namespace TravelBooking.APIs.DTOS.Booking.TourBooking
     {
         public int BookingId { get; set; }
         public string Status { get; set; }
-        public decimal Price { get; set; }
+        public decimal TotalPrice { get; set; }
+
         public string TourName { get; set; }
         public string? Destination { get; set; }
         public DateTime StartDate { get; set; }
         public DateTime EndDate { get; set; }
         public TourCategory? Category { get; set; }
         public int TourId { get; set; }
+
+        public List<TourTicketSummaryDto> Tickets { get; set; } // ✅ Add this
     }
 }

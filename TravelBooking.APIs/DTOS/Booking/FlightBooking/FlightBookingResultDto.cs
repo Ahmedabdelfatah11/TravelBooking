@@ -12,7 +12,8 @@ namespace TravelBooking.APIs.DTOS.Booking.FlightBooking
         public string DepartureAirport { get; set; }
         public string ArrivalAirport { get; set; }
         public int FlightId { get; set; }
-        public SeatClass SeatClass { get; set; } 
+        public SeatClass SeatClass { get; set; }
+
     }
 
 

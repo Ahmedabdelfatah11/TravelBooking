@@ -25,7 +25,14 @@ namespace TravelBooking.Core.Specifications.FlightSpecs
         public string? DepartureAirport { get; set; }
         public string? ArrivalAirport { get; set; }
 
-        public DateTime? DepatureTime { get; set; }
+        public DateTime? DepartureTime { get; set; }
         public DateTime? ArrivalTime { get; set; }
+        private string? search;
+
+        public string? Search
+        {
+            get { return search; }
+            set { search = value?.ToLower(); }
+        }
     }
 }

@@ -1,4 +1,5 @@
 using AutoMapper;
+using ContactUsAPI.Services;
 using Jwt.Helper;
 using Jwt.Settings;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -7,8 +8,10 @@ using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
+using System.Reflection.PortableExecutable;
 using System.Text;
 using System.Text.Json.Serialization;
+using TravelBooking.Core.Interfaces_Or_Repository;
 using TravelBooking.Core.Models.Services;
 using TravelBooking.Core.Repository.Contract;
 using TravelBooking.Core.Services;
@@ -34,7 +37,6 @@ namespace TravelBooking.APIs
 
             var webApplicationbuilder = WebApplication.CreateBuilder(args);
 
-
             webApplicationbuilder.Services.AddControllers();
             // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
             webApplicationbuilder.Services.AddOpenApi();
@@ -50,8 +52,16 @@ namespace TravelBooking.APIs
             // Add the PaymentService as IPaymentService
             webApplicationbuilder.Services.AddScoped<IPaymentService, PaymentService>();
 
-            //webApplicationbuilder.Services.AddScoped<IRoomService, RoomService>();
+            webApplicationbuilder.Services.AddScoped<IRoomService, RoomService>();
 
+            // add SmtpEmailService as IEmailService
+            webApplicationbuilder.Services.AddScoped<IEmailService, SmtpEmailService>();
+            // Enhanced ChatBot Services
+            webApplicationbuilder.Services.AddScoped<GeminiService>();
+            webApplicationbuilder.Services.AddScoped<ChatHistoryService>();
+            webApplicationbuilder.Services.AddScoped<MultiRetrieverService>();
+            webApplicationbuilder.Services.AddScoped<ChatService>();
+            webApplicationbuilder.Services.AddScoped<DatabaseChatIntegrationService>();
 
             //add Accessor for User
             webApplicationbuilder.Services.AddHttpContextAccessor();
@@ -133,15 +143,31 @@ namespace TravelBooking.APIs
             {
                 options.AddPolicy("AllowAngularApp", policy =>
                 {
-                    policy.AllowAnyOrigin()
-                     .AllowAnyHeader()
-                     .AllowAnyMethod();
-                    // Allow credentials if needed
+                    policy.WithOrigins("http://localhost:56292", "http://localhost:4200")
+                          .AllowAnyHeader()
+                          .AllowAnyMethod()
+                     .AllowCredentials();
+                    //policy.AllowAnyOrigin()
+                    // .AllowAnyHeader()
+                    // .AllowAnyMethod();
                 });
             });
+            // Caching
+            webApplicationbuilder.Services.AddMemoryCache();
+            webApplicationbuilder.Services.AddResponseCaching();
+
+
 
             // Dashboard
             webApplicationbuilder.Services.AddScoped<IDashboardService, DashboardService>();
+            //Dasboard Hotel Admin
+            webApplicationbuilder.Services.AddScoped<IHotelAdminDashboardService, HotelAdminDashboardService>();
+            //Dasboard Tour Admin
+            webApplicationbuilder.Services.AddScoped<ITourAdminDashboardService, TourAdminDashboardService>();
+            //Dasboard Flight Admin
+            webApplicationbuilder.Services.AddScoped<IFlightAdminDashboardService, FlightAdminDashboardService>();
+            //Dasboard Car Admin
+            webApplicationbuilder.Services.AddScoped<ICarRentalAdminDashboardService, CarRentalAdminDashboardService>();
 
             webApplicationbuilder.Services.AddApplicationServices();
 
@@ -162,8 +188,8 @@ namespace TravelBooking.APIs
                 await _dbcontext.Database.MigrateAsync();
                 await RoleSeeder.SeedAsync(Services); // assigning roles to the database 
                 await FlightContextSeed.SeedAsync(_dbcontext);
-
                 await TravelContextSeed.SeedAsync(_dbcontext);
+
             }
             catch (Exception ex)
             {
@@ -174,13 +200,16 @@ namespace TravelBooking.APIs
             {
                 app.UseSwaggerMiddlewares();
             }
+            // Response Caching
 
             app.UseHttpsRedirection();
             app.UseStaticFiles();
+            app.MapStaticAssets();
 
             app.UseAuthentication();
 
             app.UseAuthorization();
+            app.UseResponseCaching();
             app.MapControllers();
 
             app.Run();

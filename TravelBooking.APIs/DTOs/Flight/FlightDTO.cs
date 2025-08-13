@@ -19,7 +19,6 @@ namespace TravelBooking.APIs.DTOS.Flight
             public decimal EconomyPrice { get; set; }
             public decimal BusinessPrice { get; set; }
             public decimal FirstClassPrice { get; set; }
-            public decimal Price { get; set; }
-        public int AvailableSeats { get; set; }
+          
     }
 }

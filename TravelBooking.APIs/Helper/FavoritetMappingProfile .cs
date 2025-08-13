@@ -17,10 +17,11 @@ namespace TravelBooking.APIs.Helper
                 .ForMember(dest => dest.UserName, opt => opt.MapFrom(src => src.User != null ? src.User.UserName : null))
                 .ForMember(dest => dest.UserEmail, opt => opt.MapFrom(src => src.User != null ? src.User.Email : null));
 
-            CreateMap<CreateFavoriteTDto, Favoritet>()
+            CreateMap<CreateFavoriteDto, Favoritet>()
                 .ForMember(dest => dest.Id, opt => opt.Ignore())
                 .ForMember(dest => dest.UserId, opt => opt.Ignore())
-                .ForMember(dest => dest.CreatedAt, opt => opt.MapFrom(src => DateTime.UtcNow));
+                .ForMember(dest => dest.CreatedAt, opt => opt.MapFrom(src => DateTime.UtcNow))
+                .ForMember(dest => dest.TourId, opt => opt.MapFrom(src => src.TourId));
         }
 
         private static string? GetCompanyName(Favoritet favoritet)
@@ -28,7 +29,7 @@ namespace TravelBooking.APIs.Helper
             return favoritet.CompanyType.ToLower() switch
             {
                 "hotel" => favoritet.HotelCompany?.Name,
-                "flight" => favoritet.FlightCompany?.Name,
+                "flight" => favoritet.Flight?.FlightCompany?.Name,
                 "carrental" => favoritet.CarRentalCompany?.Name,
                 "tour" => favoritet.TourCompany?.Name,
                 _ => null
@@ -40,7 +41,7 @@ namespace TravelBooking.APIs.Helper
             return favoritet.CompanyType.ToLower() switch
             {
                 "hotel" => favoritet.HotelCompany?.Description,
-                "flight" => favoritet.FlightCompany?.Description,
+                "flight" => favoritet.Flight?.FlightCompany?.Description,
                 "carrental" => favoritet.CarRentalCompany?.description,
                 "tour" => favoritet.TourCompany?.Description,
                 _ => null
@@ -52,7 +53,7 @@ namespace TravelBooking.APIs.Helper
             return favoritet.CompanyType.ToLower() switch
             {
                 "hotel" => favoritet.HotelCompany?.ImageUrl,
-                "flight" => favoritet.FlightCompany?.ImageUrl,
+                "flight" => favoritet.Flight?.FlightCompany?.ImageUrl,
                 "carrental" => favoritet.CarRentalCompany?.ImageUrl,
                 "tour" => favoritet.TourCompany?.ImageUrl,
                 _ => null
@@ -64,7 +65,7 @@ namespace TravelBooking.APIs.Helper
             return favoritet.CompanyType.ToLower() switch
             {
                 "hotel" => favoritet.HotelCompany?.Location,
-                "flight" => favoritet.FlightCompany?.Location,
+                "flight" => favoritet.Flight?.FlightCompany?.Location,
                 "carrental" => favoritet.CarRentalCompany?.Location,
                 "tour" => favoritet.TourCompany?.Location,
                 _ => null

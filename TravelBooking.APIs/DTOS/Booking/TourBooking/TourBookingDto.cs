@@ -2,10 +2,18 @@
 {
     public class TourBookingDto
     {
-        //public DateTime StartDate { get; set; }
-        //public DateTime EndDate { get; set; }
-        //public string? Status { get; set; }
-        //public decimal Price { get; set; }
+        [Required]
+        public List<TourTicketSelectionDto> Tickets { get; set; }
+    }
+
+    public class TourTicketSelectionDto
+    {
+        [Required]
+        public string Type { get; set; }
+
+        [Required]
+        [Range(1, int.MaxValue)]
+        public int Quantity { get; set; }
     }
 
 }

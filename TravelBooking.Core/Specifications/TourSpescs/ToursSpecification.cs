@@ -21,6 +21,8 @@ namespace TravelBooking.Core.Specifications.TourSpecs
         {
             Includes.Add(x => x.TourCompany);
             Includes.Add(x => x.TourImages);
+            Includes.Add(x => x.TourTickets);
+            Includes.Add(x => x.Questions);
 
             if (!string.IsNullOrEmpty(specParams.Sort))
             {
@@ -56,6 +58,9 @@ namespace TravelBooking.Core.Specifications.TourSpecs
         {
             Includes.Add(t => t.TourCompany);
             Includes.Add(t => t.TourImages);
+            Includes.Add(t => t.TourTickets);
+            Includes.Add(x => x.Questions);
+
         }
     }
 }

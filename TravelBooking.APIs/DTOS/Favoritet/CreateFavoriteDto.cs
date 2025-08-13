@@ -1,11 +1,12 @@
 ﻿namespace TravelBooking.APIs.DTOS.Favoritet
 {
-    public class CreateFavoriteTDto
+    public class CreateFavoriteDto
     {
         public int? HotelCompanyId { get; set; }
         public int? FlightCompanyId { get; set; }
         public int? CarRentalCompanyId { get; set; }
         public int? TourCompanyId { get; set; }
+        public int? TourId { get; set; }
 
         [Required(ErrorMessage = "Company type is required")]
         [StringLength(50)]
@@ -16,7 +17,7 @@
         /// </summary>
         public bool IsValid()
         {
-            var companyIds = new int?[] { HotelCompanyId, FlightCompanyId, CarRentalCompanyId, TourCompanyId };
+            var companyIds = new int?[] { HotelCompanyId, FlightCompanyId, CarRentalCompanyId, TourCompanyId, TourId };
             return companyIds.Count(id => id.HasValue) == 1;
         }
 
@@ -30,7 +31,7 @@
                 "hotel" => HotelCompanyId,
                 "flight" => FlightCompanyId,
                 "carrental" => CarRentalCompanyId,
-                "tour" => TourCompanyId,
+                "tour" => TourId,
                 _ => null
             };
         }

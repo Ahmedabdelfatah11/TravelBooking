@@ -69,8 +69,9 @@ namespace TravelBooking.APIs.Controllers
                 user.DateOfBirth = updatedProfile.DateOfBirth.Value;
 
             var result = await _userManager.UpdateAsync(user);
+            
 
-            return result.Succeeded ? Ok("Profile updated successfully.") : BadRequest(result.Errors);
+            return result.Succeeded ? Ok(new { message = "Profile updated successfully : " , user }) : BadRequest(result.Errors);
         }
         [Authorize]
         [HttpDelete("DeleteUserProfile")]

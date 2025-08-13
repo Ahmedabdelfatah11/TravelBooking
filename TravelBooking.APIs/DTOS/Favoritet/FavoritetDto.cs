@@ -9,6 +9,8 @@
         public int? FlightCompanyId { get; set; }
         public int? CarRentalCompanyId { get; set; }
         public int? TourCompanyId { get; set; }
+        public int? TourId { get; set; }
+
         public DateTime CreatedAt { get; set; }
 
         // Company Information

@@ -11,6 +11,7 @@ using TravelBooking.Core.Specifications.TourCompanySpecs;
 using TravelBooking.Errors;
 using TravelBooking.Helper;
 using TravelBooking.Repository.TourCompanySpecs;
+using TravelBooking.Service.Services.Dashboard;
 
 
 namespace TravelBooking.APIs.Controllers
@@ -22,13 +23,14 @@ namespace TravelBooking.APIs.Controllers
     {
         private readonly IGenericRepository<TourCompany> _tourCompanyRepo;
         private readonly IMapper _mapper;
-
+        private readonly ITourAdminDashboardService _dashboardService;
         public TourCompanyController(
             IGenericRepository<TourCompany> tourCompanyRepo,
-            IMapper mapper)
+            IMapper mapper, ITourAdminDashboardService dashboardService)
         {
             _tourCompanyRepo = tourCompanyRepo;
             _mapper = mapper;
+            _dashboardService = dashboardService;
         }
 
 
@@ -75,20 +77,6 @@ namespace TravelBooking.APIs.Controllers
                 return NotFound(new ApiResponse(404));
 
             return Ok(_mapper.Map<TourCompany, TourCompanyReadDto>(company));
-        }
-        [HttpPost]
-        [Authorize(Roles = "SuperAdmin")]
-        public async Task<ActionResult<TourCompanyReadDto>> CreateTourCompany([FromBody] TourCompanyCreateDto dto)
-        {
-            // Validate AdminId
-            if (string.IsNullOrWhiteSpace(dto.AdminId))
-                return BadRequest("AdminId is required.");
-
-            var entity = _mapper.Map<TourCompany>(dto);
-            entity.AdminId = dto.AdminId;
-            var result = await _tourCompanyRepo.AddAsync(entity);
-            var resultDto = _mapper.Map<TourCompanyReadDto>(result);
-            return CreatedAtAction(nameof(GetTourCompanyById), new { id = result.Id }, resultDto);
         }
 
         // PUT: api/TourCompany/5
@@ -137,5 +125,20 @@ namespace TravelBooking.APIs.Controllers
 
             return Ok(data);
         }
+
+
+        [HttpGet("dashboard")]
+        [Authorize(Roles = "TourAdmin")]
+        public async Task<IActionResult> GetDashboard()
+        {
+            var tourCompanyIdClaim = User.Claims.FirstOrDefault(c => c.Type == "TourCompanyId")?.Value;
+
+            if (string.IsNullOrEmpty(tourCompanyIdClaim) || !int.TryParse(tourCompanyIdClaim, out int tourCompanyId))
+                return Unauthorized("TourCompanyId not found in token.");
+
+            var data = await _dashboardService.GetStatsForTourCompany(tourCompanyId);
+            return Ok(data);
+        }
+
     }
 }

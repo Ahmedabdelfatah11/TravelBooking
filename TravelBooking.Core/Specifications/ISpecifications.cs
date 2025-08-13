@@ -16,7 +16,6 @@ namespace TravelBooking.Core.Specifications
         public Expression<Func<T,object>> OrderBy { get; set; }
         public Expression<Func<T,object>> OrderByDesc { get; set; }
 
-      
         //public List<string> IncludeStrings { get; }
 
         public int Skip { get; set; }

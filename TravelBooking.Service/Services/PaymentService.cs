@@ -12,34 +12,42 @@ namespace TravelBooking.Service.Services
     {
         private readonly IConfiguration _configuration;
         private readonly IGenericRepository<Booking> _bookingRepo;
+        private readonly IGenericRepository<Payment> _paymentRepo;  
 
-        public PaymentService(IConfiguration configuration, IGenericRepository<Booking> bookingRepo)
+        public PaymentService(
+            IConfiguration configuration,
+            IGenericRepository<Booking> bookingRepo,
+            IGenericRepository<Payment> paymentRepo)  
         {
             _configuration = configuration;
             _bookingRepo = bookingRepo;
+            _paymentRepo = paymentRepo;  
         }
 
         public async Task<Booking?> CreatePaymentIntent(int bookingId)
         {
+            // Set Stripe API key from configuration
             StripeConfiguration.ApiKey = _configuration["StripeSettings:SecretKey"];
 
+            // Get booking details including related entities
             var spec = new BookingWithIncludesSpecification(bookingId);
             var booking = await _bookingRepo.GetWithSpecAsync(spec);
 
             if (booking == null)
                 return null;
 
-            // if the booking is already paid, return null
+            // If booking is already paid, no need to create a new PaymentIntent
             if (booking.Payment != null && booking.Payment.PaymentStatus == PaymentStatus.Paid)
             {
                 return null;
             }
 
+            // Calculate total amount for the booking
             decimal total = CalculateTotalPrice(booking);
             if (total <= 0)
                 return null;
 
-            // if the booking already has a PaymentIntentId, retrieve it
+            // If booking already has a PaymentIntent, retrieve it from Stripe
             if (!string.IsNullOrEmpty(booking.PaymentIntentId))
             {
                 var existing = await new PaymentIntentService().GetAsync(booking.PaymentIntentId);
@@ -47,10 +55,10 @@ namespace TravelBooking.Service.Services
                 return booking;
             }
 
-            // New PaymentIntent creation
+            // Create a new PaymentIntent in Stripe
             var options = new PaymentIntentCreateOptions
             {
-                Amount = (long)(total * 100),
+                Amount = (long)(total * 100), // Stripe expects amount in cents
                 Currency = "usd",
                 PaymentMethodTypes = new List<string> { "card" },
                 Metadata = new Dictionary<string, string>
@@ -62,40 +70,63 @@ namespace TravelBooking.Service.Services
 
             var service = new PaymentIntentService();
             var intent = await service.CreateAsync(options);
-             
-            // Save the PaymentIntent ID and ClientSecret in the booking
+
+            // Save PaymentIntent ID and ClientSecret in the booking
             booking.PaymentIntentId = intent.Id;
             booking.ClientSecret = intent.ClientSecret;
-             
-            // create a new Payment object and set its properties
-            booking.Payment = new Payment
-            {
-                Amount = total,
-                PaymentDate = DateTime.UtcNow,
-                PaymentStatus = PaymentStatus.Pending,
-                PaymentMethod = "card",
-                TransactionId = intent.Id
-            };
 
+            // Create or update Payment entity in database
+            if (booking.Payment == null)
+            {
+                // Create new Payment record
+                var payment = new Payment
+                {
+                    BookingId = booking.Id,
+                    Amount = total,
+                    PaymentDate = DateTime.UtcNow,
+                    PaymentStatus = PaymentStatus.Pending,
+                    PaymentMethod = "card",
+                    TransactionId = intent.Id
+                };
+
+                // Link Payment to Booking
+                await _paymentRepo.AddAsync(payment);
+                booking.Payment = payment;
+            }
+            else
+            {
+                // Update existing Payment record
+                booking.Payment.Amount = total;
+                booking.Payment.PaymentStatus = PaymentStatus.Pending;
+                booking.Payment.TransactionId = intent.Id;
+                booking.Payment.PaymentDate = DateTime.UtcNow;
+
+                await _paymentRepo.Update(booking.Payment);
+            }
+
+            // Save changes to booking (and related payment)
             await _bookingRepo.Update(booking);
 
             return booking;
         }
 
+        // Helper method to calculate total booking price
         private decimal CalculateTotalPrice(Booking booking)
         {
             decimal total = 0;
             int duration = (int)(booking.EndDate - booking.StartDate).TotalDays;
-            if (duration <= 0) duration = 1;
+            if (duration <= 0) duration = 1; // Minimum duration is 1 day
 
             switch (booking.BookingType)
             {
                 case BookingType.Room:
                     total = (booking.Room?.Price ?? 0) * duration;
                     break;
+
                 case BookingType.Car:
                     total = (booking.Car?.Price ?? 0) * duration;
                     break;
+
                 case BookingType.Flight:
                     total = booking.SeatClass switch
                     {
@@ -107,8 +138,9 @@ namespace TravelBooking.Service.Services
                     break;
 
                 case BookingType.Tour:
-                    total = booking.Tour?.Price ?? 0;
+                    total = booking.BookingTickets?.Sum(bt => bt.Ticket.Price * bt.Quantity) ?? 0;
                     break;
+
             }
 
             return total;
