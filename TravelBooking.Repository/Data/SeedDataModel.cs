@@ -175,7 +175,10 @@ namespace TravelBooking.Repository.Data
 
     public class TourQuestionSeedModel
     {
+        [JsonPropertyName("Question")]
+
         public string QuestionText { get; set; } = string.Empty;
+        [JsonPropertyName("Answer")]
         public string AnswerText { get; set; } = string.Empty;
     }
 
@@ -189,7 +192,7 @@ namespace TravelBooking.Repository.Data
         [JsonPropertyName("Type")]
         public string TicketType { get; set; }
         public decimal Price { get; set; }
-        public int MaxQuantity { get; set; }
+        public int AvailableQuantity { get; set; }
         public bool IsActive { get; set; } = true;
     }
 

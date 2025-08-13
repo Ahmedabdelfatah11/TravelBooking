@@ -24,7 +24,7 @@ namespace TravelBooking.Repository.Data.Config
                    .HasColumnType("decimal(18,2)")
                    .IsRequired();
 
-            builder.Property(tt => tt.MaxQuantity)
+            builder.Property(tt => tt.AvailableQuantity)
                    .IsRequired();
 
             builder.Property(tt => tt.IsActive)

@@ -55,6 +55,5 @@ namespace TravelBooking.Core.Configurations
                    .HasForeignKey(t => t.TourCompanyId)
                    .OnDelete(DeleteBehavior.Restrict);
         }
-
     }
 }

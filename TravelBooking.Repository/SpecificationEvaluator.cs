@@ -13,6 +13,7 @@ namespace TravelBooking.Repository
     {
         public static IQueryable<TEntity> GetQuery(IQueryable<TEntity> Inputquery,ISpecifications<TEntity> spec)
         {
+
             var query = Inputquery;
             if (spec.Criteria != null)
             {
@@ -33,7 +34,6 @@ namespace TravelBooking.Repository
             }
             query = spec.Includes.Aggregate(query, (current, include) => current.Include(include));
             query = spec.IncludeStrings.Aggregate(query, (current, include) => current.Include(include));
-
 
             return query;
         }

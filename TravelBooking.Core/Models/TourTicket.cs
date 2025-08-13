@@ -15,7 +15,7 @@ namespace TravelBooking.Core.Models
         [ForeignKey("TourId")]
         public Tour Tour { get; set; }
 
-        public int MaxQuantity { get; set; } = 100;
+        public int AvailableQuantity { get; set; }
 
         public bool IsActive { get; set; } = true;
     }

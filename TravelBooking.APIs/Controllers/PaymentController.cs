@@ -4,6 +4,8 @@ using TravelBooking.Core.Repository.Contract;
 using TravelBooking.Core.Models;
 using TravelBooking.Core.Specifications;
 using Stripe;
+using Microsoft.EntityFrameworkCore;
+using TravelBooking.Repository.Data;
 
 
 [Route("api/[controller]")]
@@ -12,11 +14,13 @@ public class PaymentController : ControllerBase
 {
     private readonly IPaymentService _paymentService;
     private readonly IGenericRepository<Booking> _bookingRepo;
+    private readonly AppDbContext _context;
 
-    public PaymentController(IPaymentService paymentService, IGenericRepository<Booking> bookingRepo)
+    public PaymentController(IPaymentService paymentService, IGenericRepository<Booking> bookingRepo, AppDbContext context)
     {
         _paymentService = paymentService;
         _bookingRepo = bookingRepo;
+        _context = context;
     }
 
     // Endpoint to create a Stripe PaymentIntent for a given booking
@@ -67,7 +71,20 @@ public class PaymentController : ControllerBase
                 {
                     // Update booking status to confirmed
                     booking.Status = Status.Confirmed;
+                    foreach (var bt in booking.BookingTickets)
+                    {
+                        var ticket = bt.Ticket;
 
+                        if (ticket.AvailableQuantity < bt.Quantity)
+                            return BadRequest($"Not enough '{ticket.Type}' tickets left.");
+
+                        ticket.AvailableQuantity -= bt.Quantity;
+
+                        if (ticket.AvailableQuantity == 0)
+                            ticket.IsActive = false;
+
+                        _context.TourTickets.Update(ticket);
+                    }
                     // ✅ Update or create Payment record
                     if (booking.Payment != null)
                     {

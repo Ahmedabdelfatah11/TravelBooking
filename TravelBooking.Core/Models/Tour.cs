@@ -42,5 +42,35 @@ namespace TravelBooking.Core.Models
         public List<string> IncludedItems { get; set; } = new();
         public List<string> ExcludedItems { get; set; } = new();
         public List<TourQuestion> Questions { get; set; } = new();
+
+        public decimal GetPrice(Dictionary<string, int> ticketSelections)
+        {
+            if (ticketSelections == null || !ticketSelections.Any())
+                return 0;
+
+            decimal totalPrice = 0;
+
+            foreach (var selection in ticketSelections)
+            {
+                string ticketType = selection.Key;
+                int quantity = selection.Value;
+
+                if (quantity <= 0)
+                    continue;
+
+                var ticket = TourTickets.FirstOrDefault(t =>
+                    t.Type.Equals(ticketType, StringComparison.OrdinalIgnoreCase) && t.IsActive);
+
+                if (ticket == null)
+                    throw new InvalidOperationException($"Ticket type '{ticketType}' is not available or inactive.");
+
+                if (quantity > ticket.AvailableQuantity)
+                    throw new InvalidOperationException($"Requested quantity for '{ticketType}' exceeds the maximum allowed ({ticket.AvailableQuantity}).");
+
+                totalPrice += ticket.Price * quantity;
+            }
+
+            return totalPrice;
+        }
     }
 }

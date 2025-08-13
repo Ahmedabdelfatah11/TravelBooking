@@ -12,7 +12,7 @@ using TravelBooking.Repository.Data;
 namespace TravelBooking.Repository.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20250812160715_Initial Creation")]
+    [Migration("20250813011255_Initial Creation")]
     partial class InitialCreation
     {
         /// <inheritdoc />
@@ -314,6 +314,38 @@ namespace TravelBooking.Repository.Migrations
                         .HasFilter("[AdminId] IS NOT NULL");
 
                     b.ToTable("CarRentalCompanies");
+                });
+
+            modelBuilder.Entity("TravelBooking.Core.Models.ContactMessage", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Email")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Message")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Subject")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("ContactMessages");
                 });
 
             modelBuilder.Entity("TravelBooking.Core.Models.Favoritet", b =>
@@ -915,11 +947,11 @@ namespace TravelBooking.Repository.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
+                    b.Property<int>("AvailableQuantity")
+                        .HasColumnType("int");
+
                     b.Property<bool>("IsActive")
                         .HasColumnType("bit");
-
-                    b.Property<int>("MaxQuantity")
-                        .HasColumnType("int");
 
                     b.Property<decimal>("Price")
                         .HasColumnType("decimal(18,2)");

@@ -9,6 +9,10 @@ public class BookingByPaymentIntentIdSpecification : BaseSpecifications<Booking>
         : base(b => b.PaymentIntentId == paymentIntentId)
     {
         AddInclude(b => b.Payment);
+        Includes.Add(b => b.BookingTickets);
+        AddInclude("BookingTickets.Ticket");
+        AddInclude(b => b.Tour);
+
     }
 }
 

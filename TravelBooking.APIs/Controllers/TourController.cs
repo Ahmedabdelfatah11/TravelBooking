@@ -105,9 +105,10 @@ namespace TravelBooking.APIs.Controllers
             var resultDto = _mapper.Map<TourReadDto>(result);
             return CreatedAtAction(nameof(GetTourById), new { id = result.Id }, resultDto);
         }
-        [Authorize]
+        //[Authorize]
         [HttpPost("{serviceId}/book")]
-        [Authorize(Roles = "SuperAdmin,TourAdmin,User")]
+        [AllowAnonymous]
+        //[Authorize(Roles = "SuperAdmin,TourAdmin,User")]
         public async Task<IActionResult> BookTour(int serviceId, [FromBody] TourBookingDto dto)
         {
             var userId = User.FindFirst("uid")?.Value;
@@ -120,14 +121,17 @@ namespace TravelBooking.APIs.Controllers
             if (tour.StartDate >= tour.EndDate)
                 return BadRequest("Invalid tour date range.");
 
-            var existingBookings = await _bookingRepo.GetAllAsync(b =>
-                b.TourId == serviceId &&
-                b.Status != Status.Cancelled &&
-                b.StartDate < tour.EndDate &&
-                tour.StartDate < b.EndDate
-            );
-            if (existingBookings.Any())
-                return BadRequest("Tour already booked in selected time frame.");
+            //var existingBookings = await _bookingRepo.GetAllAsync(b =>
+            //    b.TourId == serviceId &&
+            //    b.Status != Status.Cancelled &&
+            //    b.StartDate < tour.EndDate &&
+            //    tour.StartDate < b.EndDate
+            //);
+            //if (existingBookings.Any())
+            //    return BadRequest("Tour already booked in selected time frame.");
+          
+            decimal totalPrice = 0;
+            var bookingTickets = new List<TourBookingTicket>();
 
             foreach (var ticketRequest in dto.Tickets)
             {
@@ -138,15 +142,26 @@ namespace TravelBooking.APIs.Controllers
                         t.IsActive);
 
                 if (ticket == null)
-                    return BadRequest($"Ticket type '{ticketRequest.Type}' not found.");
+                    return BadRequest($"Ticket type '{ticketRequest.Type}' not found or sold out.");
 
-                if (ticket.MaxQuantity < ticketRequest.Quantity)
-                    return BadRequest($"Not enough '{ticket.Type}' tickets available.");
+                if (ticket.AvailableQuantity < ticketRequest.Quantity)
+                    return BadRequest($"Only {ticket.AvailableQuantity} '{ticket.Type}' tickets left.");
 
-                ticket.MaxQuantity -= ticketRequest.Quantity;
-                _context.TourTickets.Update(ticket);
+                totalPrice += ticket.Price * ticketRequest.Quantity;
+
+                //ticket.AvailableQuantity -= ticketRequest.Quantity;
+
+                //if (ticket.AvailableQuantity == 0)
+                //    ticket.IsActive = false;
+
+                //_context.TourTickets.Update(ticket);
+
+                bookingTickets.Add(new TourBookingTicket
+                {
+                    TicketId = ticket.Id,
+                    Quantity = ticketRequest.Quantity
+                });
             }
-
             var booking = new Booking
             {
                 UserId = userId,
@@ -154,17 +169,24 @@ namespace TravelBooking.APIs.Controllers
                 StartDate = tour.StartDate,
                 EndDate = tour.EndDate,
                 BookingType = BookingType.Tour,
-                Status = Status.Pending
+                Status = Status.Pending,
+                BookingTickets = bookingTickets,
             };
 
             await _bookingRepo.AddAsync(booking);
-            await _context.SaveChangesAsync(); // ✅ Save ticket updates + booking
+            await _context.SaveChangesAsync(); 
 
-            booking.Tour = tour;
-            var result = _mapper.Map<TourBookingResultDto>(booking);
+            var fullBooking = await _context.Bookings
+                .Include(b => b.BookingTickets)
+                .ThenInclude(bt => bt.Ticket)
+                .Include(b => b.Tour)
+                .FirstOrDefaultAsync(b => b.Id == booking.Id);
+
+            var result = _mapper.Map<TourBookingResultDto>(fullBooking);
+            result.TotalPrice = fullBooking.TotalPrice;
+
             return CreatedAtAction("GetBookingById", "Booking", new { id = booking.Id }, result);
         }
-
 
 
 

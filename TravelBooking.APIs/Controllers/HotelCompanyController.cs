@@ -21,9 +21,10 @@ namespace TravelBooking.APIs.Controllers
     {
         private readonly IGenericRepository<HotelCompany> _hotelRepo;
         private readonly IMapper _mapper;
-        private readonly IDashboardService _dashboardService;
+        private readonly IHotelAdminDashboardService _dashboardService;
 
-        public HotelCompanyController(IGenericRepository<HotelCompany> hotelRepo, IMapper mapper, IDashboardService dashboardService)
+
+        public HotelCompanyController(IGenericRepository<HotelCompany> hotelRepo, IMapper mapper, IHotelAdminDashboardService dashboardService)
         {
             _hotelRepo = hotelRepo;
             _mapper = mapper;
@@ -67,24 +68,7 @@ namespace TravelBooking.APIs.Controllers
             return Ok(_mapper.Map<HotelCompanyReadDTO>(hotel));
         }
 
-        [HttpPost]
-        [Authorize(Roles = "SuperAdmin")]
-        public async Task<ActionResult> Create([FromBody] HotelCompanyCreateDTO dto)
-        {
-            if (!ModelState.IsValid)
-                return BadRequest(ModelState);
-
-            // Validate AdminId
-            if (string.IsNullOrWhiteSpace(dto.AdminId))
-                return BadRequest("AdminId is required.");
-
-            var model = _mapper.Map<HotelCompany>(dto);
-            model.AdminId = dto.AdminId;
-
-            await _hotelRepo.AddAsync(model);
-
-            return CreatedAtAction(nameof(GetById), new { id = model.Id }, model);
-        }
+    
 
 
         [HttpPut("{id}")]
@@ -135,6 +119,21 @@ namespace TravelBooking.APIs.Controllers
 
             var data = _mapper.Map<IReadOnlyList<HotelCompanyReadDTO>>(hotels);
 
+            return Ok(data);
+        }
+
+
+
+        [HttpGet("dashboard")]
+        [Authorize(Roles = "HotelAdmin")]
+        public async Task<IActionResult> GetDashboard()
+        {
+            var hotelCompanyIdClaim = User.Claims.FirstOrDefault(c => c.Type == "HotelCompanyId")?.Value;
+
+            if (string.IsNullOrEmpty(hotelCompanyIdClaim) || !int.TryParse(hotelCompanyIdClaim, out int hotelId))
+                return Unauthorized("HotelCompanyId not found in token.");
+
+            var data = await _dashboardService.GetStatsForHotel(hotelId);
             return Ok(data);
         }
     }

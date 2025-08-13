@@ -90,6 +90,7 @@ namespace TravelBooking.Service.Services
                 };
 
                 // Link Payment to Booking
+                await _paymentRepo.AddAsync(payment);
                 booking.Payment = payment;
             }
             else
@@ -137,8 +138,9 @@ namespace TravelBooking.Service.Services
                     break;
 
                 case BookingType.Tour:
-                    total = booking.Tour?.Price ?? 0;
+                    total = booking.BookingTickets?.Sum(bt => bt.Ticket.Price * bt.Quantity) ?? 0;
                     break;
+
             }
 
             return total;

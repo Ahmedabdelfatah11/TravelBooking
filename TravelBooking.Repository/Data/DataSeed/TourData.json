@@ -166,9 +166,9 @@
         }
       ],
       "TourTickets": [
-  { "Type": "Adult", "Price": 1200.00, "MaxQuantity": 15, "IsActive": true },
-  { "Type": "Child", "Price": 600.00, "MaxQuantity": 5, "IsActive": true },
-  { "Type": "VIP", "Price": 2000.00, "MaxQuantity": 5, "IsActive": true }
+  { "Type": "Adult", "Price": 1200.00, "AvailableQuantity": 15, "IsActive": true },
+  { "Type": "Child", "Price": 600.00, "AvailableQuantity": 5, "IsActive": true },
+  { "Type": "VIP", "Price": 2000.00, "AvailableQuantity": 5, "IsActive": true }
 ],
 "IncludedItems": [
   "Licensed Egyptologist guide",
@@ -239,8 +239,8 @@
         }
       ],
       "TourTickets": [
-  { "Type": "Adult", "Price": 1750.00, "MaxQuantity": 10, "IsActive": true },
-  { "Type": "Student", "Price": 1200.00, "MaxQuantity": 40, "IsActive": true }
+  { "Type": "Adult", "Price": 1750.00, "AvailableQuantity": 10, "IsActive": true },
+  { "Type": "Student", "Price": 1200.00, "AvailableQuantity": 40, "IsActive": true }
 ],
 "IncludedItems": [
   "Museum entry ticket",
@@ -308,8 +308,8 @@
       
       ],
       "TourTickets": [
-  { "Type": "Adult", "Price": 1000.00, "MaxQuantity": 20, "IsActive": true },
-  { "Type": "Child", "Price": 500.00, "MaxQuantity": 10, "IsActive": true }
+  { "Type": "Adult", "Price": 1000.00, "AvailableQuantity": 20, "IsActive": true },
+  { "Type": "Child", "Price": 500.00, "AvailableQuantity": 10, "IsActive": true }
 ],
 "IncludedItems": [
   "Camel or horse ride",
@@ -378,8 +378,8 @@
         }
       ],
       "TourTickets": [
-  { "Type": "Standard Cabin", "Price": 6500.00, "MaxQuantity": 22, "IsActive": true },
-  { "Type": "Suite", "Price": 9500.00, "MaxQuantity": 8, "IsActive": true }
+  { "Type": "Standard Cabin", "Price": 6500.00, "AvailableQuantity": 22, "IsActive": true },
+  { "Type": "Suite", "Price": 9500.00, "AvailableQuantity": 8, "IsActive": true }
 ],
 "IncludedItems": [
   "Accommodation on cruise ship",
@@ -448,8 +448,8 @@
         }
       ],
       "TourTickets": [
-  { "Type": "Adult", "Price": 1500.00, "MaxQuantity": 20, "IsActive": true },
-  { "Type": "Child", "Price": 750.00, "MaxQuantity": 10, "IsActive": true }
+  { "Type": "Adult", "Price": 1500.00, "AvailableQuantity": 20, "IsActive": true },
+  { "Type": "Child", "Price": 750.00, "AvailableQuantity": 10, "IsActive": true }
 ],
 "IncludedItems": [
   "Transportation",
@@ -520,8 +520,8 @@
         
       ],
       "TourTickets": [
-  { "Type": "Adult", "Price": 3300.00, "MaxQuantity": 40, "IsActive": true },
-  { "Type": "Senior", "Price": 2800.00, "MaxQuantity": 10, "IsActive": true }
+  { "Type": "Adult", "Price": 3300.00, "AvailableQuantity": 40, "IsActive": true },
+  { "Type": "Senior", "Price": 2800.00, "AvailableQuantity": 10, "IsActive": true }
 ],
 "IncludedItems": [
   "Round-trip flight from Cairo",
@@ -587,8 +587,8 @@
         }
       ],
       "TourTickets": [
-      { "Type": "Adult", "Price": 3000.00, "MaxQuantity": 30, "IsActive": true },
-      { "Type": "Student", "Price": 2200.00, "MaxQuantity": 15, "IsActive": true }
+      { "Type": "Adult", "Price": 3000.00, "AvailableQuantity": 30, "IsActive": true },
+      { "Type": "Student", "Price": 2200.00, "AvailableQuantity": 15, "IsActive": true }
 ],
 "IncludedItems": [
   "Transportation",
@@ -659,8 +659,8 @@
         
       ],
       "TourTickets": [
-      { "Type": "Explorer", "Price": 2500.00, "MaxQuantity": 40, "IsActive": true },
-      { "Type": "Child", "Price": 1500.00, "MaxQuantity": 20, "IsActive": true }
+      { "Type": "Explorer", "Price": 2500.00, "AvailableQuantity": 40, "IsActive": true },
+      { "Type": "Child", "Price": 1500.00, "AvailableQuantity": 20, "IsActive": true }
 ],
 "IncludedItems": [
   "4×4 vehicle",
@@ -730,8 +730,8 @@
         }
       ],
       "TourTickets": [
-      { "Type": "Standard", "Price": 600.00, "MaxQuantity": 40, "IsActive": true },
-      { "Type": "VIP Table", "Price": 1200.00, "MaxQuantity": 10, "IsActive": true }
+      { "Type": "Standard", "Price": 600.00, "AvailableQuantity": 40, "IsActive": true },
+      { "Type": "VIP Table", "Price": 1200.00, "AvailableQuantity": 10, "IsActive": true }
 ],
 "IncludedItems": [
   "Dinner buffet",
@@ -800,8 +800,8 @@
         }
       ],
       "TourTickets": [
-       { "Type": "General Admission", "Price": 400.00, "MaxQuantity": 80, "IsActive": true },
-       { "Type": "Front Row", "Price": 600.00, "MaxQuantity": 20, "IsActive": true }
+       { "Type": "General Admission", "Price": 400.00, "AvailableQuantity": 80, "IsActive": true },
+       { "Type": "Front Row", "Price": 600.00, "AvailableQuantity": 20, "IsActive": true }
 ],
 "IncludedItems": [
   "Show ticket",
@@ -871,8 +871,8 @@
         }
       ],
       "TourTickets": [
-      { "Type": "Standard Balloon", "Price": 2000.00, "MaxQuantity": 40, "IsActive": true },
-      { "Type": "Private Basket", "Price": 3000.00, "MaxQuantity": 20, "IsActive": true }
+      { "Type": "Standard Balloon", "Price": 2000.00, "AvailableQuantity": 40, "IsActive": true },
+      { "Type": "Private Basket", "Price": 3000.00, "AvailableQuantity": 20, "IsActive": true }
 ],
 "IncludedItems": [
   "Balloon flight",
@@ -940,8 +940,8 @@
           "TourId": 12
         }
       ],"TourTickets": [
-      { "Type": "Explorer Pass", "Price": 1800.00, "MaxQuantity": 60, "IsActive": true },
-      { "Type": "Child", "Price": 1200.00, "MaxQuantity": 10, "IsActive": true }
+      { "Type": "Explorer Pass", "Price": 1800.00, "AvailableQuantity": 60, "IsActive": true },
+      { "Type": "Child", "Price": 1200.00, "AvailableQuantity": 10, "IsActive": true }
 ],
 "IncludedItems": [
   "Snorkeling gear",

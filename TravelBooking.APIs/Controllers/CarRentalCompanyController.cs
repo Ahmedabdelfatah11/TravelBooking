@@ -11,6 +11,7 @@ using TravelBooking.Core.Repository.Contract;
 using TravelBooking.Core.Specifications.CarRentalCompanySpecs;
 using TravelBooking.Errors;
 using TravelBooking.Helper;
+using TravelBooking.Service.Services.Dashboard;
 namespace TravelBooking.APIs.Controllers
 {
     [ApiController]
@@ -20,13 +21,16 @@ namespace TravelBooking.APIs.Controllers
     {
         private readonly IGenericRepository<CarRentalCompany> _carRentalRepo;
         private readonly IMapper _mapper;
+        private readonly ICarRentalAdminDashboardService _dashboardService;
 
         public CarRentalController(
             IGenericRepository<CarRentalCompany> carRentalRepo,
-            IMapper mapper)
+            IMapper mapper,
+            ICarRentalAdminDashboardService dashboardService)
         {
             _carRentalRepo = carRentalRepo;
             _mapper = mapper;
+            _dashboardService = dashboardService;
         }
 
         [HttpGet]
@@ -56,21 +60,7 @@ namespace TravelBooking.APIs.Controllers
 
         }
 
-        [HttpPost]
-        [Authorize(Roles = "SuperAdmin")]
-        public async Task<ActionResult<CarRentalDto>> CreateRental([FromBody] SaveCarRentalDto dto)
-        {
 
-            // Validate AdminId
-            if (string.IsNullOrWhiteSpace(dto.AdminId))
-                return BadRequest("AdminId is required.");
-            var rental = _mapper.Map<CarRentalCompany>(dto);
-            rental.AdminId = dto.AdminId;
-
-            var result = await _carRentalRepo.AddAsync(rental);
-           
-            return CreatedAtAction(nameof(GetCarRentalCompanyWithCarsById), new { id = result.Id }, result);
-        }
 
         [HttpPut("{id}")]
         [Authorize(Roles = "SuperAdmin,CarRentalAdmin")]
@@ -123,6 +113,18 @@ namespace TravelBooking.APIs.Controllers
             return Ok(data);
         }
 
+        [HttpGet("dashboard")]
+        [Authorize(Roles = "CarRentalAdmin")]
+        public async Task<IActionResult> GetDashboard()
+        {
+            var rentalCompanyIdClaim = User.Claims.FirstOrDefault(c => c.Type == "CarRentalCompanyId")?.Value;
+
+            if (string.IsNullOrEmpty(rentalCompanyIdClaim) || !int.TryParse(rentalCompanyIdClaim, out int rentalCompanyId))
+                return Unauthorized("CarRentalCompanyId not found in token.");
+
+            var data = await _dashboardService.GetStatsForCarRentalCompany(rentalCompanyId);
+            return Ok(data);
+        }
     }
 
 }

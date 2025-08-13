@@ -196,7 +196,7 @@ namespace TravelBooking.Repository.Data
                             {
                                 Type = t.TicketType,
                                 Price = t.Price,
-                                MaxQuantity = t.MaxQuantity,
+                                AvailableQuantity = t.AvailableQuantity,
                                 IsActive = t.IsActive
                             }).ToList()
 

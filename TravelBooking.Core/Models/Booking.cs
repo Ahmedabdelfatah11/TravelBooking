@@ -71,7 +71,7 @@ namespace TravelBooking.Core.Models
                         break;
 
                     case BookingType.Tour:
-                        total = Tour?.Price ?? 0;
+                        total = BookingTickets?.Sum(bt => bt.Ticket.Price * bt.Quantity) ?? 0;
                         break;
 
                     default:

@@ -156,13 +156,22 @@ namespace TravelBooking.Helper
             CreateMap<TourBookingDto, Booking>();
 
             CreateMap<Booking, TourBookingResultDto>()
-                .ForMember(dest => dest.BookingId, opt => opt.MapFrom(src => src.Id))
-                .ForMember(dest => dest.Status, opt => opt.MapFrom(src => src.Status.ToString()))
-                .ForMember(dest => dest.Price, opt => opt.MapFrom(src => src.Tour != null ? src.Tour.Price : 0))
-                .ForMember(dest => dest.TourId, opt => opt.MapFrom(src => src.TourId))
-                .ForMember(dest => dest.TourName, opt => opt.MapFrom(src => src.Tour != null ? src.Tour.Name : string.Empty))
-                .ForMember(dest => dest.Destination, opt => opt.MapFrom(src => src.Tour != null ? src.Tour.Destination : string.Empty));
+      .ForMember(dest => dest.BookingId, opt => opt.MapFrom(src => src.Id))
+      .ForMember(dest => dest.Status, opt => opt.MapFrom(src => src.Status.ToString()))
+      .ForMember(dest => dest.TotalPrice, opt => opt.MapFrom(src => src.TotalPrice)) 
+      .ForMember(dest => dest.TourId, opt => opt.MapFrom(src => src.TourId))
+      .ForMember(dest => dest.TourName, opt => opt.MapFrom(src => src.Tour != null ? src.Tour.Name : string.Empty))
+      .ForMember(dest => dest.Destination, opt => opt.MapFrom(src => src.Tour != null ? src.Tour.Destination : string.Empty))
+      .ForMember(dest => dest.Category, opt => opt.MapFrom(src => src.Tour.Category))
+      .ForMember(dest => dest.StartDate, opt => opt.MapFrom(src => src.StartDate))
+      .ForMember(dest => dest.EndDate, opt => opt.MapFrom(src => src.EndDate))
+      .ForMember(dest => dest.Tickets, opt => opt.MapFrom(src => src.BookingTickets)); 
 
+            CreateMap<TourBookingTicket, TourTicketSummaryDto>()
+    .ForMember(dest => dest.Type, opt => opt.MapFrom(src => src.Ticket.Type))
+    .ForMember(dest => dest.Quantity, opt => opt.MapFrom(src => src.Quantity))
+    .ForMember(dest => dest.UnitPrice, opt => opt.MapFrom(src => src.Ticket.Price));
+            
             //Tour Ticket
             CreateMap<TourTicket, TourTicketDto>().ReverseMap();
             CreateMap<TourTicketCreateDto, TourTicket>();
