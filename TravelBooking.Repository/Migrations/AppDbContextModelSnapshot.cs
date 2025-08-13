@@ -316,7 +316,7 @@ namespace TravelBooking.Repository.Migrations
                     b.ToTable("CarRentalCompanies");
                 });
 
-            modelBuilder.Entity("TravelBooking.Core.Models.ChatMessage", b =>
+            modelBuilder.Entity("TravelBooking.Core.Models.ChatBot.ChatMessage", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -324,29 +324,43 @@ namespace TravelBooking.Repository.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("GeminiResponse")
-                        .IsRequired()
+                    b.Property<string>("Context")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<bool>("IsUserMessage")
+                    b.Property<bool>("IsFromUser")
                         .HasColumnType("bit");
 
-                    b.Property<string>("MessageType")
+                    b.Property<string>("Message")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(2000)
+                        .HasColumnType("nvarchar(2000)");
+
+                    b.Property<int>("MessageType")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Response")
+                        .IsRequired()
+                        .HasMaxLength(4000)
+                        .HasColumnType("nvarchar(4000)");
+
+                    b.Property<string>("SessionId")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<DateTime>("Timestamp")
+                        .HasColumnType("datetime2");
 
                     b.Property<string>("UserId")
-                        .IsRequired()
                         .HasColumnType("nvarchar(450)");
 
-                    b.Property<string>("UserInput")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
                     b.HasKey("Id");
+
+                    b.HasIndex("MessageType");
+
+                    b.HasIndex("SessionId");
+
+                    b.HasIndex("Timestamp");
 
                     b.HasIndex("UserId");
 
@@ -393,13 +407,7 @@ namespace TravelBooking.Repository.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<string>("ApplicationUserId")
-                        .HasColumnType("nvarchar(450)");
-
                     b.Property<int?>("CarRentalCompanyId")
-                        .HasColumnType("int");
-
-                    b.Property<int?>("CarRentalCompanyId1")
                         .HasColumnType("int");
 
                     b.Property<string>("CompanyType")
@@ -412,19 +420,10 @@ namespace TravelBooking.Repository.Migrations
                     b.Property<int?>("FlightCompanyId")
                         .HasColumnType("int");
 
-                    b.Property<int?>("FlightCompanyId1")
-                        .HasColumnType("int");
-
                     b.Property<int?>("HotelCompanyId")
                         .HasColumnType("int");
 
-                    b.Property<int?>("HotelCompanyId1")
-                        .HasColumnType("int");
-
                     b.Property<int?>("TourCompanyId")
-                        .HasColumnType("int");
-
-                    b.Property<int?>("TourCompanyId1")
                         .HasColumnType("int");
 
                     b.Property<int>("TourId")
@@ -437,23 +436,13 @@ namespace TravelBooking.Repository.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("ApplicationUserId");
-
                     b.HasIndex("CarRentalCompanyId");
-
-                    b.HasIndex("CarRentalCompanyId1");
 
                     b.HasIndex("FlightCompanyId");
 
-                    b.HasIndex("FlightCompanyId1");
-
                     b.HasIndex("HotelCompanyId");
 
-                    b.HasIndex("HotelCompanyId1");
-
                     b.HasIndex("TourCompanyId");
-
-                    b.HasIndex("TourCompanyId1");
 
                     b.HasIndex("TourId");
 
@@ -654,13 +643,7 @@ namespace TravelBooking.Repository.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<string>("ApplicationUserId")
-                        .HasColumnType("nvarchar(450)");
-
                     b.Property<int?>("CarRentalCompanyId")
-                        .HasColumnType("int");
-
-                    b.Property<int?>("CarRentalCompanyId1")
                         .HasColumnType("int");
 
                     b.Property<string>("Comment")
@@ -679,22 +662,13 @@ namespace TravelBooking.Repository.Migrations
                     b.Property<int?>("FlightCompanyId")
                         .HasColumnType("int");
 
-                    b.Property<int?>("FlightCompanyId1")
-                        .HasColumnType("int");
-
                     b.Property<int?>("HotelCompanyId")
-                        .HasColumnType("int");
-
-                    b.Property<int?>("HotelCompanyId1")
                         .HasColumnType("int");
 
                     b.Property<int>("Rating")
                         .HasColumnType("int");
 
                     b.Property<int?>("TourCompanyId")
-                        .HasColumnType("int");
-
-                    b.Property<int?>("TourCompanyId1")
                         .HasColumnType("int");
 
                     b.Property<DateTime?>("UpdatedAt")
@@ -706,23 +680,13 @@ namespace TravelBooking.Repository.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("ApplicationUserId");
-
                     b.HasIndex("CarRentalCompanyId");
-
-                    b.HasIndex("CarRentalCompanyId1");
 
                     b.HasIndex("FlightCompanyId");
 
-                    b.HasIndex("FlightCompanyId1");
-
                     b.HasIndex("HotelCompanyId");
 
-                    b.HasIndex("HotelCompanyId1");
-
                     b.HasIndex("TourCompanyId");
-
-                    b.HasIndex("TourCompanyId1");
 
                     b.HasIndex("UserId", "HotelCompanyId", "FlightCompanyId", "CarRentalCompanyId", "TourCompanyId")
                         .IsUnique()
@@ -1208,58 +1172,37 @@ namespace TravelBooking.Repository.Migrations
                     b.Navigation("Admin");
                 });
 
-            modelBuilder.Entity("TravelBooking.Core.Models.ChatMessage", b =>
+            modelBuilder.Entity("TravelBooking.Core.Models.ChatBot.ChatMessage", b =>
                 {
                     b.HasOne("TravelBooking.Models.ApplicationUser", "User")
                         .WithMany()
                         .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .OnDelete(DeleteBehavior.SetNull);
 
                     b.Navigation("User");
                 });
 
             modelBuilder.Entity("TravelBooking.Core.Models.Favoritet", b =>
                 {
-                    b.HasOne("TravelBooking.Models.ApplicationUser", null)
-                        .WithMany("favoritets")
-                        .HasForeignKey("ApplicationUserId");
-
                     b.HasOne("TravelBooking.Core.Models.CarRentalCompany", "CarRentalCompany")
-                        .WithMany()
+                        .WithMany("favoritets")
                         .HasForeignKey("CarRentalCompanyId")
                         .OnDelete(DeleteBehavior.SetNull);
 
-                    b.HasOne("TravelBooking.Core.Models.CarRentalCompany", null)
-                        .WithMany("favoritets")
-                        .HasForeignKey("CarRentalCompanyId1");
-
                     b.HasOne("TravelBooking.Core.Models.Flight", "Flight")
-                        .WithMany()
+                        .WithMany("favoritets")
                         .HasForeignKey("FlightCompanyId")
                         .OnDelete(DeleteBehavior.SetNull);
 
-                    b.HasOne("TravelBooking.Core.Models.FlightCompany", null)
-                        .WithMany("favoritets")
-                        .HasForeignKey("FlightCompanyId1");
-
                     b.HasOne("TravelBooking.Core.Models.HotelCompany", "HotelCompany")
-                        .WithMany()
+                        .WithMany("favoritets")
                         .HasForeignKey("HotelCompanyId")
                         .OnDelete(DeleteBehavior.SetNull);
 
-                    b.HasOne("TravelBooking.Core.Models.HotelCompany", null)
-                        .WithMany("favoritets")
-                        .HasForeignKey("HotelCompanyId1");
-
                     b.HasOne("TravelBooking.Core.Models.TourCompany", "TourCompany")
-                        .WithMany()
+                        .WithMany("favoritets")
                         .HasForeignKey("TourCompanyId")
                         .OnDelete(DeleteBehavior.SetNull);
-
-                    b.HasOne("TravelBooking.Core.Models.TourCompany", null)
-                        .WithMany("favoritets")
-                        .HasForeignKey("TourCompanyId1");
 
                     b.HasOne("TravelBooking.Core.Models.Tour", "Tour")
                         .WithMany()
@@ -1268,7 +1211,7 @@ namespace TravelBooking.Repository.Migrations
                         .IsRequired();
 
                     b.HasOne("TravelBooking.Models.ApplicationUser", "User")
-                        .WithMany()
+                        .WithMany("favoritets")
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -1330,48 +1273,28 @@ namespace TravelBooking.Repository.Migrations
 
             modelBuilder.Entity("TravelBooking.Core.Models.Review", b =>
                 {
-                    b.HasOne("TravelBooking.Models.ApplicationUser", null)
-                        .WithMany("reviews")
-                        .HasForeignKey("ApplicationUserId");
-
                     b.HasOne("TravelBooking.Core.Models.CarRentalCompany", "CarRentalCompany")
-                        .WithMany()
+                        .WithMany("reviews")
                         .HasForeignKey("CarRentalCompanyId")
                         .OnDelete(DeleteBehavior.SetNull);
 
-                    b.HasOne("TravelBooking.Core.Models.CarRentalCompany", null)
-                        .WithMany("reviews")
-                        .HasForeignKey("CarRentalCompanyId1");
-
                     b.HasOne("TravelBooking.Core.Models.FlightCompany", "FlightCompany")
-                        .WithMany()
+                        .WithMany("reviews")
                         .HasForeignKey("FlightCompanyId")
                         .OnDelete(DeleteBehavior.SetNull);
 
-                    b.HasOne("TravelBooking.Core.Models.FlightCompany", null)
-                        .WithMany("reviews")
-                        .HasForeignKey("FlightCompanyId1");
-
                     b.HasOne("TravelBooking.Core.Models.HotelCompany", "HotelCompany")
-                        .WithMany()
+                        .WithMany("reviews")
                         .HasForeignKey("HotelCompanyId")
                         .OnDelete(DeleteBehavior.SetNull);
 
-                    b.HasOne("TravelBooking.Core.Models.HotelCompany", null)
-                        .WithMany("reviews")
-                        .HasForeignKey("HotelCompanyId1");
-
                     b.HasOne("TravelBooking.Core.Models.TourCompany", "TourCompany")
-                        .WithMany()
+                        .WithMany("reviews")
                         .HasForeignKey("TourCompanyId")
                         .OnDelete(DeleteBehavior.SetNull);
 
-                    b.HasOne("TravelBooking.Core.Models.TourCompany", null)
-                        .WithMany("reviews")
-                        .HasForeignKey("TourCompanyId1");
-
                     b.HasOne("TravelBooking.Models.ApplicationUser", "User")
-                        .WithMany()
+                        .WithMany("reviews")
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -1496,11 +1419,14 @@ namespace TravelBooking.Repository.Migrations
                     b.Navigation("reviews");
                 });
 
+            modelBuilder.Entity("TravelBooking.Core.Models.Flight", b =>
+                {
+                    b.Navigation("favoritets");
+                });
+
             modelBuilder.Entity("TravelBooking.Core.Models.FlightCompany", b =>
                 {
                     b.Navigation("Flights");
-
-                    b.Navigation("favoritets");
 
                     b.Navigation("reviews");
                 });

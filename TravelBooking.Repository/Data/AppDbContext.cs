@@ -10,6 +10,7 @@ using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 using TravelBooking.Core.Models;
+using TravelBooking.Core.Models.ChatBot;
 
 
 namespace TravelBooking.Repository.Data
@@ -50,6 +51,8 @@ namespace TravelBooking.Repository.Data
         public DbSet<TourBookingTicket> TourBookingTickets { get; set; }
         public DbSet<ContactMessage> ContactMessages { get; set; }
 
-        public DbSet<ChatMessage> ChatMessages => Set<ChatMessage>();
+    
+        public DbSet<ChatMessage> ChatMessages { get; set; }
+
     }
 }

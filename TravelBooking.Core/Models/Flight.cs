@@ -39,6 +39,7 @@ namespace TravelBooking.Core.Models
         [Required(ErrorMessage = "Arrival airport is required.")]
         [StringLength(100, MinimumLength = 3, ErrorMessage = "Arrival airport name must be between 3 and 100 characters.")]
         public string ArrivalAirport { get; set; } = string.Empty;
+        public ICollection<Favoritet> favoritets { get; set; } = new List<Favoritet>();
 
         public int FlightCompanyId { get; set; }
 
