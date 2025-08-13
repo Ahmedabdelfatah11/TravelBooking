@@ -10,6 +10,7 @@ namespace TravelBooking.Core.Models
 {
     public class Car : BaseEntity
     {
+        public int Id { get; set; } // Unique identifier for the car
         public string? Model { get; set; }
         public decimal? Price { get; set; }
         public string? Description { get; set; }
@@ -28,6 +29,9 @@ namespace TravelBooking.Core.Models
         [ForeignKey("RentalCompany")]
         public int? RentalCompanyId { get; set; } // Foreign key to CarRentalCompany
         public CarRentalCompany? RentalCompany { get; set; } // Navigation property to CarRentalCompany
+
+        public string Name { get; set; }
+
         public float[]? Embedding { get; set; }
     }
 }
