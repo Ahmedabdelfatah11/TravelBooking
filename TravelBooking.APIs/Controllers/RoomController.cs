@@ -1,4 +1,5 @@
-﻿using AutoMapper;
+
+using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -13,6 +14,7 @@ using TravelBooking.Core.Specifications;
 using TravelBooking.Core.Specifications.RoomSpecs;
 using TravelBooking.Errors;
 using TravelBooking.Helper;
+using static TravelBooking.Service.Services.RoomService;
 
 namespace TravelBooking.APIs.Controllers
 {
@@ -26,7 +28,7 @@ namespace TravelBooking.APIs.Controllers
         private readonly IGenericRepository<HotelCompany> _hotelRepo;
         private readonly IGenericRepository<Booking> _bookingRepo;
         private readonly IMapper _mapper;
-
+        private readonly IRoomService _roomService;
         /// <summary>
         /// Initializes a new instance of the <see cref="RoomController"/> class.
         /// </summary>
@@ -38,13 +40,16 @@ namespace TravelBooking.APIs.Controllers
                               IGenericRepository<RoomImage> roomImageRepo,
                               IGenericRepository<HotelCompany> hotelRepo,
                                 IGenericRepository<Booking> bookingRepo,
-                              IMapper mapper)
+                              IMapper mapper,
+                              IRoomService roomService)
+
         {
             _roomRepo = roomRepo;
             _roomImageRepo = roomImageRepo;
             _hotelRepo = hotelRepo;
             _bookingRepo = bookingRepo;
             _mapper = mapper;
+            _roomService = roomService;
         }
 
         /// <summary>
@@ -67,6 +72,17 @@ namespace TravelBooking.APIs.Controllers
             return Ok(new Pagination<RoomToReturnDTO>(specParams.PageIndex, specParams.PageSize, totalItems, data));
         }
 
+
+        [HttpGet("{roomId}/available-dates")]
+        [AllowAnonymous]
+        public async Task<ActionResult<List<DateRange>>> GetAvailableDates(
+            int roomId,
+            [FromQuery] DateTime start,
+            [FromQuery] DateTime end)
+        {
+            var ranges = await _roomService.GetAvailableDateRanges(roomId, start.ToLocalTime(), end.ToLocalTime());
+            return Ok(ranges);
+        }
         /// <summary>
         /// Get room by ID
         /// </summary>
@@ -84,9 +100,11 @@ namespace TravelBooking.APIs.Controllers
             return Ok(_mapper.Map<Room, RoomToReturnDTO>(room));
         }
 
-        [Authorize]
+
+        //[Authorize]
         [HttpPost("{serviceId}/book")]
-        [Authorize(Roles = "SuperAdmin,HotelAdmin,User")]
+        //[Authorize(Roles = "SuperAdmin,User,HotelAdmin")]
+        [AllowAnonymous]
         public async Task<IActionResult> BookRoom(int serviceId, [FromBody] RoomBookingDto dto)
         {
             var userId = User.FindFirst("uid")?.Value;
@@ -103,10 +121,10 @@ namespace TravelBooking.APIs.Controllers
                 b.RoomId == serviceId &&
                 b.Status != Status.Cancelled &&
                 b.StartDate < dto.EndDate &&
-                dto.StartDate < b.EndDate 
+                dto.StartDate < b.EndDate
             );
 
-            
+
             if (overlapping.Any())
                 return BadRequest("Room already booked for selected dates.");
 
@@ -115,10 +133,11 @@ namespace TravelBooking.APIs.Controllers
             booking.UserId = userId;
             booking.BookingType = BookingType.Room;
             booking.Status = Status.Pending;
-            
-            
+
+
 
             await _bookingRepo.AddAsync(booking);
+
 
             booking.Room = room;
 
@@ -126,10 +145,6 @@ namespace TravelBooking.APIs.Controllers
             //booking.Payment.Amount = result.TotalPrice;
             return CreatedAtAction("GetBookingById", "Booking", new { id = booking.Id }, result);
         }
-
-
-
-
 
         /// <summary>
         /// Create a new room
@@ -188,7 +203,7 @@ namespace TravelBooking.APIs.Controllers
                 return BadRequest("Hotel company not found");
 
             _mapper.Map(roomDto, room);
-             _roomRepo.Update(room);
+            _roomRepo.Update(room);
 
             return NoContent();
         }
@@ -205,8 +220,13 @@ namespace TravelBooking.APIs.Controllers
             var room = await _roomRepo.GetAsync(id);
             if (room == null) return NotFound();
 
-             _roomRepo.Delete(room);
+            _roomRepo.Delete(room);
             return NoContent();
         }
     }
 }
+
+
+
+
+

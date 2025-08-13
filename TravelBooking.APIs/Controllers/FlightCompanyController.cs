@@ -9,6 +9,7 @@ using TravelBooking.Core.DTOS.CarRentalCompanies;
 using TravelBooking.Core.Models;
 using TravelBooking.Core.Repository.Contract;
 using TravelBooking.Core.Specifications.FlightSpecs;
+using TravelBooking.Service.Services.Dashboard;
 namespace TravelBooking.APIs.Controllers
 {
     [Route("[controller]")]
@@ -18,11 +19,13 @@ namespace TravelBooking.APIs.Controllers
     {
         private readonly IGenericRepository<FlightCompany> _flightComRepository;
         private readonly IMapper _mapper;
+        private readonly IFlightAdminDashboardService _dashboardService;
 
-        public FlightCompanyController(IGenericRepository<FlightCompany> flightComRepository,IMapper mapper)
+        public FlightCompanyController(IGenericRepository<FlightCompany> flightComRepository,IMapper mapper, IFlightAdminDashboardService dashboardService)
         {
             _flightComRepository = flightComRepository;
             _mapper = mapper;
+            _dashboardService = dashboardService;
         }
 
         // GET: FlightCompanyController
@@ -47,20 +50,6 @@ namespace TravelBooking.APIs.Controllers
             var Company = await _flightComRepository.GetWithSpecAsync(spec);
             var companyDTO = _mapper.Map<FlightCompanyDetailsDTO>(Company);
             return Ok(companyDTO);
-        }
-        [HttpPost]
-        [Authorize(Roles = "SuperAdmin")]
-        public async Task<ActionResult<FlightCompanyDetailsDTO>> AddFlightCompany(FlightCompanyDTO flight)
-        {
-            
-            // Validate AdminId
-            if (string.IsNullOrWhiteSpace(flight.AdminId))
-                return BadRequest("AdminId is required.");
-            var entity = _mapper.Map<FlightCompany>(flight);
-            entity.AdminId = flight.AdminId;
-            var newCompany = await _flightComRepository.AddAsync(entity);
-            var resultDto = _mapper.Map<FlightCompanyDetailsDTO>(newCompany);
-            return CreatedAtAction(nameof(GetFlightCompany), new { id = newCompany.Id }, resultDto);
         }
 
 
@@ -116,6 +105,19 @@ namespace TravelBooking.APIs.Controllers
             return Ok(data);
         }
 
+
+        [HttpGet("dashboard")]
+        [Authorize(Roles = "FlightAdmin")]
+        public async Task<IActionResult> GetDashboard()
+        {
+            var flightCompanyIdClaim = User.Claims.FirstOrDefault(c => c.Type == "FlightCompanyId")?.Value;
+
+            if (string.IsNullOrEmpty(flightCompanyIdClaim) || !int.TryParse(flightCompanyIdClaim, out int flightCompanyId))
+                return Unauthorized("FlightCompanyId not found in token.");
+
+            var data = await _dashboardService.GetStatsForFlightCompany(flightCompanyId);
+            return Ok(data);
+        }
 
     }
 }

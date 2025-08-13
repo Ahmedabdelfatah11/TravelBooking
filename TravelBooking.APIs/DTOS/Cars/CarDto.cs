@@ -10,6 +10,8 @@ namespace TravelBooking.Core.DTOS.Cars
 {
     public class CarDto
     {
+        [Required]
+        public int Id { get; set; }
         public string? Model { get; set; }
         public decimal? Price { get; set; }
         public string? Description { get; set; }

@@ -40,6 +40,6 @@ namespace TravelBooking.Core.Specifications
             get { return location; }
             set { location = value?.ToLower(); }
         }
-        public string? Rating { get; set; }
+        public int? Rating { get; set; }
     }
 }

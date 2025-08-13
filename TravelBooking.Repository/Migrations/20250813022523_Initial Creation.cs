@@ -55,6 +55,23 @@ namespace TravelBooking.Repository.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "ContactMessages",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Email = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Subject = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Message = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_ContactMessages", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "AspNetRoleClaims",
                 columns: table => new
                 {
@@ -185,6 +202,30 @@ namespace TravelBooking.Repository.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "ChatMessages",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    UserInput = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    GeminiResponse = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    UserId = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    IsUserMessage = table.Column<bool>(type: "bit", nullable: false),
+                    MessageType = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_ChatMessages", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_ChatMessages_AspNetUsers_UserId",
+                        column: x => x.UserId,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "FlightCompanies",
                 columns: table => new
                 {
@@ -240,9 +281,9 @@ namespace TravelBooking.Repository.Migrations
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Name = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
                     Description = table.Column<string>(type: "nvarchar(1000)", maxLength: 1000, nullable: true),
-                    ImageUrl = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    ImageUrl = table.Column<string>(type: "nvarchar(500)", maxLength: 500, nullable: true),
                     Location = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: true),
-                    rating = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Rating = table.Column<int>(type: "int", nullable: true),
                     AdminId = table.Column<string>(type: "nvarchar(450)", nullable: true)
                 },
                 constraints: table =>
@@ -271,7 +312,8 @@ namespace TravelBooking.Repository.Migrations
                     Location = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: true),
                     ImageUrl = table.Column<string>(type: "nvarchar(500)", maxLength: 500, nullable: true),
                     Capacity = table.Column<int>(type: "int", nullable: false, defaultValue: 5),
-                    RentalCompanyId = table.Column<int>(type: "int", nullable: true)
+                    RentalCompanyId = table.Column<int>(type: "int", nullable: true),
+                    Embedding = table.Column<string>(type: "nvarchar(max)", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -301,7 +343,8 @@ namespace TravelBooking.Repository.Migrations
                     DepartureAirport = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
                     ArrivalAirport = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
                     FlightCompanyId = table.Column<int>(type: "int", nullable: false),
-                    SelectedSeatClass = table.Column<int>(type: "int", nullable: true)
+                    SelectedSeatClass = table.Column<int>(type: "int", nullable: true),
+                    Embedding = table.Column<string>(type: "nvarchar(max)", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -326,6 +369,7 @@ namespace TravelBooking.Repository.Migrations
                     Description = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     From = table.Column<DateTime>(type: "datetime2", nullable: false),
                     To = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    Embedding = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     HotelId = table.Column<int>(type: "int", nullable: true)
                 },
                 constraints: table =>
@@ -337,85 +381,6 @@ namespace TravelBooking.Repository.Migrations
                         principalTable: "HotelCompanies",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "Favorites",
-                columns: table => new
-                {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    UserId = table.Column<string>(type: "nvarchar(450)", nullable: false),
-                    HotelCompanyId = table.Column<int>(type: "int", nullable: true),
-                    FlightCompanyId = table.Column<int>(type: "int", nullable: true),
-                    CarRentalCompanyId = table.Column<int>(type: "int", nullable: true),
-                    TourCompanyId = table.Column<int>(type: "int", nullable: true),
-                    CompanyType = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
-                    CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    ApplicationUserId = table.Column<string>(type: "nvarchar(450)", nullable: true),
-                    CarRentalCompanyId1 = table.Column<int>(type: "int", nullable: true),
-                    FlightCompanyId1 = table.Column<int>(type: "int", nullable: true),
-                    HotelCompanyId1 = table.Column<int>(type: "int", nullable: true),
-                    TourCompanyId1 = table.Column<int>(type: "int", nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Favorites", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_Favorites_AspNetUsers_ApplicationUserId",
-                        column: x => x.ApplicationUserId,
-                        principalTable: "AspNetUsers",
-                        principalColumn: "Id");
-                    table.ForeignKey(
-                        name: "FK_Favorites_AspNetUsers_UserId",
-                        column: x => x.UserId,
-                        principalTable: "AspNetUsers",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_Favorites_CarRentalCompanies_CarRentalCompanyId",
-                        column: x => x.CarRentalCompanyId,
-                        principalTable: "CarRentalCompanies",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.SetNull);
-                    table.ForeignKey(
-                        name: "FK_Favorites_CarRentalCompanies_CarRentalCompanyId1",
-                        column: x => x.CarRentalCompanyId1,
-                        principalTable: "CarRentalCompanies",
-                        principalColumn: "Id");
-                    table.ForeignKey(
-                        name: "FK_Favorites_FlightCompanies_FlightCompanyId",
-                        column: x => x.FlightCompanyId,
-                        principalTable: "FlightCompanies",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.SetNull);
-                    table.ForeignKey(
-                        name: "FK_Favorites_FlightCompanies_FlightCompanyId1",
-                        column: x => x.FlightCompanyId1,
-                        principalTable: "FlightCompanies",
-                        principalColumn: "Id");
-                    table.ForeignKey(
-                        name: "FK_Favorites_HotelCompanies_HotelCompanyId",
-                        column: x => x.HotelCompanyId,
-                        principalTable: "HotelCompanies",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.SetNull);
-                    table.ForeignKey(
-                        name: "FK_Favorites_HotelCompanies_HotelCompanyId1",
-                        column: x => x.HotelCompanyId1,
-                        principalTable: "HotelCompanies",
-                        principalColumn: "Id");
-                    table.ForeignKey(
-                        name: "FK_Favorites_TourCompanies_TourCompanyId",
-                        column: x => x.TourCompanyId,
-                        principalTable: "TourCompanies",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.SetNull);
-                    table.ForeignKey(
-                        name: "FK_Favorites_TourCompanies_TourCompanyId1",
-                        column: x => x.TourCompanyId1,
-                        principalTable: "TourCompanies",
-                        principalColumn: "Id");
                 });
 
             migrationBuilder.CreateTable(
@@ -512,9 +477,15 @@ namespace TravelBooking.Repository.Migrations
                     Description = table.Column<string>(type: "nvarchar(1000)", maxLength: 1000, nullable: true),
                     Destination = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: true),
                     MaxGuests = table.Column<int>(type: "int", nullable: false),
+                    MinGroupSize = table.Column<int>(type: "int", nullable: false),
+                    MaxGroupSize = table.Column<int>(type: "int", nullable: false),
                     Price = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
-                    Category = table.Column<int>(type: "int", nullable: true),
-                    TourCompanyId = table.Column<int>(type: "int", nullable: true)
+                    ImageUrl = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Category = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Languages = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    TourCompanyId = table.Column<int>(type: "int", nullable: true),
+                    IncludedItems = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    ExcludedItems = table.Column<string>(type: "nvarchar(max)", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -564,7 +535,8 @@ namespace TravelBooking.Repository.Migrations
                     TourId = table.Column<int>(type: "int", nullable: true),
                     UserId = table.Column<string>(type: "nvarchar(450)", nullable: true),
                     PaymentIntentId = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    ClientSecret = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                    ClientSecret = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    RoomId1 = table.Column<int>(type: "int", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -593,11 +565,102 @@ namespace TravelBooking.Repository.Migrations
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
+                        name: "FK_Bookings_Rooms_RoomId1",
+                        column: x => x.RoomId1,
+                        principalTable: "Rooms",
+                        principalColumn: "Id");
+                    table.ForeignKey(
                         name: "FK_Bookings_Tours_TourId",
                         column: x => x.TourId,
                         principalTable: "Tours",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Favorites",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    UserId = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    HotelCompanyId = table.Column<int>(type: "int", nullable: true),
+                    FlightCompanyId = table.Column<int>(type: "int", nullable: true),
+                    CarRentalCompanyId = table.Column<int>(type: "int", nullable: true),
+                    TourCompanyId = table.Column<int>(type: "int", nullable: true),
+                    TourId = table.Column<int>(type: "int", maxLength: 50, nullable: false),
+                    CompanyType = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    ApplicationUserId = table.Column<string>(type: "nvarchar(450)", nullable: true),
+                    CarRentalCompanyId1 = table.Column<int>(type: "int", nullable: true),
+                    FlightCompanyId1 = table.Column<int>(type: "int", nullable: true),
+                    HotelCompanyId1 = table.Column<int>(type: "int", nullable: true),
+                    TourCompanyId1 = table.Column<int>(type: "int", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Favorites", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Favorites_AspNetUsers_ApplicationUserId",
+                        column: x => x.ApplicationUserId,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id");
+                    table.ForeignKey(
+                        name: "FK_Favorites_AspNetUsers_UserId",
+                        column: x => x.UserId,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_Favorites_CarRentalCompanies_CarRentalCompanyId",
+                        column: x => x.CarRentalCompanyId,
+                        principalTable: "CarRentalCompanies",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.SetNull);
+                    table.ForeignKey(
+                        name: "FK_Favorites_CarRentalCompanies_CarRentalCompanyId1",
+                        column: x => x.CarRentalCompanyId1,
+                        principalTable: "CarRentalCompanies",
+                        principalColumn: "Id");
+                    table.ForeignKey(
+                        name: "FK_Favorites_FlightCompanies_FlightCompanyId1",
+                        column: x => x.FlightCompanyId1,
+                        principalTable: "FlightCompanies",
+                        principalColumn: "Id");
+                    table.ForeignKey(
+                        name: "FK_Favorites_Flights_FlightCompanyId",
+                        column: x => x.FlightCompanyId,
+                        principalTable: "Flights",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.SetNull);
+                    table.ForeignKey(
+                        name: "FK_Favorites_HotelCompanies_HotelCompanyId",
+                        column: x => x.HotelCompanyId,
+                        principalTable: "HotelCompanies",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.SetNull);
+                    table.ForeignKey(
+                        name: "FK_Favorites_HotelCompanies_HotelCompanyId1",
+                        column: x => x.HotelCompanyId1,
+                        principalTable: "HotelCompanies",
+                        principalColumn: "Id");
+                    table.ForeignKey(
+                        name: "FK_Favorites_TourCompanies_TourCompanyId",
+                        column: x => x.TourCompanyId,
+                        principalTable: "TourCompanies",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.SetNull);
+                    table.ForeignKey(
+                        name: "FK_Favorites_TourCompanies_TourCompanyId1",
+                        column: x => x.TourCompanyId1,
+                        principalTable: "TourCompanies",
+                        principalColumn: "Id");
+                    table.ForeignKey(
+                        name: "FK_Favorites_Tours_TourId",
+                        column: x => x.TourId,
+                        principalTable: "Tours",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -614,6 +677,50 @@ namespace TravelBooking.Repository.Migrations
                     table.PrimaryKey("PK_TourImages", x => x.Id);
                     table.ForeignKey(
                         name: "FK_TourImages_Tours_TourId",
+                        column: x => x.TourId,
+                        principalTable: "Tours",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "TourQuestion",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    QuestionText = table.Column<string>(type: "nvarchar(500)", maxLength: 500, nullable: false),
+                    AnswerText = table.Column<string>(type: "nvarchar(1000)", maxLength: 1000, nullable: false),
+                    TourId = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_TourQuestion", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_TourQuestion_Tours_TourId",
+                        column: x => x.TourId,
+                        principalTable: "Tours",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "TourTickets",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Type = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
+                    Price = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
+                    TourId = table.Column<int>(type: "int", nullable: false),
+                    AvailableQuantity = table.Column<int>(type: "int", nullable: false),
+                    IsActive = table.Column<bool>(type: "bit", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_TourTickets", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_TourTickets_Tours_TourId",
                         column: x => x.TourId,
                         principalTable: "Tours",
                         principalColumn: "Id",
@@ -642,6 +749,34 @@ namespace TravelBooking.Repository.Migrations
                         principalTable: "Bookings",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "TourBookingTickets",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    BookingId = table.Column<int>(type: "int", nullable: false),
+                    TicketId = table.Column<int>(type: "int", nullable: false),
+                    Quantity = table.Column<int>(type: "int", nullable: false),
+                    IsIssued = table.Column<bool>(type: "bit", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_TourBookingTickets", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_TourBookingTickets_Bookings_BookingId",
+                        column: x => x.BookingId,
+                        principalTable: "Bookings",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_TourBookingTickets_TourTickets_TicketId",
+                        column: x => x.TicketId,
+                        principalTable: "TourTickets",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateIndex(
@@ -699,6 +834,11 @@ namespace TravelBooking.Repository.Migrations
                 column: "RoomId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_Bookings_RoomId1",
+                table: "Bookings",
+                column: "RoomId1");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Bookings_TourId",
                 table: "Bookings",
                 column: "TourId");
@@ -719,6 +859,11 @@ namespace TravelBooking.Repository.Migrations
                 name: "IX_Cars_RentalCompanyId",
                 table: "Cars",
                 column: "RentalCompanyId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_ChatMessages_UserId",
+                table: "ChatMessages",
+                column: "UserId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Favorites_ApplicationUserId",
@@ -766,11 +911,22 @@ namespace TravelBooking.Repository.Migrations
                 column: "TourCompanyId1");
 
             migrationBuilder.CreateIndex(
+                name: "IX_Favorites_TourId",
+                table: "Favorites",
+                column: "TourId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Favorites_UserId_HotelCompanyId_FlightCompanyId_CarRentalCompanyId_TourCompanyId",
                 table: "Favorites",
                 columns: new[] { "UserId", "HotelCompanyId", "FlightCompanyId", "CarRentalCompanyId", "TourCompanyId" },
                 unique: true,
                 filter: "[HotelCompanyId] IS NOT NULL AND [FlightCompanyId] IS NOT NULL AND [CarRentalCompanyId] IS NOT NULL AND [TourCompanyId] IS NOT NULL");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Favorites_UserId_TourId",
+                table: "Favorites",
+                columns: new[] { "UserId", "TourId" },
+                unique: true);
 
             migrationBuilder.CreateIndex(
                 name: "IX_FlightCompanies_AdminId",
@@ -860,6 +1016,16 @@ namespace TravelBooking.Repository.Migrations
                 column: "HotelId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_TourBookingTickets_BookingId",
+                table: "TourBookingTickets",
+                column: "BookingId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_TourBookingTickets_TicketId",
+                table: "TourBookingTickets",
+                column: "TicketId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_TourCompanies_AdminId",
                 table: "TourCompanies",
                 column: "AdminId",
@@ -872,9 +1038,19 @@ namespace TravelBooking.Repository.Migrations
                 column: "TourId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_TourQuestion_TourId",
+                table: "TourQuestion",
+                column: "TourId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Tours_TourCompanyId",
                 table: "Tours",
                 column: "TourCompanyId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_TourTickets_TourId",
+                table: "TourTickets",
+                column: "TourId");
         }
 
         /// <inheritdoc />
@@ -896,6 +1072,12 @@ namespace TravelBooking.Repository.Migrations
                 name: "AspNetUserTokens");
 
             migrationBuilder.DropTable(
+                name: "ChatMessages");
+
+            migrationBuilder.DropTable(
+                name: "ContactMessages");
+
+            migrationBuilder.DropTable(
                 name: "Favorites");
 
             migrationBuilder.DropTable(
@@ -908,13 +1090,22 @@ namespace TravelBooking.Repository.Migrations
                 name: "RoomImages");
 
             migrationBuilder.DropTable(
+                name: "TourBookingTickets");
+
+            migrationBuilder.DropTable(
                 name: "TourImages");
+
+            migrationBuilder.DropTable(
+                name: "TourQuestion");
 
             migrationBuilder.DropTable(
                 name: "AspNetRoles");
 
             migrationBuilder.DropTable(
                 name: "Bookings");
+
+            migrationBuilder.DropTable(
+                name: "TourTickets");
 
             migrationBuilder.DropTable(
                 name: "Cars");

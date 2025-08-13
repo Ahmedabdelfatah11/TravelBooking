@@ -125,8 +125,93 @@ namespace TravelBooking.Repository.Data
                     await context.SaveChangesAsync();
                 }
             }
+            // Seed Tour Companies
+            if (!context.TourCompanies.Any())
+            {
+                var tourJson = await File.ReadAllTextAsync("../TravelBooking.Repository/Data/DataSeed/TourData.json");
+                var tourSeed = JsonSerializer.Deserialize<TourSeedDataModel>(tourJson, options);
+
+                if (tourSeed?.TourCompanies is not null && tourSeed.TourCompanies.Count > 0)
+                {
+                    foreach (var company in tourSeed.TourCompanies)
+                    {
+                        var tourCompany = new TourCompany
+                        {
+                            Name = company.Name,
+                            Description = company.Description,
+                            ImageUrl = company.ImageUrl,
+                            Location = company.Location,
+                            Rating = company.rating,
+                            //AdminId = company.AdminId
+                        };
+
+                        await context.Set<TourCompany>().AddAsync(tourCompany);
+                    }
+
+                    await context.SaveChangesAsync();
+                }
+            }
+
+            // Seed Tours
+            if (!context.Tours.Any())
+            {
+                var tourJson = await File.ReadAllTextAsync("../TravelBooking.Repository/Data/DataSeed/TourData.json");
+                var tourSeed = JsonSerializer.Deserialize<TourSeedDataModel>(tourJson, options);
+
+                if (tourSeed?.Tours is not null && tourSeed.Tours.Count > 0)
+                {
+                    foreach (var tourData in tourSeed.Tours)
+                    {
+                        if (!Enum.TryParse<TourCategory>(tourData.Category, out var parsedCategory))
+                            continue; // skip invalid category
+
+                        var tour = new Tour
+                        {
+                            Name = tourData.Name,
+                            StartDate = tourData.StartDate,
+                            EndDate = tourData.EndDate,
+                            Description = tourData.Description,
+                            Destination = tourData.Destination,
+                            MaxGuests = tourData.MaxGuests,
+                            MinGroupSize=tourData.MinGroupSize,
+                            MaxGroupSize = tourData.MaxGroupSize,
+                            Price = tourData.Price,
+                            ImageUrl = tourData.ImageUrl, 
+                            Category = parsedCategory,
+                            Languages = tourData.Languages,
+                            TourCompanyId = tourData.TourCompanyId,
+                            TourImages = tourData.TourImages.Select(img => new TourImage
+                            {
+                                ImageUrl = img.ImageUrl
+                            }).ToList(),
+                             IncludedItems = tourData.IncludedItems,
+                            ExcludedItems = tourData.ExcludedItems,
+                            Questions = tourData.Questions.Select(q => new TourQuestion
+                            {
+                                QuestionText = q.QuestionText,
+                                AnswerText = q.AnswerText
+                            }).ToList(),
+                           
+                            TourTickets = tourData.TourTickets.Select(t => new TourTicket
+                            {
+                                Type = t.TicketType,
+                                Price = t.Price,
+                                AvailableQuantity = t.AvailableQuantity,
+                                IsActive = t.IsActive
+                            }).ToList()
+
+
+                        };
+
+                        await context.Set<Tour>().AddAsync(tour);
+                    }
+
+                    await context.SaveChangesAsync();
+                }
+            }
+
         }
-    
-}
+
+    }
 }
 

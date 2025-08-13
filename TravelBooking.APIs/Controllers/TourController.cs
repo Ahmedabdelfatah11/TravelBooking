@@ -11,6 +11,9 @@ using AutoMapper;
 using TravelBooking.Core.Specifications.TourSpecs;
 using TravelBooking.APIs.DTOS.Tours;
 using TravelBooking.APIs.DTOS.TourCompany;
+using Microsoft.EntityFrameworkCore;
+using TravelBooking.Repository.Data;
+using TravelBooking.APIs.Extensions;
 
 namespace TravelBooking.APIs.Controllers
 {
@@ -23,32 +26,42 @@ namespace TravelBooking.APIs.Controllers
         private readonly IMapper _mapper;
         private readonly IGenericRepository<Booking> _bookingRepo;
         private readonly IGenericRepository<TourCompany> _tourCompany;
+        private readonly AppDbContext _context;
 
         public TourController(
             IGenericRepository<Tour> tourRepo,
             IMapper mapper,
              IGenericRepository<Booking> bookingRepo,
-             IGenericRepository<TourCompany> tourCompany)
+             IGenericRepository<TourCompany> tourCompany, AppDbContext context)
         {
             _tourRepo = tourRepo;
             _mapper = mapper;
             _bookingRepo = bookingRepo;
             _tourCompany = tourCompany;
+            _context = context;
         }
         [HttpGet]
         [AllowAnonymous]
-        public async Task<ActionResult<Pagination<TourReadDto>>> GetTourCompanies([FromQuery] TourSpecParams specParams)
+        public async Task<ActionResult<Pagination<TourReadDto>>> GetTour([FromQuery] TourSpecParams specParams)
         {
             var spec = new ToursSpecification(specParams);
 
-            var companies = await _tourRepo.GetAllWithSpecAsync(spec);
+            var tours = await _tourRepo.GetAllWithSpecAsync(spec);
 
-            var data = _mapper.Map<IReadOnlyList<Tour>, IReadOnlyList<TourReadDto>>(companies);
+            var data = _mapper.Map<IReadOnlyList<Tour>, IReadOnlyList<TourReadDto>>(tours);
 
             var countSpec = new ToursWithFilterationForCountSpec(specParams);
             var count = await _tourRepo.GetCountAsync(countSpec);
+            var baseQuery = _context.Tours.AsQueryable().ApplyFiltering(specParams);
+            var (minPrice, maxPrice) = await baseQuery.GetPriceBoundsAsync();
 
-            return Ok(new Pagination<TourReadDto>(specParams.PageIndex, specParams.PageSize, count, data));
+            var priceBounds = new { min = minPrice, max = maxPrice };
+
+            return Ok(new
+            {
+                pagination = new Pagination<TourReadDto>(specParams.PageIndex, specParams.PageSize, count, data),
+                priceBounds = priceBounds
+            });
         }
 
         [ProducesResponseType(typeof(TourCompanyReadDto), StatusCodes.Status200OK)]
@@ -74,6 +87,17 @@ namespace TravelBooking.APIs.Controllers
         {
             var entity = _mapper.Map<Tour>(dto);
             var result = await _tourRepo.AddAsync(entity);
+            if (dto.Tickets != null && dto.Tickets.Any())
+            {
+                foreach (var ticketDto in dto.Tickets)
+                {
+                    var ticket = _mapper.Map<TourTicket>(ticketDto);
+                    ticket.TourId = result.Id;
+                    await _context.TourTickets.AddAsync(ticket);
+                }
+                await _context.SaveChangesAsync();
+            }
+
 
             // Load TourCompany so AutoMapper can project its Name
             result.TourCompany = await _tourCompany.GetAsync(dto.TourCompanyId.Value);
@@ -81,10 +105,11 @@ namespace TravelBooking.APIs.Controllers
             var resultDto = _mapper.Map<TourReadDto>(result);
             return CreatedAtAction(nameof(GetTourById), new { id = result.Id }, resultDto);
         }
-        [Authorize]
+        //[Authorize]
         [HttpPost("{serviceId}/book")]
-        [Authorize(Roles = "SuperAdmin,TourAdmin,User")]
-        public async Task<IActionResult> BookTour(int serviceId/*, [FromBody] TourBookingDto? dto*/)
+        [AllowAnonymous]
+        //[Authorize(Roles = "SuperAdmin,TourAdmin,User")]
+        public async Task<IActionResult> BookTour(int serviceId, [FromBody] TourBookingDto dto)
         {
             var userId = User.FindFirst("uid")?.Value;
             if (string.IsNullOrEmpty(userId))
@@ -93,20 +118,50 @@ namespace TravelBooking.APIs.Controllers
             var tour = await _tourRepo.GetAsync(serviceId);
             if (tour == null) return NotFound(new ApiResponse(404));
 
-            // Validate that the tour date is valid (optional but recommended)
             if (tour.StartDate >= tour.EndDate)
                 return BadRequest("Invalid tour date range.");
 
-            // Check for overlapping bookings
-            var existingBookings = await _bookingRepo.GetAllAsync(b =>
-                b.TourId == serviceId &&
-                b.Status != Status.Cancelled &&
-                b.StartDate < tour.EndDate &&
-                tour.StartDate < b.EndDate
-            );
-            if (existingBookings.Any())
-                return BadRequest("Tour already booked in selected time frame.");
+            //var existingBookings = await _bookingRepo.GetAllAsync(b =>
+            //    b.TourId == serviceId &&
+            //    b.Status != Status.Cancelled &&
+            //    b.StartDate < tour.EndDate &&
+            //    tour.StartDate < b.EndDate
+            //);
+            //if (existingBookings.Any())
+            //    return BadRequest("Tour already booked in selected time frame.");
+          
+            decimal totalPrice = 0;
+            var bookingTickets = new List<TourBookingTicket>();
 
+            foreach (var ticketRequest in dto.Tickets)
+            {
+                var ticket = await _context.TourTickets
+                    .FirstOrDefaultAsync(t =>
+                        t.TourId == serviceId &&
+                        t.Type == ticketRequest.Type &&
+                        t.IsActive);
+
+                if (ticket == null)
+                    return BadRequest($"Ticket type '{ticketRequest.Type}' not found or sold out.");
+
+                if (ticket.AvailableQuantity < ticketRequest.Quantity)
+                    return BadRequest($"Only {ticket.AvailableQuantity} '{ticket.Type}' tickets left.");
+
+                totalPrice += ticket.Price * ticketRequest.Quantity;
+
+                //ticket.AvailableQuantity -= ticketRequest.Quantity;
+
+                //if (ticket.AvailableQuantity == 0)
+                //    ticket.IsActive = false;
+
+                //_context.TourTickets.Update(ticket);
+
+                bookingTickets.Add(new TourBookingTicket
+                {
+                    TicketId = ticket.Id,
+                    Quantity = ticketRequest.Quantity
+                });
+            }
             var booking = new Booking
             {
                 UserId = userId,
@@ -114,13 +169,22 @@ namespace TravelBooking.APIs.Controllers
                 StartDate = tour.StartDate,
                 EndDate = tour.EndDate,
                 BookingType = BookingType.Tour,
-                Status = Status.Pending
+                Status = Status.Pending,
+                BookingTickets = bookingTickets,
             };
 
             await _bookingRepo.AddAsync(booking);
-            booking.Tour = tour;
+            await _context.SaveChangesAsync(); 
 
-            var result = _mapper.Map<TourBookingResultDto>(booking);
+            var fullBooking = await _context.Bookings
+                .Include(b => b.BookingTickets)
+                .ThenInclude(bt => bt.Ticket)
+                .Include(b => b.Tour)
+                .FirstOrDefaultAsync(b => b.Id == booking.Id);
+
+            var result = _mapper.Map<TourBookingResultDto>(fullBooking);
+            result.TotalPrice = fullBooking.TotalPrice;
+
             return CreatedAtAction("GetBookingById", "Booking", new { id = booking.Id }, result);
         }
 
@@ -151,5 +215,6 @@ namespace TravelBooking.APIs.Controllers
             await _tourRepo.Delete(existing);
             return NoContent();
         }
+      
     }
 }
