@@ -12,7 +12,7 @@ namespace TravelBooking.APIs.DTOS.UserProfile
         public string Phone { get; set; } = null!;
         public string Address { get; set; } = null!;
         public DateTime DateOfBirth { get; set; }
-
+        public string? ProfilePictureUrl { get; set; }
         public string Token { get; set; } = null!;
     }
 }
