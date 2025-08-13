@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
+using System.Reflection.PortableExecutable;
 using System.Text;
 using System.Text.Json.Serialization;
 using TravelBooking.Core.Models.Services;
@@ -51,7 +52,12 @@ namespace TravelBooking.APIs
             webApplicationbuilder.Services.AddScoped<IPaymentService, PaymentService>();
 
             webApplicationbuilder.Services.AddScoped<IRoomService, RoomService>();
-
+            // Enhanced ChatBot Services
+            webApplicationbuilder.Services.AddScoped<GeminiService>();
+            webApplicationbuilder.Services.AddScoped<ChatHistoryService>();
+            webApplicationbuilder.Services.AddScoped<MultiRetrieverService>();
+            webApplicationbuilder.Services.AddScoped<ChatService>();
+            webApplicationbuilder.Services.AddScoped<DatabaseChatIntegrationService>();
 
             //add Accessor for User
             webApplicationbuilder.Services.AddHttpContextAccessor();
@@ -139,6 +145,11 @@ namespace TravelBooking.APIs
                     // Allow credentials if needed
                 });
             });
+            // Caching
+            webApplicationbuilder.Services.AddMemoryCache();
+            webApplicationbuilder.Services.AddResponseCaching();
+
+            
 
             // Dashboard
             webApplicationbuilder.Services.AddScoped<IDashboardService, DashboardService>();
@@ -162,6 +173,7 @@ namespace TravelBooking.APIs
                 await _dbcontext.Database.MigrateAsync();
                 await RoleSeeder.SeedAsync(Services); // assigning roles to the database 
                 await FlightContextSeed.SeedAsync(_dbcontext);
+                
                 await TravelContextSeed.SeedAsync(_dbcontext);
             }
             catch (Exception ex)
@@ -173,13 +185,16 @@ namespace TravelBooking.APIs
             {
                 app.UseSwaggerMiddlewares();
             }
-
+            // Response Caching
+            
             app.UseHttpsRedirection();
             app.UseStaticFiles();
+            app.MapStaticAssets();
 
             app.UseAuthentication();
 
             app.UseAuthorization();
+            app.UseResponseCaching();
             app.MapControllers();
 
             app.Run();

@@ -30,8 +30,9 @@ namespace TravelBooking.Core.Models
         [Required(ErrorMessage = "Arrival time is required.")]
         [GreaterThan("DepartureTime", ErrorMessage = "Arrival time must be after departure time.")]
         public DateTime To { get; set; }
+        public float[]? Embedding { get; set; }
 
-        [ForeignKey("HotelCompany")]
+        [ForeignKey("HotelId")]
         public int? HotelId { get; set; }
         public HotelCompany? Hotel { get; set; }
         public ICollection<RoomImage> Images { get; set; } = new List<RoomImage>();

@@ -12,6 +12,7 @@ namespace TravelBooking.Core.Specifications.CarSpecs
         public CarSpecifications(CarSpecParams carParams)
          : base(c =>
              (string.IsNullOrEmpty(carParams.Model) || c.Model.ToLower().Contains(carParams.Model.ToLower())) &&
+             (string.IsNullOrEmpty(carParams.Location) || c.Location.ToLower().Contains(carParams.Location.ToLower())) &&
              (!carParams.MinPrice.HasValue || c.Price >= carParams.MinPrice.Value) &&
              (!carParams.MaxPrice.HasValue || c.Price <= carParams.MaxPrice.Value)
          )

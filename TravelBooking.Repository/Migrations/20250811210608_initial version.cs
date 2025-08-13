@@ -185,6 +185,30 @@ namespace TravelBooking.Repository.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "ChatMessages",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    UserInput = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    GeminiResponse = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    UserId = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    IsUserMessage = table.Column<bool>(type: "bit", nullable: false),
+                    MessageType = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_ChatMessages", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_ChatMessages_AspNetUsers_UserId",
+                        column: x => x.UserId,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "FlightCompanies",
                 columns: table => new
                 {
@@ -271,7 +295,8 @@ namespace TravelBooking.Repository.Migrations
                     Location = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: true),
                     ImageUrl = table.Column<string>(type: "nvarchar(500)", maxLength: 500, nullable: true),
                     Capacity = table.Column<int>(type: "int", nullable: false, defaultValue: 5),
-                    RentalCompanyId = table.Column<int>(type: "int", nullable: true)
+                    RentalCompanyId = table.Column<int>(type: "int", nullable: true),
+                    Embedding = table.Column<string>(type: "nvarchar(max)", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -301,7 +326,8 @@ namespace TravelBooking.Repository.Migrations
                     DepartureAirport = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
                     ArrivalAirport = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
                     FlightCompanyId = table.Column<int>(type: "int", nullable: false),
-                    SelectedSeatClass = table.Column<int>(type: "int", nullable: true)
+                    SelectedSeatClass = table.Column<int>(type: "int", nullable: true),
+                    Embedding = table.Column<string>(type: "nvarchar(max)", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -326,6 +352,7 @@ namespace TravelBooking.Repository.Migrations
                     Description = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     From = table.Column<DateTime>(type: "datetime2", nullable: false),
                     To = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    Embedding = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     HotelId = table.Column<int>(type: "int", nullable: true)
                 },
                 constraints: table =>
@@ -732,6 +759,11 @@ namespace TravelBooking.Repository.Migrations
                 column: "RentalCompanyId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_ChatMessages_UserId",
+                table: "ChatMessages",
+                column: "UserId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Favorites_ApplicationUserId",
                 table: "Favorites",
                 column: "ApplicationUserId");
@@ -905,6 +937,9 @@ namespace TravelBooking.Repository.Migrations
 
             migrationBuilder.DropTable(
                 name: "AspNetUserTokens");
+
+            migrationBuilder.DropTable(
+                name: "ChatMessages");
 
             migrationBuilder.DropTable(
                 name: "Favorites");

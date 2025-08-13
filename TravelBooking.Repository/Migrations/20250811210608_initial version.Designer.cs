@@ -12,7 +12,7 @@ using TravelBooking.Repository.Data;
 namespace TravelBooking.Repository.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20250810173817_initial version")]
+    [Migration("20250811210608_initial version")]
     partial class initialversion
     {
         /// <inheritdoc />
@@ -245,6 +245,9 @@ namespace TravelBooking.Repository.Migrations
                         .HasMaxLength(1000)
                         .HasColumnType("nvarchar(1000)");
 
+                    b.PrimitiveCollection<string>("Embedding")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("ImageUrl")
                         .HasMaxLength(500)
                         .HasColumnType("nvarchar(500)");
@@ -314,6 +317,43 @@ namespace TravelBooking.Repository.Migrations
                         .HasFilter("[AdminId] IS NOT NULL");
 
                     b.ToTable("CarRentalCompanies");
+                });
+
+            modelBuilder.Entity("TravelBooking.Core.Models.ChatMessage", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("GeminiResponse")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("IsUserMessage")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("MessageType")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("UserId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("UserInput")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("ChatMessages");
                 });
 
             modelBuilder.Entity("TravelBooking.Core.Models.Favoritet", b =>
@@ -425,6 +465,9 @@ namespace TravelBooking.Repository.Migrations
 
                     b.Property<int>("EconomySeats")
                         .HasColumnType("int");
+
+                    b.PrimitiveCollection<string>("Embedding")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<decimal>("FirstClassPrice")
                         .HasColumnType("decimal(18,2)");
@@ -661,6 +704,9 @@ namespace TravelBooking.Repository.Migrations
 
                     b.Property<string>("Description")
                         .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.PrimitiveCollection<string>("Embedding")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime>("From")
@@ -1012,6 +1058,17 @@ namespace TravelBooking.Repository.Migrations
                         .OnDelete(DeleteBehavior.Restrict);
 
                     b.Navigation("Admin");
+                });
+
+            modelBuilder.Entity("TravelBooking.Core.Models.ChatMessage", b =>
+                {
+                    b.HasOne("TravelBooking.Models.ApplicationUser", "User")
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("TravelBooking.Core.Models.Favoritet", b =>

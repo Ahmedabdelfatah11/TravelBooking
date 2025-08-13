@@ -45,7 +45,7 @@ namespace TravelBooking.Core.Models
         [ForeignKey("FlightCompanyId")]
         public FlightCompany? FlightCompany { get; set; }
         public SeatClass? SelectedSeatClass { get; set; }
-
+        public float[]? Embedding { get; set; }
         public decimal GetPrice(SeatClass? seatClass)
         {
             switch (seatClass)
