@@ -316,6 +316,10 @@ namespace TravelBooking.Repository.Migrations
                     b.Property<int?>("RentalCompanyId")
                         .HasColumnType("int");
 
+                    b.Property<string>("name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
                     b.HasKey("Id");
 
                     b.HasIndex("RentalCompanyId");
@@ -714,8 +718,8 @@ namespace TravelBooking.Repository.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<int?>("Category")
-                        .HasColumnType("int");
+                    b.Property<string>("Category")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Description")
                         .HasMaxLength(1000)
@@ -767,7 +771,8 @@ namespace TravelBooking.Repository.Migrations
                         .HasColumnType("nvarchar(1000)");
 
                     b.Property<string>("ImageUrl")
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(500)
+                        .HasColumnType("nvarchar(500)");
 
                     b.Property<string>("Location")
                         .HasMaxLength(100)
@@ -778,8 +783,8 @@ namespace TravelBooking.Repository.Migrations
                         .HasMaxLength(100)
                         .HasColumnType("nvarchar(100)");
 
-                    b.Property<string>("rating")
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<int?>("Rating")
+                        .HasColumnType("int");
 
                     b.HasKey("Id");
 

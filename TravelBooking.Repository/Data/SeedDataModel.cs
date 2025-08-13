@@ -109,4 +109,63 @@ namespace TravelBooking.Repository.Data
         [JsonPropertyName("roomId")]
         public int RoomId { get; set; }
     }
+
+    public class TourSeedDataModel
+    {
+        [JsonPropertyName("TourCompanies")]
+        public List<TourCompanySeedModel> TourCompanies { get; set; } = new();
+
+        [JsonPropertyName("Tours")]
+        public List<TourSeedModel> Tours { get; set; } = new();
+    }
+
+    public class TourCompanySeedModel
+    {
+        [JsonPropertyName("id")]
+        public int Id { get; set; }
+        [JsonPropertyName("name")]
+        public string Name { get; set; }
+        [JsonPropertyName("description")]
+        public string? Description { get; set; }
+        [JsonPropertyName("imageUrl")]
+        public string? ImageUrl { get; set; }
+        [JsonPropertyName("location")]
+        public string? Location { get; set; } // Location of the tour company, e.g., "Rome, Italy"
+        [JsonPropertyName("rating")]
+        public int? rating { get; set; }
+        public string? AdminId { get; set; } // FK to AspNetUsers
+
+    }
+
+    public class TourSeedModel
+    {
+        [JsonPropertyName("id")]
+        public int Id { get; set; }
+        [JsonPropertyName("name")]
+
+        public string Name { get; set; }
+        [JsonPropertyName("StartDate")]
+
+        public DateTime StartDate { get; set; }
+        [JsonPropertyName("EndDate")]
+
+        public DateTime EndDate { get; set; }
+        [JsonPropertyName("Description")]
+
+        public string? Description { get; set; } = string.Empty;
+        public string? Destination { get; set; } = string.Empty;
+        public int MaxGuests { get; set; }
+        [JsonPropertyName("price")]
+
+        public decimal Price { get; set; }
+        public string Category { get; set; } = string.Empty;
+        public int? TourCompanyId { get; set; }
+        public List<TourImageSeedModel> TourImages { get; set; } = new();
+    }
+
+    public class TourImageSeedModel
+    {
+        public string ImageUrl { get; set; } = string.Empty;
+    }
+
 }

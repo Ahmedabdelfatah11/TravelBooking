@@ -27,6 +27,7 @@ namespace TravelBooking.Core.Models
         public int MaxGuests { get; set; } // Maximum allowed guests for the Tour
 
         public decimal Price { get; set; } // Total price of the Tour 
+
         public TourCategory? Category { get; set; }
         [ForeignKey("TourCompany")]
         public int? TourCompanyId { get; set; } // Foreign key for the associated tour company

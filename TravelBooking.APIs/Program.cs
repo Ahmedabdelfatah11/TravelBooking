@@ -18,9 +18,12 @@ using TravelBooking.Helper;
 using TravelBooking.Models;
 using TravelBooking.Repository;
 using TravelBooking.Repository.Data;
+
 using TravelBooking.Repository.Data.Seeds;
 using TravelBooking.Service.Services;
+
 using TravelBooking.Service.Services.Dashboard;
+
 
 namespace TravelBooking.APIs
 {
@@ -28,93 +31,145 @@ namespace TravelBooking.APIs
     {
         public static async Task Main(string[] args)
         {
-            var builder = WebApplication.CreateBuilder(args);
 
-            // ---------- Services Registration ----------
+            var webApplicationbuilder = WebApplication.CreateBuilder(args);
 
-            builder.Services.AddControllers()
-                .AddJsonOptions(options =>
-                {
-                    options.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter());
-                    options.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles;
-                    options.JsonSerializerOptions.WriteIndented = true;
-                });
 
-            builder.Services.AddOpenApi();
-            builder.Services.AddSwaggerServices();
+            webApplicationbuilder.Services.AddControllers();
+            // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
+            webApplicationbuilder.Services.AddOpenApi();
+            webApplicationbuilder.Services.AddSwaggerServices();
+            webApplicationbuilder.Services.AddScoped(typeof(IGenericRepository<>), typeof(GenericRepository<>));
 
-            builder.Services.AddScoped(typeof(IGenericRepository<>), typeof(GenericRepository<>));
-            builder.Services.AddScoped<IAuthService, AuthService>();
-            builder.Services.AddScoped<IEmailSender, EmailService>();
-            builder.Services.AddScoped<IPaymentService, PaymentService>();
-            builder.Services.AddScoped<IDashboardService, DashboardService>();
-            builder.Services.AddApplicationServices();
+            //inject the AuthService as IAuthService
+            webApplicationbuilder.Services.AddScoped<IAuthService, AuthService>();
 
-            builder.Services.AddHttpContextAccessor();
+            // add EmailService as IEmailSender
+            webApplicationbuilder.Services.AddScoped<IEmailSender, EmailService>();
 
-            builder.Services.AddDbContext<AppDbContext>(options =>
-                options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
+            // Add the PaymentService as IPaymentService
+            webApplicationbuilder.Services.AddScoped<IPaymentService, PaymentService>();
 
-            builder.Services.Configure<JWT>(builder.Configuration.GetSection("JWT"));
-            builder.Services.Configure<MailSettings>(builder.Configuration.GetSection(nameof(MailSettings)));
+            //webApplicationbuilder.Services.AddScoped<IRoomService, RoomService>();
 
-            builder.Services.AddIdentity<ApplicationUser, IdentityRole>()
-                .AddEntityFrameworkStores<AppDbContext>()
-                .AddDefaultTokenProviders();
 
-            builder.Services.Configure<IdentityOptions>(options =>
-            {
-                options.Password.RequiredLength = 8;
-                options.User.RequireUniqueEmail = true;
-                options.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromMinutes(5);
-                options.Lockout.MaxFailedAccessAttempts = 5;
-            });
+            //add Accessor for User
+            webApplicationbuilder.Services.AddHttpContextAccessor();
 
-            builder.Services.AddAutoMapper(cfg => cfg.AddMaps(typeof(Program).Assembly));
+            webApplicationbuilder.Services.AddDbContext<AppDbContext>(options =>
+                options.UseSqlServer(webApplicationbuilder.Configuration.GetConnectionString("DefaultConnection")));
 
-            // ---------- JWT Authentication ----------
-            builder.Services.AddAuthentication(options =>
+            // Register JWT configuration and map it from appsettings.json
+            webApplicationbuilder.Services.Configure<JWT>(webApplicationbuilder.Configuration.GetSection("JWT"));
+
+            // Register Identity services
+            webApplicationbuilder.Services.AddIdentity<ApplicationUser, IdentityRole>()
+                 .AddEntityFrameworkStores<AppDbContext>()
+                 .AddDefaultTokenProviders();
+            //adding Email service 
+            webApplicationbuilder.Services.Configure<MailSettings>(webApplicationbuilder.Configuration.GetSection(nameof(MailSettings)));
+
+            // adding AutoMapper 
+            webApplicationbuilder.Services.AddAutoMapper(cfg => cfg.AddMaps(typeof(Program).Assembly));
+
+
+            // Configure JWT authentication
+            webApplicationbuilder.Services.AddAuthentication(options =>
             {
                 options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
                 options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
             })
-            .AddJwtBearer(options =>
-            {
-                options.RequireHttpsMetadata = false;
-                options.SaveToken = false;
-                options.TokenValidationParameters = new TokenValidationParameters
+                .AddJwtBearer(o =>
                 {
-                    ValidateIssuerSigningKey = true,
-                    ValidateIssuer = true,
-                    ValidateAudience = true,
-                    ValidateLifetime = true,
-                    ValidIssuer = builder.Configuration["JWT:Issuer"],
-                    ValidAudience = builder.Configuration["JWT:Audience"],
-                    IssuerSigningKey = new SymmetricSecurityKey(
-                        Encoding.UTF8.GetBytes(builder.Configuration["JWT:Key"]))
-                };
-            });
+                    o.RequireHttpsMetadata = false;
+                    o.SaveToken = false;
+                    o.TokenValidationParameters = new TokenValidationParameters
+                    {
+                        ValidateIssuerSigningKey = true,
+                        ValidateIssuer = true,
+                        ValidateAudience = true,
+                        ValidateLifetime = true,
+                        ValidIssuer = webApplicationbuilder.Configuration["JWT:Issuer"],
+                        ValidAudience = webApplicationbuilder.Configuration["JWT:Audience"],
+                        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(webApplicationbuilder.Configuration["JWT:Key"]))
+                    };
 
-            // ---------- CORS FIX ----------
-            builder.Services.AddCors(options =>
+                });
+            webApplicationbuilder.Services.Configure<IdentityOptions>(options =>
+            {
+                // Password settings  
+                options.Password.RequiredLength = 8;
+
+                //options.SignIn.RequireConfirmedEmail= true; // Optional: Require confirmed email for sign-in
+                options.User.RequireUniqueEmail = true; // Ensure unique email addresses
+                // Lockout settings
+                options.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromMinutes(5);
+                options.Lockout.MaxFailedAccessAttempts = 5;
+            });
+            webApplicationbuilder.Services.AddScoped(typeof(IGenericRepository<>), typeof(GenericRepository<>));
+
+            webApplicationbuilder.Services.AddControllers()
+                .AddJsonOptions(options =>
+                {
+                    options.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter());
+                });
+            webApplicationbuilder.Services.AddControllers()
+                .AddJsonOptions(options =>
+                {
+                    //options.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.Preserve;
+                    options.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter());
+                    options.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles; // or Preserve
+                    options.JsonSerializerOptions.WriteIndented = true; // optional, for readability
+                });
+            //webApplicationbuilder.Services.AddControllers().AddJsonOptions(options =>
+            //{
+            //    options.JsonSerializerOptions.ReferenceHandler = null; // or ReferenceHandler.IgnoreCycles
+            //});
+
+            // adding Email service
+            webApplicationbuilder.Services.AddTransient<IEmailSender, EmailService>();
+
+            webApplicationbuilder.Services.AddCors(options =>
             {
                 options.AddPolicy("AllowAngularApp", policy =>
                 {
-                    policy.WithOrigins("http://localhost:4200") // <--- Correct origin here
-                          .AllowAnyHeader()
-                          .AllowAnyMethod()
-                          .AllowCredentials();
+                    policy.AllowAnyOrigin()
+                     .AllowAnyHeader()
+                     .AllowAnyMethod();
+                    // Allow credentials if needed
                 });
             });
 
-            // ---------- Build App ----------
-            var app = builder.Build();
+            // Dashboard
+            webApplicationbuilder.Services.AddScoped<IDashboardService, DashboardService>();
 
-            // ---------- Middleware ----------
+            webApplicationbuilder.Services.AddApplicationServices();
+
+
+            var app = webApplicationbuilder.Build();
+
             app.UseCors("AllowAngularApp");
-
             app.UseStatusCodePagesWithReExecute("/errors/{0}");
+            using var scope = app.Services.CreateScope();
 
+            var Services = scope.ServiceProvider;
+
+            var logger = Services.GetRequiredService<ILogger<Program>>();
+            var _dbcontext = Services.GetRequiredService<AppDbContext>();
+
+            try
+            {
+                await _dbcontext.Database.MigrateAsync();
+                await RoleSeeder.SeedAsync(Services); // assigning roles to the database 
+                await FlightContextSeed.SeedAsync(_dbcontext);
+
+                await TravelContextSeed.SeedAsync(_dbcontext);
+            }
+            catch (Exception ex)
+            {
+                logger.LogError(ex, "An error occurred during migration");
+            }
+            // Configure the HTTP request pipeline.
             if (app.Environment.IsDevelopment())
             {
                 app.UseSwaggerMiddlewares();
@@ -124,27 +179,9 @@ namespace TravelBooking.APIs
             app.UseStaticFiles();
 
             app.UseAuthentication();
+
             app.UseAuthorization();
-
             app.MapControllers();
-
-            // ---------- Seeding ----------
-            using var scope = app.Services.CreateScope();
-            var services = scope.ServiceProvider;
-            var logger = services.GetRequiredService<ILogger<Program>>();
-            var dbContext = services.GetRequiredService<AppDbContext>();
-
-            try
-            {
-                await dbContext.Database.MigrateAsync();
-                await RoleSeeder.SeedAsync(services);
-                await FlightContextSeed.SeedAsync(dbContext);
-                await TravelContextSeed.SeedAsync(dbContext);
-            }
-            catch (Exception ex)
-            {
-                logger.LogError(ex, "An error occurred during migration");
-            }
 
             app.Run();
         }

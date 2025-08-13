@@ -54,7 +54,7 @@ namespace TravelBooking.Core.Models
         {
             get
             {
-                int duration = (int)(EndDate - StartDate).TotalDays;
+                int duration = (int)(EndDate - StartDate).TotalDays ;
                 if (duration <= 0) duration = 1;
 
                 decimal total = 0;
@@ -62,7 +62,7 @@ namespace TravelBooking.Core.Models
                 switch (BookingType)
                 {
                     case BookingType.Room:
-                        total = (Room?.Price ?? 0) * duration;
+                        total = (Room?.Price ?? 0) * (duration);
                         break;
 
                     case BookingType.Car:

@@ -41,7 +41,7 @@ namespace TravelBooking.Core.Specifications.TourSpecs
             get { return destination; }
             set { destination = value?.ToLower(); }
         }
-        public TourCategory? Category { get; set; }
+        public List<TourCategory> Category { get; set; } = new();
         public decimal Price { get; set; }
         public decimal? MinPrice { get; set; }
         public decimal? MaxPrice { get; set; }

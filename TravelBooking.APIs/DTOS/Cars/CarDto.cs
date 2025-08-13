@@ -18,5 +18,8 @@ namespace TravelBooking.Core.DTOS.Cars
         public string? Location { get; set; } // Location where the car is available for rent 
         public string? ImageUrl { get; set; }
         public int Capacity { get; set; } // Number of passengers the car can accommodate
+        public int? RentalCompanyId { get; set; } // Foreign key to CarRentalCompany
+        public string Name { get; set; } //company name
+
     }
 }

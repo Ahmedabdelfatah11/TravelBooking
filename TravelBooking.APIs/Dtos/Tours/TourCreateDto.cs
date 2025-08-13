@@ -18,8 +18,9 @@ namespace TravelBooking.APIs.DTOS.Tours
 
         public int MaxGuests { get; set; }
         [Required(ErrorMessage = "Price is required.")]
-        [Range(0.01, double.MaxValue, ErrorMessage = "Price must be greater than zero.")]
         public decimal Price { get; set; }
+
+        [EnumDataType(typeof(TourCategory), ErrorMessage = "Invalid category value.")]
         public TourCategory? Category { get; set; }
         [Required(ErrorMessage = "TourCompanyId is required.")]
         public int? TourCompanyId { get; set; }

@@ -11,6 +11,9 @@ using AutoMapper;
 using TravelBooking.Core.Specifications.TourSpecs;
 using TravelBooking.APIs.DTOS.Tours;
 using TravelBooking.APIs.DTOS.TourCompany;
+using Microsoft.EntityFrameworkCore;
+using TravelBooking.Repository.Data;
+using TravelBooking.APIs.Extensions;
 
 namespace TravelBooking.APIs.Controllers
 {
@@ -23,32 +26,42 @@ namespace TravelBooking.APIs.Controllers
         private readonly IMapper _mapper;
         private readonly IGenericRepository<Booking> _bookingRepo;
         private readonly IGenericRepository<TourCompany> _tourCompany;
+        private readonly AppDbContext _context;
 
         public TourController(
             IGenericRepository<Tour> tourRepo,
             IMapper mapper,
              IGenericRepository<Booking> bookingRepo,
-             IGenericRepository<TourCompany> tourCompany)
+             IGenericRepository<TourCompany> tourCompany, AppDbContext context)
         {
             _tourRepo = tourRepo;
             _mapper = mapper;
             _bookingRepo = bookingRepo;
             _tourCompany = tourCompany;
+            _context = context;
         }
         [HttpGet]
         [AllowAnonymous]
-        public async Task<ActionResult<Pagination<TourReadDto>>> GetTourCompanies([FromQuery] TourSpecParams specParams)
+        public async Task<ActionResult<Pagination<TourReadDto>>> GetTour([FromQuery] TourSpecParams specParams)
         {
             var spec = new ToursSpecification(specParams);
 
-            var companies = await _tourRepo.GetAllWithSpecAsync(spec);
+            var tours = await _tourRepo.GetAllWithSpecAsync(spec);
 
-            var data = _mapper.Map<IReadOnlyList<Tour>, IReadOnlyList<TourReadDto>>(companies);
+            var data = _mapper.Map<IReadOnlyList<Tour>, IReadOnlyList<TourReadDto>>(tours);
 
             var countSpec = new ToursWithFilterationForCountSpec(specParams);
             var count = await _tourRepo.GetCountAsync(countSpec);
+            var baseQuery = _context.Tours.AsQueryable().ApplyFiltering(specParams);
+            var (minPrice, maxPrice) = await baseQuery.GetPriceBoundsAsync();
 
-            return Ok(new Pagination<TourReadDto>(specParams.PageIndex, specParams.PageSize, count, data));
+            var priceBounds = new { min = minPrice, max = maxPrice };
+
+            return Ok(new
+            {
+                pagination = new Pagination<TourReadDto>(specParams.PageIndex, specParams.PageSize, count, data),
+                priceBounds = priceBounds
+            });
         }
 
         [ProducesResponseType(typeof(TourCompanyReadDto), StatusCodes.Status200OK)]
@@ -151,5 +164,6 @@ namespace TravelBooking.APIs.Controllers
             await _tourRepo.Delete(existing);
             return NoContent();
         }
+      
     }
 }

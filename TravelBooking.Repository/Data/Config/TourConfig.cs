@@ -15,6 +15,8 @@ namespace TravelBooking.Core.Configurations
             builder.Property(t => t.Description).HasMaxLength(1000);
             builder.Property(t => t.Destination).HasMaxLength(100);
             builder.Property(t => t.Price).HasColumnType("decimal(18,2)");
+            builder.Property(t => t.MaxGuests).IsRequired();
+            builder.Property(t => t.Category).HasConversion<string>();
 
             // one-to-many with TourCompany
             builder.HasOne(t => t.TourCompany)
