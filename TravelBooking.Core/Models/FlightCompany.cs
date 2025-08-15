@@ -37,8 +37,6 @@ namespace TravelBooking.Core.Models
         public virtual ICollection<Flight> Flights { get; set; } = new List<Flight>(); // Navigation property for related flights
 
 
-        public ICollection<Favoritet> favoritets { get; set; } = new List<Favoritet>();
-
         public ICollection<Review> reviews { get; set; } = new List<Review>();
 
         public string? AdminId { get; set; } // FK to AspNetUsers

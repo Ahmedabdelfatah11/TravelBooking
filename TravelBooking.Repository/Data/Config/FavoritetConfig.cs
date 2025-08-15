@@ -17,30 +17,21 @@ namespace TravelBooking.Repository.Data.Config
             base.Configure(builder);
 
             builder.HasOne(f => f.User)
-                            .WithMany()
+                            .WithMany(f=>f.favoritets)
                             .HasForeignKey(f => f.UserId)
                             .OnDelete(DeleteBehavior.Cascade);
             builder.HasOne(f => f.HotelCompany)
-                .WithMany()
+                .WithMany(f => f.favoritets)
                 .HasForeignKey(f => f.HotelCompanyId)
                 .OnDelete(DeleteBehavior.SetNull);
 
-            builder.HasOne(f => f.Flight)
-                  .WithMany()
-                  .HasForeignKey(f => f.FlightCompanyId)
-                  .OnDelete(DeleteBehavior.SetNull);
-
-            builder.HasOne(f => f.CarRentalCompany)
-                  .WithMany()
-                  .HasForeignKey(f => f.CarRentalCompanyId)
-                  .OnDelete(DeleteBehavior.SetNull);
 
             builder.HasOne(f => f.TourCompany)
-                  .WithMany()
+                  .WithMany(f => f.favoritets)
                   .HasForeignKey(f => f.TourCompanyId)
                   .OnDelete(DeleteBehavior.SetNull);
 
-            builder.HasIndex(f => new { f.UserId, f.HotelCompanyId, f.FlightCompanyId, f.CarRentalCompanyId, f.TourCompanyId }).IsUnique();
+            builder.HasIndex(f => new { f.UserId, f.HotelCompanyId, f.TourCompanyId }).IsUnique();
             builder.HasIndex(f => new { f.UserId, f.TourId }).IsUnique();
 
         }

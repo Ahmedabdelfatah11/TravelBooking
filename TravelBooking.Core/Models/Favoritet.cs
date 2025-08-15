@@ -16,13 +16,11 @@ namespace TravelBooking.Core.Models
         public string UserId { get; set; }
         [ForeignKey("HotelCompany")]
         public int? HotelCompanyId { get; set; }
-        [ForeignKey("Flight")]
-        public int? FlightCompanyId { get; set; }
-        [ForeignKey("CarRentalCompany")]
-        public int? CarRentalCompanyId { get; set; }
+        
         [ForeignKey("TourCompany")]
         public int? TourCompanyId { get; set; }
-        [Required]
+        
+
         [StringLength(50)]
         [ForeignKey("Tour")]
         public int? TourId { get; set; }
@@ -32,9 +30,6 @@ namespace TravelBooking.Core.Models
         public DateTime CreatedAt { get; set; } = DateTime.UtcNow.Date;
         public virtual ApplicationUser User { get; set; }
         public virtual HotelCompany HotelCompany { get; set; }
-        public virtual Flight Flight { get; set; }
-
-        public virtual CarRentalCompany CarRentalCompany { get; set; }
         public virtual TourCompany TourCompany { get; set; }
     }
 }
