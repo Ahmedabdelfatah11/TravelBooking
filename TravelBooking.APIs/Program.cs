@@ -25,6 +25,9 @@ using TravelBooking.Repository.Data;
 using TravelBooking.Repository.Data.Seeds;
 using TravelBooking.Service.Services;
 
+using TravelBooking.Repository.Hubs;
+using TravelBooking.Service.Services;
+using TravelBooking.Service.Services.ChatBot;
 using TravelBooking.Service.Services.Dashboard;
 
 
@@ -58,9 +61,7 @@ namespace TravelBooking.APIs
             webApplicationbuilder.Services.AddScoped<IEmailService, SmtpEmailService>();
             // Enhanced ChatBot Services
             webApplicationbuilder.Services.AddScoped<GeminiService>();
-            webApplicationbuilder.Services.AddScoped<ChatHistoryService>();
             webApplicationbuilder.Services.AddScoped<MultiRetrieverService>();
-            webApplicationbuilder.Services.AddScoped<ChatService>();
             webApplicationbuilder.Services.AddScoped<DatabaseChatIntegrationService>();
 
             //add Accessor for User
@@ -157,6 +158,14 @@ namespace TravelBooking.APIs
             webApplicationbuilder.Services.AddResponseCaching();
 
 
+            // HttpClient for external API calls
+            webApplicationbuilder.Services.AddHttpClient();
+
+            // ChatBot Services
+            webApplicationbuilder.Services.AddScoped<IChatBotService, ChatBotService>();
+
+            // SignalR
+            webApplicationbuilder.Services.AddSignalR();
 
             // Dashboard
             webApplicationbuilder.Services.AddScoped<IDashboardService, DashboardService>();
@@ -213,6 +222,7 @@ namespace TravelBooking.APIs
             app.MapControllers();
             app.MapFallbackToFile("index.html"); // <--- this makes /users load Angular
 
+            app.MapHub<ChatHub>("/chatHub");
             app.Run();
         }
     }
