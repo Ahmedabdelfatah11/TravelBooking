@@ -22,10 +22,16 @@ namespace TravelBooking.Service.Services
             var spec = new BookingByRoomAndDateRangeSpec(roomId, start, end);
             var bookings = await _bookingRepo.GetAllWithSpecAsync(spec);
 
+            // Only consider confirmed bookings for availability
+            var confirmedBookings = bookings
+                .Where(b => b.Status == Status.Confirmed)
+                .OrderBy(b => b.StartDate)
+                .ToList();
+
             var availableRanges = new List<DateRange>();
             DateTime current = start;
 
-            foreach (var booking in bookings)
+            foreach (var booking in confirmedBookings)
             {
                 if (current < booking.StartDate)
                 {
@@ -35,13 +41,15 @@ namespace TravelBooking.Service.Services
                         availableRanges.Add(new DateRange(current, gapEnd));
                     }
                 }
-                current = booking.EndDate.AddDays(1);
 
+                // Move current pointer past this booking
+                current = booking.EndDate.AddDays(1);
 
                 if (current > end)
                     break;
             }
 
+            // Add final range if there's still time left
             if (current <= end)
             {
                 availableRanges.Add(new DateRange(current, end));

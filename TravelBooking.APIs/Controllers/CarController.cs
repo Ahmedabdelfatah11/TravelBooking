@@ -72,6 +72,8 @@ namespace TravelBooking.APIs.Controllers
 
             var car = await _carRepo.GetAsync(serviceId);
             if (car == null) return NotFound(new ApiResponse(404));
+            if (!car.IsAvailable)
+                return BadRequest("Car is currently not available.");
 
             if (dto.StartDate >= dto.EndDate)
                 return BadRequest("Start date must be before end date.");

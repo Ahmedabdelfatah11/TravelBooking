@@ -207,12 +207,14 @@ namespace TravelBooking.Repository.Migrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    UserInput = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    GeminiResponse = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    UserId = table.Column<string>(type: "nvarchar(450)", nullable: false),
-                    CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    IsUserMessage = table.Column<bool>(type: "bit", nullable: false),
-                    MessageType = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                    Message = table.Column<string>(type: "nvarchar(2000)", maxLength: 2000, nullable: false),
+                    Response = table.Column<string>(type: "nvarchar(4000)", maxLength: 4000, nullable: false),
+                    UserId = table.Column<string>(type: "nvarchar(450)", nullable: true),
+                    SessionId = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
+                    Timestamp = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    IsFromUser = table.Column<bool>(type: "bit", nullable: false),
+                    Context = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    MessageType = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -222,7 +224,7 @@ namespace TravelBooking.Repository.Migrations
                         column: x => x.UserId,
                         principalTable: "AspNetUsers",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.SetNull);
                 });
 
             migrationBuilder.CreateTable(
@@ -307,8 +309,6 @@ namespace TravelBooking.Repository.Migrations
                     Price = table.Column<decimal>(type: "decimal(18,2)", nullable: true),
                     Description = table.Column<string>(type: "nvarchar(1000)", maxLength: 1000, nullable: true),
                     IsAvailable = table.Column<bool>(type: "bit", nullable: false, defaultValue: true),
-                    DepartureTime = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    ArrivalTime = table.Column<DateTime>(type: "datetime2", nullable: false),
                     Location = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: true),
                     ImageUrl = table.Column<string>(type: "nvarchar(500)", maxLength: 500, nullable: true),
                     Capacity = table.Column<int>(type: "int", nullable: false, defaultValue: 5),
@@ -426,7 +426,7 @@ namespace TravelBooking.Repository.Migrations
                         column: x => x.HotelCompanyId,
                         principalTable: "HotelCompanies",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.SetNull);
+                        onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "FK_Reviews_TourCompanies_TourCompanyId",
                         column: x => x.TourCompanyId,
@@ -558,7 +558,8 @@ namespace TravelBooking.Repository.Migrations
                     TourCompanyId = table.Column<int>(type: "int", nullable: true),
                     TourId = table.Column<int>(type: "int", maxLength: 50, nullable: true),
                     CompanyType = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false)
+                    CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    FlightId = table.Column<int>(type: "int", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -569,6 +570,11 @@ namespace TravelBooking.Repository.Migrations
                         principalTable: "AspNetUsers",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_Favorites_Flights_FlightId",
+                        column: x => x.FlightId,
+                        principalTable: "Flights",
+                        principalColumn: "Id");
                     table.ForeignKey(
                         name: "FK_Favorites_HotelCompanies_HotelCompanyId",
                         column: x => x.HotelCompanyId,
@@ -786,9 +792,29 @@ namespace TravelBooking.Repository.Migrations
                 column: "RentalCompanyId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_ChatMessages_MessageType",
+                table: "ChatMessages",
+                column: "MessageType");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_ChatMessages_SessionId",
+                table: "ChatMessages",
+                column: "SessionId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_ChatMessages_Timestamp",
+                table: "ChatMessages",
+                column: "Timestamp");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_ChatMessages_UserId",
                 table: "ChatMessages",
                 column: "UserId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Favorites_FlightId",
+                table: "Favorites",
+                column: "FlightId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Favorites_HotelCompanyId",

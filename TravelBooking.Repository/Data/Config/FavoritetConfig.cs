@@ -10,14 +10,14 @@ using TravelBooking.Core.Models;
 
 namespace TravelBooking.Repository.Data.Config
 {
-    public class FavoritetConfig: BaseEntityConfiguration<Favoritet>
+    public class FavoritetConfig : BaseEntityConfiguration<Favoritet>
     {
         public override void Configure(EntityTypeBuilder<Favoritet> builder)
         {
             base.Configure(builder);
 
             builder.HasOne(f => f.User)
-                            .WithMany(f=>f.favoritets)
+                            .WithMany(f => f.favoritets)
                             .HasForeignKey(f => f.UserId)
                             .OnDelete(DeleteBehavior.Cascade);
             builder.HasOne(f => f.HotelCompany)

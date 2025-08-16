@@ -54,8 +54,6 @@ namespace TravelBooking.Repository.Data
                         Price = c.Price,
                         Description = c.Description,
                         IsAvailable = c.IsAvailable,
-                        DepartureTime = c.DepartureTime,
-                        ArrivalTime = c.ArrivalTime,
                         Location = c.Location,
                         ImageUrl = c.ImageUrl,
                         Capacity = c.Capacity,

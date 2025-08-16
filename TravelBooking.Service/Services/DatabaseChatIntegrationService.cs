@@ -56,16 +56,7 @@ namespace TravelBooking.Service.Services
                 query = query.Where(c => c.Capacity >= criteria.MinCapacity);
             }
 
-            if (criteria.PickupDate.HasValue)
-            {
-                query = query.Where(c => c.DepartureTime >= criteria.PickupDate);
-            }
-
-            if (criteria.ReturnDate.HasValue)
-            {
-                query = query.Where(c => c.ArrivalTime <= criteria.ReturnDate);
-            }
-
+           
             if (!string.IsNullOrEmpty(criteria.SearchText))
             {
                 query = query.Where(c =>

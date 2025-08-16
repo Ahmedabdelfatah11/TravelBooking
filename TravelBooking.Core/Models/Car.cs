@@ -15,13 +15,13 @@ namespace TravelBooking.Core.Models
         public decimal? Price { get; set; }
         public string? Description { get; set; }
         public bool IsAvailable { get; set; }
-        [Required(ErrorMessage = "Departure time is required.")]
-        [FutureDate(ErrorMessage = "Departure time must be in the future.")]
-        public DateTime DepartureTime { get; set; }
+        //[Required(ErrorMessage = "Departure time is required.")]
+        //[FutureDate(ErrorMessage = "Departure time must be in the future.")]
+        //public DateTime DepartureTime { get; set; }
 
-        [Required(ErrorMessage = "Arrival time is required.")]
-        [GreaterThan("DepartureTime", ErrorMessage = "Arrival time must be after departure time.")]
-        public DateTime ArrivalTime { get; set; }
+        //[Required(ErrorMessage = "Arrival time is required.")]
+        //[GreaterThan("DepartureTime", ErrorMessage = "Arrival time must be after departure time.")]
+        //public DateTime ArrivalTime { get; set; }
         public string? Location { get; set; } // Location where the car is available for rent 
         public string? ImageUrl { get; set; }
 

@@ -21,9 +21,10 @@ namespace TravelBooking.Repository.Data.Config
                             .HasForeignKey(f => f.UserId)
                             .OnDelete(DeleteBehavior.Cascade);
             builder.HasOne(f => f.HotelCompany)
-                .WithMany(r=>r.reviews)
-                .HasForeignKey(f => f.HotelCompanyId)
-                .OnDelete(DeleteBehavior.SetNull);
+                            .WithMany(e=>e.reviews)
+                            .HasForeignKey(f => f.HotelCompanyId)
+                            .OnDelete(DeleteBehavior.Cascade);
+          
 
             builder.HasOne(f => f.FlightCompany)
                   .WithMany(r => r.reviews)
@@ -31,7 +32,7 @@ namespace TravelBooking.Repository.Data.Config
                   .OnDelete(DeleteBehavior.SetNull);
 
             builder.HasOne(f => f.CarRentalCompany)
-                  .WithMany(r => r.reviews)
+                 .WithMany(r => r.reviews)
                   .HasForeignKey(f => f.CarRentalCompanyId)
                   .OnDelete(DeleteBehavior.SetNull);
 

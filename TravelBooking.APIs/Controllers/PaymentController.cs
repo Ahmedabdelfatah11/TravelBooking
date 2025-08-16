@@ -15,12 +15,17 @@ public class PaymentController : ControllerBase
     private readonly IPaymentService _paymentService;
     private readonly IGenericRepository<Booking> _bookingRepo;
     private readonly AppDbContext _context;
-
-    public PaymentController(IPaymentService paymentService, IGenericRepository<Booking> bookingRepo, AppDbContext context)
+    private readonly IGenericRepository<Flight> _flightRepo;
+    private readonly IGenericRepository<Car> _carRepo;
+    public PaymentController(IPaymentService paymentService, IGenericRepository<Booking> bookingRepo,
+        AppDbContext context, IGenericRepository<Flight> flightRepo, IGenericRepository<Car> carRepo)
     {
         _paymentService = paymentService;
         _bookingRepo = bookingRepo;
         _context = context;
+        _flightRepo = flightRepo;
+        _carRepo = carRepo;
+
     }
 
     // Endpoint to create a Stripe PaymentIntent for a given booking
@@ -84,6 +89,58 @@ public class PaymentController : ControllerBase
                             ticket.IsActive = false;
 
                         _context.TourTickets.Update(ticket);
+                    }
+
+                    if (booking.CarId != null)
+                    {
+                        var car = await _carRepo.GetAsync(booking.CarId.Value);
+                        if (car == null)
+                            return NotFound("Car not found for booking.");
+
+                        car.IsAvailable = false;
+                        await _carRepo.Update(car);
+                    }
+
+
+
+                    if (booking.FlightId != null)
+                    {
+                        var flight = await _flightRepo.GetAsync(booking.FlightId.Value);
+                        if (flight == null)
+                            return NotFound("Flight not found for booking.");
+
+                        switch (booking.SeatClass)
+                        {
+                            case SeatClass.Economy:
+                                if (flight.EconomySeats <= 0)
+                                    return BadRequest("No economy seats left.");
+                                flight.EconomySeats--;
+                                break;
+                            case SeatClass.Business:
+                                if (flight.BusinessSeats <= 0)
+                                    return BadRequest("No business seats left.");
+                                flight.BusinessSeats--;
+                                break;
+                            case SeatClass.FirstClass:
+                                if (flight.FirstClassSeats <= 0)
+                                    return BadRequest("No first class seats left.");
+                                flight.FirstClassSeats--;
+                                break;
+                        }
+
+                        await _flightRepo.Update(flight);
+                    }
+                    if(booking.RoomId != null)
+                    {
+                        var overlappingConfirmed = await _bookingRepo.GetAllAsync(b =>
+                    b.RoomId == booking.RoomId &&
+                     b.Status == Status.Confirmed &&
+                       b.StartDate < booking.EndDate &&
+                       booking.StartDate < b.EndDate
+                        );
+
+                        if (overlappingConfirmed.Any())
+                            return BadRequest("Room is no longer available for the selected dates.");
                     }
                     // ✅ Update or create Payment record
                     if (booking.Payment != null)
