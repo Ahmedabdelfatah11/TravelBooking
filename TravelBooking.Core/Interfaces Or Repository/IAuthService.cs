@@ -2,6 +2,7 @@
 using System.IdentityModel.Tokens.Jwt;
 using TravelBooking.Models;
 using TravelBooking.Models.ResetPassword;
+using TravelBooking.Service;
 
 namespace TravelBooking.Core.Services
 {
@@ -20,7 +21,7 @@ namespace TravelBooking.Core.Services
         
         //Super Admin
         Task<AuthModel> CreateUserByAdmin(RegisterModel model, string role);
-        Task<List<object>> GetAllUsersAsync(int pageIndex, int pageSize);
+        Task<List<UserListDto>> GetAllUsersAsync(int pageIndex, int pageSize);
         Task<string> AssignRoleToUserAsync(string userId, int companyId, string companyType);
         Task<string> RemoveRoleFromUserAsync(string userId, string role);
         Task<string> DeleteUserAsync(string userId);

@@ -124,6 +124,10 @@ namespace TravelBooking.Repository
         {
             return await _dbContext.Set<T>().CountAsync(predicate);
         }
-
+        public async Task<T?> FindAsync(Expression<Func<T, bool>> predicate)
+        {
+            return await _dbContext.Set<T>().FirstOrDefaultAsync(predicate);
         }
+
+    }
     }

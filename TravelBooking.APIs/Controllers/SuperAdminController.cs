@@ -1,16 +1,21 @@
 ﻿using AutoMapper;
+using Google.Api.Gax.Grpc;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using TravelBooking.APIs.DTOS.Admins;
 using TravelBooking.APIs.DTOS.FlightCompany;
 using TravelBooking.APIs.DTOS.HotelCompany;
 using TravelBooking.APIs.DTOS.TourCompany;
+using TravelBooking.APIs.DTOS.Users;
 using TravelBooking.Core.DTOS.CarRentalCompanies;
 using TravelBooking.Core.Models;
 using TravelBooking.Core.Repository.Contract;
 using TravelBooking.Core.Services;
 using TravelBooking.Models;
+using TravelBooking.Service;
 using TravelBooking.Service.Services.Dashboard;
 
 namespace TravelBooking.APIs.Controllers
@@ -28,6 +33,7 @@ namespace TravelBooking.APIs.Controllers
         private readonly IGenericRepository<CarRentalCompany> _carRentalRepo;
         private readonly IGenericRepository<TourCompany> _tourCompanyRepo;
         private readonly IMapper _mapper;
+        private readonly UserManager<ApplicationUser> _userManager;
 
         public SuperAdminController(IAuthService authService, IDashboardService dashboardService,
 
@@ -36,7 +42,8 @@ namespace TravelBooking.APIs.Controllers
             IGenericRepository<FlightCompany> flightRepo,
             IGenericRepository<CarRentalCompany> carRentalRepo,
             IGenericRepository<TourCompany> tourCompanyRepo,
-            IMapper mapper
+            IMapper mapper,
+            UserManager<ApplicationUser> userManager
 
 
             )
@@ -49,6 +56,7 @@ namespace TravelBooking.APIs.Controllers
             _carRentalRepo = carRentalRepo;
             _tourCompanyRepo = tourCompanyRepo;
             _mapper = mapper;
+            _userManager = userManager;
         }
 
 
@@ -194,13 +202,29 @@ namespace TravelBooking.APIs.Controllers
 
         //1-Get All user 
         ///api/SuperAdmin/users?pageIndex=1&pageSize=10
+        // In your AuthService or UserService
         [HttpGet("users")]
-        public async Task<ActionResult> GetAllUsers([FromQuery] int pageIndex = 1, [FromQuery] int pageSize = 10)
+        public async Task<IActionResult> GetAllUsers(
+    [FromQuery] int pageIndex = 1,
+    [FromQuery] int pageSize = 1000)
         {
             var users = await _authService.GetAllUsersAsync(pageIndex, pageSize);
-            return Ok(users);
-        }
+            var totalCount = await _userManager.Users.CountAsync(); // Or cache this
 
+            return Ok(new UserListResponse<UserListDto>
+            {
+                Data = users,
+                TotalCount = totalCount
+            });
+        }
+        // Helper to get entity name (optional)
+        private string? GetEntityName(ApplicationUser user)
+        {
+            return user.HotelCompany?.Name ??
+                   user.FlightCompany?.Name ??
+                   user.TourCompany?.Name ??
+                   user.CarRentalCompany?.Name;
+        }
 
         ///api/SuperAdmin/assign-role
         ///Body:
@@ -212,12 +236,103 @@ namespace TravelBooking.APIs.Controllers
         [HttpPost("assign-role")]
         public async Task<ActionResult> AssignRole([FromBody] AssignAdminToCompanyDto dto)
         {
-            var result = await _authService.AssignRoleToUserAsync(dto.UserId, dto.CompanyId, dto.CompanyType);
+            if (string.IsNullOrEmpty(dto.UserId))
+                return BadRequest("UserId is required.");
 
-            if (result == "Admin assigned to company successfully")
-                return Ok(new { message = result });
+            var user = await _userManager.FindByIdAsync(dto.UserId);
+            if (user == null)
+                return NotFound("User not found.");
 
-            return BadRequest(new { message = result });
+            // Normalize and validate
+            var companyType = dto.CompanyType?.ToLower();
+            var validTypes = new[] { "hotel", "flight", "carrental", "tour" };
+            if (string.IsNullOrEmpty(companyType) || !validTypes.Contains(companyType))
+                return BadRequest("Invalid CompanyType");
+
+            // Map to role
+            string role = companyType switch
+            {
+                "hotel" => "HotelAdmin",
+                "flight" => "FlightAdmin",
+                "carrental" => "CarRentalAdmin",
+                "tour" => "TourAdmin",
+                _ => throw new InvalidOperationException()
+            };
+
+            int? assignedCompanyId = null;
+            string? companyName = null;
+
+            // Assign to company
+            if (dto.CompanyId.HasValue)
+            {
+                assignedCompanyId = dto.CompanyId.Value;
+            }
+            else
+            {
+                switch (companyType)
+                {
+                    case "hotel":
+                        var hotel = await _hotelRepo.FindAsync(h => h.AdminId == null);
+                        if (hotel != null)
+                        {
+                            hotel.AdminId = user.Id;
+                            await _hotelRepo.Update(hotel);
+                            assignedCompanyId = hotel.Id;
+                            companyName = hotel.Name;
+                        }
+                        break;
+
+                    case "flight":
+                        var flight = await _flightRepo.FindAsync(f => f.AdminId == null);
+                        if (flight != null)
+                        {
+                            flight.AdminId = user.Id;
+                            await _flightRepo.Update(flight);
+                            assignedCompanyId = flight.Id;
+                            companyName = flight.Name;
+                        }
+                        break;
+
+                    case "carrental":
+                        var car = await _carRentalRepo.FindAsync(c => c.AdminId == null);
+                        if (car != null)
+                        {
+                            car.AdminId = user.Id;
+                            await _carRentalRepo.Update(car);
+                            assignedCompanyId = car.Id;
+                            companyName = car.Name;
+                        }
+                        break;
+
+                    case "tour":
+                        var tour = await _tourCompanyRepo.FindAsync(t => t.AdminId == null);
+                        if (tour != null)
+                        {
+                            tour.AdminId = user.Id;
+                            await _tourCompanyRepo.Update(tour);
+                            assignedCompanyId = tour.Id;
+                            companyName = tour.Name;
+                        }
+                        break;
+                }
+            }
+
+            // Assign role
+            var roleResult = await _userManager.AddToRoleAsync(user, role);
+            if (!roleResult.Succeeded)
+                return BadRequest(new
+                {
+                    message = "Failed to assign role",
+                    errors = roleResult.Errors.Select(e => e.Description)
+                });
+
+            return Ok(new
+            {
+                message = $"Role '{role}' assigned successfully",
+                companyId = assignedCompanyId,
+                companyName,
+                autoAssigned = !dto.CompanyId.HasValue && assignedCompanyId.HasValue
+            });
         }
 
         [HttpPost("remove-role")]
@@ -231,6 +346,7 @@ namespace TravelBooking.APIs.Controllers
             return BadRequest(new { message = result });
         }
 
+
         [HttpDelete("delete-user/{userId}")]
         public async Task<ActionResult> DeleteUser(string userId)
         {
@@ -241,6 +357,8 @@ namespace TravelBooking.APIs.Controllers
 
             return BadRequest(new { message = result });
         }
+
+
 
         // /api/SuperAdmin/add-user?role=HotelAdmin
         //ADD ANY Admin

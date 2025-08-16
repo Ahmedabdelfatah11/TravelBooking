@@ -1,4 +1,4 @@
-
+﻿
 using AutoMapper;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
@@ -21,6 +21,7 @@ using TravelBooking.EmailBuilderbody;
 using TravelBooking.Models;
 using TravelBooking.Models.ResetPassword;
 using TravelBooking.Repository.Data.Seeds;
+using TravelBooking.Service;
 using static Org.BouncyCastle.Math.EC.ECCurve;
 
 
@@ -449,65 +450,117 @@ namespace TravelBooking.Core.Models.Services
                 IsAuthenticated = false
             };
         }
-        public async Task<List<object>> GetAllUsersAsync(int pageIndex, int pageSize)
+        public async Task<List<UserListDto>> GetAllUsersAsync(int pageIndex, int pageSize)
         {
-            var users = await _userManager.Users
-       .Skip((pageIndex - 1) * pageSize)
-       .Take(pageSize)
-       .ToListAsync();
+            // Step 1: Get user IDs (lightweight)
+            var userIds = await _userManager.Users
+                .Skip((pageIndex - 1) * pageSize)
+                .Take(pageSize)
+                .Select(u => u.Id)
+                .ToListAsync();
 
-            var userIds = users.Select(u => u.Id).ToList();
+            if (!userIds.Any()) return new List<UserListDto>();
 
-            // Fetch all related companies in advance (batch query)
+            // Step 2: Fetch companies
             var hotels = await _hotelCompanyRepo.GetAllAsync(h => userIds.Contains(h.AdminId));
             var carCompanies = await _carRentalCompanyRepo.GetAllAsync(c => userIds.Contains(c.AdminId));
             var flightCompanies = await _flightCompanyRepo.GetAllAsync(f => userIds.Contains(f.AdminId));
             var tourCompanies = await _tourCompanyRepo.GetAllAsync(t => userIds.Contains(t.AdminId));
 
-            var userDtos = new List<object>();
+            var result = new List<UserListDto>();
 
-            foreach (var user in users)
+            foreach (var userId in userIds)
             {
-                var roles = await _userManager.GetRolesAsync(user);
-                string? entityName = null;
+                // ✅ Critical: Reload user fresh
+                var freshUser = await _userManager.FindByIdAsync(userId);
+                if (freshUser == null) continue;
 
+                // ✅ Get roles from fresh user
+                var roles = await _userManager.GetRolesAsync(freshUser);
+
+                var managedCompanies = new List<UserManagedCompanyDto>();
+
+                // ✅ Hotel
                 if (roles.Contains("HotelAdmin"))
                 {
-                    var hotel = hotels.FirstOrDefault(h => h.AdminId == user.Id);
-                    entityName = hotel?.Name;
-                }
-                else if (roles.Contains("CarRentalAdmin"))
-                {
-                    var carCompany = carCompanies.FirstOrDefault(c => c.AdminId == user.Id);
-                    entityName = carCompany?.Name;
-                }
-                else if (roles.Contains("FlightAdmin"))
-                {
-                    var flightCompany = flightCompanies.FirstOrDefault(f => f.AdminId == user.Id);
-                    entityName = flightCompany?.Name;
-                }
-                else if (roles.Contains("TourAdmin"))
-                {
-                    var tourCompany = tourCompanies.FirstOrDefault(t => t.AdminId == user.Id);
-                    entityName = tourCompany?.Name;
+                    var hotel = hotels.FirstOrDefault(h => h.AdminId == userId);
+                    if (hotel != null)
+                    {
+                        managedCompanies.Add(new UserManagedCompanyDto
+                        {
+                            Role = "HotelAdmin",
+                            CompanyName = hotel.Name,
+                            CompanyId = hotel.Id,
+                            CompanyType = "Hotel"
+                        });
+                    }
                 }
 
-                userDtos.Add(new
+                // ✅ Flight
+                if (roles.Contains("FlightAdmin"))
                 {
-                    user.Id,
-                    user.UserName,
-                    user.Email,
-                    user.EmailConfirmed,
+                    var flight = flightCompanies.FirstOrDefault(f => f.AdminId == userId);
+                    if (flight != null)
+                    {
+                        managedCompanies.Add(new UserManagedCompanyDto
+                        {
+                            Role = "FlightAdmin",
+                            CompanyName = flight.Name,
+                            CompanyId = flight.Id,
+                            CompanyType = "Flight"
+                        });
+                    }
+                }
+
+                // ✅ Car Rental
+                if (roles.Contains("CarRentalAdmin"))
+                {
+                    var car = carCompanies.FirstOrDefault(c => c.AdminId == userId);
+                    if (car != null)
+                    {
+                        managedCompanies.Add(new UserManagedCompanyDto
+                        {
+                            Role = "CarRentalAdmin",
+                            CompanyName = car.Name,
+                            CompanyId = car.Id,
+                            CompanyType = "Car Rental"
+                        });
+                    }
+                }
+
+                // ✅ Tour
+                if (roles.Contains("TourAdmin"))
+                {
+                    var tour = tourCompanies.FirstOrDefault(t => t.AdminId == userId);
+                    if (tour != null)
+                    {
+                        managedCompanies.Add(new UserManagedCompanyDto
+                        {
+                            Role = "TourAdmin",
+                            CompanyName = tour.Name,
+                            CompanyId = tour.Id,
+                            CompanyType = "Tour"
+                        });
+                    }
+                }
+
+                result.Add(new UserListDto
+                {
+                    Id = freshUser.Id,
+                    UserName = freshUser.UserName,
+                    Email = freshUser.Email,
+                    FirstName = freshUser.FirstName,
+                    LastName = freshUser.LastName,
+                    PhoneNumber = freshUser.PhoneNumber,
+                    Address = freshUser.Address,
+                    EmailConfirmed = freshUser.EmailConfirmed,
                     Roles = roles,
-                    EntityName = entityName
+                    ManagedCompanies = managedCompanies
                 });
             }
 
-            return userDtos;
-
-
+            return result;
         }
-
         public async Task<string> AssignRoleToUserAsync(string userId, int companyId, string companyType)
         {
             var user = await _userManager.FindByIdAsync(userId);
@@ -572,12 +625,23 @@ namespace TravelBooking.Core.Models.Services
         public async Task<string> RemoveRoleFromUserAsync(string userId, string role)
         {
             var user = await _userManager.FindByIdAsync(userId);
-            if (user == null)
-                return "User not found";
+            if (user == null) return "User not found";
+
+            // 🔍 LOG 1: Roles BEFORE
+            var rolesBefore = string.Join(", ", await _userManager.GetRolesAsync(user));
+            Console.WriteLine($"🔧 BEFORE Remove '{role}': [{rolesBefore}]");
 
             var result = await _userManager.RemoveFromRoleAsync(user, role);
+
+            // 🔍 LOG 2: Roles AFTER
+            var rolesAfter = string.Join(", ", await _userManager.GetRolesAsync(user));
+            Console.WriteLine($"🔧 AFTER Remove '{role}': [{rolesAfter}]");
+
             if (result.Succeeded)
+            {
+                await _userManager.UpdateAsync(user);
                 return "Role removed successfully";
+            }
 
             return string.Join(", ", result.Errors.Select(e => e.Description));
         }
@@ -604,7 +668,6 @@ namespace TravelBooking.Core.Models.Services
 
             return string.Join(", ", result.Errors.Select(e => e.Description));
         }
-
 
     }
 }

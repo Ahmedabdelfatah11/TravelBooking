@@ -10,6 +10,7 @@ namespace TravelBooking.APIs.DTOS.HotelCompany
         public string Location { get; set; }
         public string ImageUrl { get; set; }
         public string Rating { get; set; }
+        public string? AdminId { get; set; } 
 
         public List<RoomToReturnDTO> Rooms { get; set; } = new();
     }

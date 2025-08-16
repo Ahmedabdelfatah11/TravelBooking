@@ -144,7 +144,7 @@ namespace TravelBooking.APIs
             {
                 options.AddPolicy("AllowAngularApp", policy =>
                 {
-                    policy.WithOrigins("http://localhost:56292", "http://localhost:4200")
+                    policy.WithOrigins("http://localhost:53517", "http://localhost:4200")
                           .AllowAnyHeader()
                           .AllowAnyMethod()
                      .AllowCredentials();
@@ -202,7 +202,7 @@ namespace TravelBooking.APIs
                 app.UseSwaggerMiddlewares();
             }
             // Response Caching
-            
+
             app.UseHttpsRedirection();
             app.UseStaticFiles();
             app.MapStaticAssets();
@@ -212,6 +212,7 @@ namespace TravelBooking.APIs
             app.UseAuthorization();
             app.UseResponseCaching();
             app.MapControllers();
+            app.MapFallbackToFile("index.html"); // <--- this makes /users load Angular
 
             app.Run();
         }
