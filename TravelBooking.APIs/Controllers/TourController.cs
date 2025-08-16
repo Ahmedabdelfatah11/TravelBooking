@@ -87,13 +87,11 @@ namespace TravelBooking.APIs.Controllers
         {
             var entity = _mapper.Map<Tour>(dto);
 
-            // ✅ رفع الصورة الرئيسية (واحدة)
             if (dto.Image != null)
             {
-                entity.ImageUrl = await SaveImageAsync(dto.Image); // ✅ استخدم SaveImageAsync
+                entity.ImageUrl = await SaveImageAsync(dto.Image); 
             }
 
-            // ✅ رفع الصور الإضافية (مصفوفة)
             if (dto.GalleryImages != null && dto.GalleryImages.Any())
             {
                 var imageUrls = await SaveImagesAsync(dto.GalleryImages);
@@ -105,7 +103,6 @@ namespace TravelBooking.APIs.Controllers
 
             var result = await _tourRepo.AddAsync(entity);
 
-            // حفظ التذاكر إن وُجدت
             if (dto.Tickets != null && dto.Tickets.Any())
             {
                 foreach (var ticketDto in dto.Tickets)
@@ -117,7 +114,6 @@ namespace TravelBooking.APIs.Controllers
                 await _context.SaveChangesAsync();
             }
 
-            // تحميل شركة الرحلة
             result.TourCompany = await _tourCompany.GetAsync(dto.TourCompanyId.Value);
 
             var resultDto = _mapper.Map<TourReadDto>(result);
