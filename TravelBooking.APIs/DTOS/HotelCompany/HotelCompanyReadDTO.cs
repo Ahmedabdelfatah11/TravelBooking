@@ -13,5 +13,6 @@ namespace TravelBooking.APIs.DTOS.HotelCompany
         public string? AdminId { get; set; } 
 
         public List<RoomToReturnDTO> Rooms { get; set; } = new();
+ 
     }
 }

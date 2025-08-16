@@ -15,19 +15,7 @@ namespace TravelBooking.Repository.Data.Seeds
     public static class RoleSeeder
     {
         public static async Task SeedAsync(IServiceProvider serviceProvider)
-        {
-            //foreach (var roleName in Enum.GetNames(typeof(Roles)))
-            //{
-            //    if (!await roleManager.RoleExistsAsync(roleName))
-            //    {
-            //        var result = await roleManager.CreateAsync(new IdentityRole(roleName));
-            //        Console.WriteLine($"Created role: {roleName} | Success: {result.Succeeded}");
-            //    }
-            //    else
-            //    {
-            //        Console.WriteLine($"Role already exists: {roleName}");
-            //    }
-            //}
+        { 
 
 
             var roleManager = serviceProvider.GetRequiredService<RoleManager<IdentityRole>>();

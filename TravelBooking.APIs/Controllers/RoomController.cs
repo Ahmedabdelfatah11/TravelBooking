@@ -1,4 +1,4 @@
-
+﻿
 using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
@@ -20,7 +20,7 @@ namespace TravelBooking.APIs.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    [Authorize(Roles = "SuperAdmin,HotelAdmin")]
+    [Authorize(Roles = "HotelAdmin")]
     public class RoomController : ControllerBase
     {
         private readonly IGenericRepository<Room> _roomRepo;
@@ -153,58 +153,77 @@ namespace TravelBooking.APIs.Controllers
         /// <returns>Created room</returns>
         [HttpPost]
         [Authorize(Roles = "SuperAdmin,HotelAdmin")]
-        public async Task<ActionResult<RoomToReturnDTO>> CreateRoom([FromBody] RoomCreateDTO roomDto)
+        public async Task<ActionResult<RoomToReturnDTO>> CreateRoom([FromForm] RoomCreateDTO roomDto)
         {
-            if (!ModelState.IsValid)
-                return BadRequest(ModelState);
+            var hotel = await _hotelRepo.GetAsync(roomDto.HotelCompanyId);
+            if (hotel == null)
+                return BadRequest("Hotel not found");
 
-            // Check if hotel exists
-            var hotelExists = await _hotelRepo.GetAsync(roomDto.HotelCompanyId);
-            if (hotelExists == null)
-                return BadRequest("Hotel company not found");
-
-            var room = _mapper.Map<RoomCreateDTO, Room>(roomDto);
+            var room = _mapper.Map<Room>(roomDto);
             room.HotelId = roomDto.HotelCompanyId;
-
-            // Handle room images
+             
             if (roomDto.RoomImages != null && roomDto.RoomImages.Any())
             {
-                room.Images = _mapper.Map<List<RoomImage>>(roomDto.RoomImages);
+                var imageUrls = await SaveImagesAsync(roomDto.RoomImages);
+                foreach (var url in imageUrls)
+                {
+                    room.Images.Add(new RoomImage { ImageUrl = url });
+                }
             }
 
             await _roomRepo.AddAsync(room);
 
-            var result = _mapper.Map<Room, RoomToReturnDTO>(room);
+            var result = _mapper.Map<RoomToReturnDTO>(room);
             return CreatedAtAction(nameof(GetRoom), new { id = room.Id }, result);
         }
+        private async Task<string> SaveRoomImageAsync(IFormFile image)
+        {
+            var folderPath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "images", "rooms");
+            if (!Directory.Exists(folderPath))
+                Directory.CreateDirectory(folderPath);
 
+            var fileName = $"{Guid.NewGuid()}{Path.GetExtension(image.FileName)}";
+            var filePath = Path.Combine(folderPath, fileName);
+
+            using (var stream = new FileStream(filePath, FileMode.Create))
+            {
+                await image.CopyToAsync(stream);
+            }
+
+            return $"/images/rooms/{fileName}";
+        }
         /// <summary>
         /// Update existing room
         /// </summary>
         /// <param name="id">Room ID</param>
         /// <param name="roomDto">Room update data</param>
         /// <returns>No content</returns>
+
         [HttpPut("{id}")]
-        [Authorize(Roles = "SuperAdmin,HotelAdmin,User")]
-        public async Task<ActionResult> UpdateRoom(int id, [FromBody] RoomUpdateDTO roomDto)
+        [Authorize(Roles = "SuperAdmin,HotelAdmin")]
+        public async Task<ActionResult> UpdateRoom(int id, [FromForm] RoomUpdateDTO roomDto)
         {
-            if (!ModelState.IsValid)
-                return BadRequest(ModelState);
-
-            //if (id != roomDto.Id)
-            //    return BadRequest("ID mismatch");
-
             var room = await _roomRepo.GetAsync(id);
             if (room == null) return NotFound();
 
-            // Check if hotel exists
-            var hotelExists = await _hotelRepo.GetAsync(roomDto.HotelCompanyId);
-            if (hotelExists == null)
+            var hotel = await _hotelRepo.GetAsync(roomDto.HotelCompanyId);
+            if (hotel == null)
                 return BadRequest("Hotel company not found");
 
             _mapper.Map(roomDto, room);
-            _roomRepo.Update(room);
+             
+            if (roomDto.RoomImages != null && roomDto.RoomImages.Any())
+            {
+                var newImageUrls = await SaveImagesAsync(roomDto.RoomImages);
 
+                room.Images.Clear();  
+                foreach (var url in newImageUrls)
+                {
+                    room.Images.Add(new RoomImage { ImageUrl = url });
+                }
+            }
+
+            await _roomRepo.Update(room);
             return NoContent();
         }
 
@@ -222,6 +241,37 @@ namespace TravelBooking.APIs.Controllers
 
             _roomRepo.Delete(room);
             return NoContent();
+        }
+
+        private async Task<List<string>> SaveImagesAsync(List<IFormFile>? files)
+        {
+            var urls = new List<string>();
+
+            if (files == null || !files.Any())
+                return urls;
+             
+            var folderPath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "images", "rooms");
+            if (!Directory.Exists(folderPath))
+                Directory.CreateDirectory(folderPath);
+
+            foreach (var file in files)
+            {
+                if (file.Length == 0) continue;
+
+                var extension = Path.GetExtension(file.FileName).ToLower();
+                if (extension != ".jpg" && extension != ".jpeg" && extension != ".png" && extension != ".webp")
+                    throw new ArgumentException($"Invalid file type: {file.FileName}. Only jpg, jpeg, png, webp are allowed.");
+
+                var fileName = $"{Guid.NewGuid()}{extension}";
+                var filePath = Path.Combine(folderPath, fileName);
+
+                await using var stream = new FileStream(filePath, FileMode.Create);
+                await file.CopyToAsync(stream);
+
+                urls.Add($"/images/rooms/{fileName}");
+            }
+
+            return urls;
         }
     }
 }

@@ -19,7 +19,7 @@ namespace TravelBooking.APIs.DTOS.Tours
         public string Languages { get; set; }
         public int? TourCompanyId { get; set; }
         public string? TourCompanyName { get; set; }
-        public List<string>? ImageUrls { get; set; }
+        public IEnumerable<string>? ImageUrls { get; set; } 
 
 
         public List<TourTicketDto>? Tickets { get; set; }

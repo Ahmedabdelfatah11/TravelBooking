@@ -15,3 +15,4 @@ namespace TravelBooking.APIs.DTOS.FlightCompany
         public List<FlightDTO> Flights { get; set; } = new List<FlightDTO>(); // List of flights associated with the company
     }
 }
+  

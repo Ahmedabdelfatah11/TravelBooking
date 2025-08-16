@@ -102,32 +102,43 @@ namespace TravelBooking.APIs.Controllers
 
         [HttpPost]
         [Authorize(Roles = "SuperAdmin,CarRentalAdmin")]
-        public async Task<ActionResult> CreateCar(CarCreateUpdateDto dto)
+        public async Task<ActionResult> CreateCar([FromForm] CarCreateUpdateDto dto)
         {
             var car = _mapper.Map<Car>(dto);
 
-            // Assign RentalCompanyId manually if it's ignored in Mapping
+            // Assign RentalCompanyId manually if mapping ignores it
             if (car.RentalCompanyId == 0)
             {
                 car.RentalCompanyId = dto.RentalCompanyId;
             }
 
-            var result = await _carRepo.AddAsync(car);
+            if (dto.Image != null && dto.Image.Length > 0)
+            {
+                car.ImageUrl = await SaveImageAsync(dto.Image);
+            }
+
+            await _carRepo.AddAsync(car);
             return CreatedAtAction(nameof(GetCar), new { id = car.Id }, _mapper.Map<CarDto>(car));
         }
 
         //  PUT
         [HttpPut("{id}")]
-        public async Task<ActionResult> UpdateCar(int id, CarCreateUpdateDto dto)
+        public async Task<ActionResult> UpdateCar(int id, [FromForm] CarCreateUpdateDto dto)
         {
             var car = await _carRepo.GetAsync(id);
             if (car == null) return NotFound();
 
             _mapper.Map(dto, car);
-           await _carRepo.Update(car);
-            return NoContent();
 
+            if (dto.Image != null && dto.Image.Length > 0)
+            {
+                car.ImageUrl = await SaveImageAsync(dto.Image);
+            }
+
+            await _carRepo.Update(car);
+            return NoContent();
         }
+
 
         [HttpDelete("{id}")]
         [Authorize(Roles = "SuperAdmin,User,CarRentalAdmin")]
@@ -139,6 +150,23 @@ namespace TravelBooking.APIs.Controllers
            await _carRepo.Delete(car);
 
             return NoContent();
+        }
+
+        private async Task<string> SaveImageAsync(IFormFile image)
+        {
+            var folderPath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "images", "cars");
+            if (!Directory.Exists(folderPath))
+                Directory.CreateDirectory(folderPath);
+
+            var fileName = $"{Guid.NewGuid()}{Path.GetExtension(image.FileName)}";
+            var filePath = Path.Combine(folderPath, fileName);
+
+            using (var stream = new FileStream(filePath, FileMode.Create))
+            {
+                await image.CopyToAsync(stream);
+            }
+
+            return $"/images/cars/{fileName}";
         }
     }
 }

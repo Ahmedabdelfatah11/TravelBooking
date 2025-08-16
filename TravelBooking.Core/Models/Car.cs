@@ -30,7 +30,7 @@ namespace TravelBooking.Core.Models
         public int? RentalCompanyId { get; set; } // Foreign key to CarRentalCompany
         public CarRentalCompany? RentalCompany { get; set; } // Navigation property to CarRentalCompany
 
-        public string Name { get; set; }
+        public string? Name { get; set; }
 
         public float[]? Embedding { get; set; }
     }

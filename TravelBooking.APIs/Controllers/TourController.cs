@@ -83,10 +83,26 @@ namespace TravelBooking.APIs.Controllers
 
         [HttpPost]
         [Authorize(Roles = "SuperAdmin,TourAdmin")]
-        public async Task<ActionResult<TourReadDto>> CreateTour([FromBody] TourCreateDto dto)
+        public async Task<ActionResult<TourReadDto>> CreateTour([FromForm] TourCreateDto dto)
         {
             var entity = _mapper.Map<Tour>(dto);
+
+            if (dto.Image != null)
+            {
+                entity.ImageUrl = await SaveImageAsync(dto.Image); 
+            }
+
+            if (dto.GalleryImages != null && dto.GalleryImages.Any())
+            {
+                var imageUrls = await SaveImagesAsync(dto.GalleryImages);
+                foreach (var url in imageUrls)
+                {
+                    entity.TourImages.Add(new TourImage { ImageUrl = url });
+                }
+            }
+
             var result = await _tourRepo.AddAsync(entity);
+
             if (dto.Tickets != null && dto.Tickets.Any())
             {
                 foreach (var ticketDto in dto.Tickets)
@@ -98,13 +114,12 @@ namespace TravelBooking.APIs.Controllers
                 await _context.SaveChangesAsync();
             }
 
-
-            // Load TourCompany so AutoMapper can project its Name
             result.TourCompany = await _tourCompany.GetAsync(dto.TourCompanyId.Value);
 
             var resultDto = _mapper.Map<TourReadDto>(result);
             return CreatedAtAction(nameof(GetTourById), new { id = result.Id }, resultDto);
         }
+
         //[Authorize]
         [HttpPost("{serviceId}/book")]
         [AllowAnonymous]
@@ -191,19 +206,77 @@ namespace TravelBooking.APIs.Controllers
 
 
 
-        // PUT: api/TourCompany/5
         [HttpPut("{id}")]
-        [Authorize(Roles = "SuperAdmin,TourAdmin,User")]
-        public async Task<ActionResult> UpdateTour(int id, [FromBody] TourUpdateDto dto)
+        [Authorize(Roles = "SuperAdmin,TourAdmin")]
+        public async Task<ActionResult> UpdateTour(int id, [FromForm] TourUpdateDto dto)
         {
-            var existing = await _tourRepo.GetAsync(id);
+            var existing = await _tourRepo.GetWithSpecAsync(new ToursSpecification(id));
             if (existing == null) return NotFound();
 
             _mapper.Map(dto, existing);
+
+            // رفع صورة رئيسية جديدة
+            if (dto.Image != null)
+            {
+                existing.ImageUrl = await SaveImageAsync(dto.Image);
+            }
+
+            // رفع صور إضافية جديدة
+            if (dto.GalleryImages != null && dto.GalleryImages.Any())
+            {
+                var newImageUrls = await SaveImagesAsync(dto.GalleryImages);
+                foreach (var url in newImageUrls)
+                {
+                    existing.TourImages.Add(new TourImage { ImageUrl = url });
+                }
+            }
+
             await _tourRepo.Update(existing);
             return NoContent();
         }
 
+        private async Task<string> SaveImageAsync(IFormFile file)
+        {
+            if (file == null || file.Length == 0)
+                throw new ArgumentException("Invalid file");
+
+            var folderPath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "images", "tours");
+            if (!Directory.Exists(folderPath))
+                Directory.CreateDirectory(folderPath);
+
+            var fileName = $"{Guid.NewGuid()}{Path.GetExtension(file.FileName)}";
+            var filePath = Path.Combine(folderPath, fileName);
+
+            await using var stream = new FileStream(filePath, FileMode.Create);
+            await file.CopyToAsync(stream);
+
+            return $"/images/tours/{fileName}";
+        }
+        private async Task<List<string>> SaveImagesAsync(List<IFormFile>? files)
+        {
+            var urls = new List<string>();
+
+            if (files == null || !files.Any()) return urls;
+
+            var folderPath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "images", "tours");
+            if (!Directory.Exists(folderPath))
+                Directory.CreateDirectory(folderPath);
+
+            foreach (var file in files)
+            {
+                if (file.Length == 0) continue;
+
+                var fileName = $"{Guid.NewGuid()}{Path.GetExtension(file.FileName)}";
+                var filePath = Path.Combine(folderPath, fileName);
+
+                await using var stream = new FileStream(filePath, FileMode.Create);
+                await file.CopyToAsync(stream);
+
+                urls.Add($"/images/tours/{fileName}");
+            }
+
+            return urls;
+        }
         // DELETE: api/TourCompany/5
         [HttpDelete("{id}")]
         [Authorize(Roles = "SuperAdmin,TourAdmin,User")]
@@ -215,6 +288,6 @@ namespace TravelBooking.APIs.Controllers
             await _tourRepo.Delete(existing);
             return NoContent();
         }
-      
+
     }
 }

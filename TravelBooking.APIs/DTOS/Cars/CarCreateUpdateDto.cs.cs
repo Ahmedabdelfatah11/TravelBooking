@@ -14,7 +14,7 @@ namespace TravelBooking.Core.DTOS.Cars
         public string? Description { get; set; }
         public bool IsAvailable { get; set; } = true;
         public string? Location { get; set; }
-        public string? ImageUrl { get; set; }
+        public IFormFile? Image { get; set; }
         public int? Capacity { get; set; }
         public int RentalCompanyId { get; set; }
     }

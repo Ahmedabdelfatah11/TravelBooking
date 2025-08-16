@@ -1,28 +1,26 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using TravelBooking.APIs.DTOS.Rooms;
+﻿using System.ComponentModel.DataAnnotations;
 
-namespace TravelBooking.Core.Validations
+namespace TravelBooking.Core.Validations;
+
+public class MaxImagesCountAttribute : ValidationAttribute
 {
-    public class MaxImagesCountAttribute: ValidationAttribute
+    private readonly int _maxCount;
+
+    public MaxImagesCountAttribute(int maxCount)
     {
-        private readonly int _maxCount;
+        _maxCount = maxCount;
+        ErrorMessage = $"You can only upload up to {_maxCount} images.";
+    }
 
-        public MaxImagesCountAttribute(int maxCount)
+    public override bool IsValid(object? value)
+    {
+        if (value is null) return true;
+
+        if (value is List<IFormFile> files)
         {
-            _maxCount = maxCount;
+            return files.Count <= _maxCount;
         }
 
-        public override bool IsValid(object value)
-        {
-            if (value is List<RoomImageCreateDTO> images)
-                return images.Count <= _maxCount;
-
-            return false;
-        }
+        return false;
     }
 }
