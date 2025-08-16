@@ -22,8 +22,8 @@ using TravelBooking.Models;
 using TravelBooking.Repository;
 using TravelBooking.Repository.Data;
 
-using TravelBooking.Repository.Data.Seeds; 
-using TravelBooking.Service.Services; 
+using TravelBooking.Repository.Data.Seeds;
+using TravelBooking.Service.Services;
 
 using TravelBooking.Service.Services.Dashboard;
 
@@ -36,7 +36,6 @@ namespace TravelBooking.APIs
         {
 
             var webApplicationbuilder = WebApplication.CreateBuilder(args);
-
 
             webApplicationbuilder.Services.AddControllers();
             // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
@@ -138,7 +137,7 @@ namespace TravelBooking.APIs
             //});
 
             // adding Email service
-           webApplicationbuilder.Services.AddTransient<IEmailSender, EmailService>();
+            webApplicationbuilder.Services.AddTransient<IEmailSender, EmailService>();
 
             webApplicationbuilder.Services.AddCors(options =>
             {
@@ -157,7 +156,7 @@ namespace TravelBooking.APIs
             webApplicationbuilder.Services.AddMemoryCache();
             webApplicationbuilder.Services.AddResponseCaching();
 
-            
+
 
             // Dashboard
             webApplicationbuilder.Services.AddScoped<IDashboardService, DashboardService>();
@@ -189,7 +188,7 @@ namespace TravelBooking.APIs
                 await _dbcontext.Database.MigrateAsync();
                 await RoleSeeder.SeedAsync(Services); // assigning roles to the database 
                 await FlightContextSeed.SeedAsync(_dbcontext);
-                await TravelContextSeed.SeedAsync(_dbcontext); 
+                await TravelContextSeed.SeedAsync(_dbcontext);
 
             }
             catch (Exception ex)

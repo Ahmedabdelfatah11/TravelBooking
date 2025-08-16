@@ -17,6 +17,7 @@ namespace TravelBooking.Core.Specifications.CarSpecs
              (!carParams.MaxPrice.HasValue || c.Price <= carParams.MaxPrice.Value)
          )
         {
+            AddInclude(c => c.RentalCompany);
             if (!string.IsNullOrEmpty(carParams.Sort))
             {
                 switch (carParams.Sort.ToLower())
@@ -51,5 +52,6 @@ namespace TravelBooking.Core.Specifications.CarSpecs
         {
 
         }
+        
     }
 }
