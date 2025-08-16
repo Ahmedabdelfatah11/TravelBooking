@@ -315,7 +315,7 @@ namespace TravelBooking.Repository.Migrations
                     ImageUrl = table.Column<string>(type: "nvarchar(500)", maxLength: 500, nullable: true),
                     Capacity = table.Column<int>(type: "int", nullable: false, defaultValue: 5),
                     RentalCompanyId = table.Column<int>(type: "int", nullable: true),
-                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Name = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Embedding = table.Column<string>(type: "nvarchar(max)", nullable: true)
                 },
                 constraints: table =>

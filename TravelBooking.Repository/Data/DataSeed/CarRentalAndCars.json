@@ -467,7 +467,6 @@
       "RentalCompanyId": 6
     },
     {
-<<<<<<< HEAD
       "Model": "Volkswagen Passat 2024",
       "Price": 900.00,
       "Description": "Executive sedan with superior comfort and advanced technology. Perfect for business travelers and long-distance journeys across Egypt.",
@@ -934,7 +933,8 @@
       "ImageUrl": "https://di-uploads-pod6.dealerinspire.com/siddillonautogroup/uploads/2024/08/2024-Jeep-Grand-Cherokee-Cover.jpg",
       "Capacity": 5,
       "RentalCompanyId": 3
-=======
+    },
+    {
       "Model": "Volvo XC60 2024",
       "Price": 1400.00,
       "Description": "Swedish luxury SUV with advanced safety for family beach trips.",
@@ -981,12 +981,10 @@
       "ImageUrl": "https://images.unsplash.com/photo-1469474968028-56623f02e42e?w=500",
       "Capacity": 8,
       "RentalCompanyId": 7
->>>>>>> e6d2e3421c26644f82928e335646a05f25c4d470
     },
     {
       "Model": "Lincoln Navigator 2024",
       "Price": 2600.00,
-<<<<<<< HEAD
       "Description": "American luxury SUV with presidential-level comfort and space. Ultimate choice for VIP pyramid tours and luxury desert experiences.",
       "IsAvailable": true,
       "DepartureTime": "2025-09-22T05:30:00",
@@ -1019,15 +1017,6 @@
       "ImageUrl": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSDYPRU3hzCf01wFRrU-as79DSeb3EI5Jg3nA&s",
       "Capacity": 7,
       "RentalCompanyId": 3
-=======
-      "Description": "Premium American SUV for luxury resort and diving adventures.",
-      "IsAvailable": true,
-      "DepartureTime": "2025-09-15T08:00:00",
-      "ArrivalTime": "2025-09-15T19:00:00",
-      "Location": "Naama Bay",
-      "ImageUrl": "https://images.unsplash.com/photo-1544551763-46a013bb70d5?w=500",
-      "Capacity": 8,
-      "RentalCompanyId": 7
     },
     {
       "Model": "Porsche Cayenne 2024",
@@ -1688,7 +1677,6 @@
       "ImageUrl": "https://images.unsplash.com/photo-1580273916550-e323be2ae537?w=500",
       "Capacity": 5,
       "RentalCompanyId": 18
->>>>>>> e6d2e3421c26644f82928e335646a05f25c4d470
     }
   ]
 }

@@ -21,11 +21,16 @@ namespace TravelBooking.APIs.Extensions
             return query;
         }
 
-        public static async Task<(decimal MinPrice, decimal MaxPrice)> GetPriceBoundsAsync(this IQueryable<Tour> query)
+        public static async Task<(decimal? MinPrice, decimal? MaxPrice)> GetPriceBoundsAsync(this IQueryable<Tour> query)
         {
-            var min = await query.MinAsync(t => t.Price);
-            var max = await query.MaxAsync(t => t.Price);
+            if (!await query.AnyAsync())
+                return (null, null);  // no tours found → avoid exception
+
+            var min = await query.Select(t => (decimal?)t.Price).MinAsync();
+            var max = await query.Select(t => (decimal?)t.Price).MaxAsync();
+
             return (min, max);
         }
+
     }
 }
