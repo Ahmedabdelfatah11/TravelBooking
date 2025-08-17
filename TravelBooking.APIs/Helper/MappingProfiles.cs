@@ -150,7 +150,6 @@ namespace TravelBooking.Helper
                 .ForMember(dest => dest.DepartureAirport, opt => opt.MapFrom(src => src.Flight.DepartureAirport))
                 .ForMember(dest => dest.ArrivalAirport, opt => opt.MapFrom(src => src.Flight.ArrivalAirport))
                 .ForMember(dest => dest.FlightId, opt => opt.MapFrom(src => src.FlightId)) 
-
                 .ForMember(dest => dest.SeatClass, opt => opt.MapFrom(src => src.SeatClass)) 
                 .ForMember(dest => dest.Price, opt => opt.MapFrom(src => src.TotalPrice))
                 ;
