@@ -89,21 +89,21 @@ namespace TravelBooking.APIs.Controllers
                 case SeatClass.Economy:
                     if (flight.EconomySeats <= 0)
                         return BadRequest(new ApiResponse(400, "No economy seats available."));
-                    flight.EconomySeats--;
+                    
                     price = flight.EconomyPrice;
                     break;
 
                 case SeatClass.Business:
                     if (flight.BusinessSeats <= 0)
                         return BadRequest(new ApiResponse(400, "No business class seats available."));
-                    flight.BusinessSeats--;
+                    
                     price = flight.BusinessPrice;
                     break;
 
                 case SeatClass.FirstClass:
                     if (flight.FirstClassSeats <= 0)
                         return BadRequest(new ApiResponse(400, "No first class seats available."));
-                    flight.FirstClassSeats--;
+                    
                     price = flight.FirstClassPrice;
                     break;
 
@@ -123,7 +123,6 @@ namespace TravelBooking.APIs.Controllers
             };
 
             await _bookingRepo.AddAsync(booking);
-            await _flightRepo.Update(flight);
 
             booking.Flight = flight;
 

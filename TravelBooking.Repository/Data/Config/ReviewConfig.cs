@@ -17,26 +17,27 @@ namespace TravelBooking.Repository.Data.Config
             base.Configure(builder);
 
             builder.HasOne(f => f.User)
-                            .WithMany(e=>e.reviews)
+                            .WithMany(r => r.reviews)
                             .HasForeignKey(f => f.UserId)
                             .OnDelete(DeleteBehavior.Cascade);
             builder.HasOne(f => f.HotelCompany)
-                .WithMany(e => e.reviews)
-                .HasForeignKey(f => f.HotelCompanyId)
-                .OnDelete(DeleteBehavior.SetNull);
+                            .WithMany(e=>e.reviews)
+                            .HasForeignKey(f => f.HotelCompanyId)
+                            .OnDelete(DeleteBehavior.Cascade);
+          
 
             builder.HasOne(f => f.FlightCompany)
-                  .WithMany(e => e.reviews)
+                  .WithMany(r => r.reviews)
                   .HasForeignKey(f => f.FlightCompanyId)
                   .OnDelete(DeleteBehavior.SetNull);
 
             builder.HasOne(f => f.CarRentalCompany)
-                  .WithMany(e => e.reviews)
+                 .WithMany(r => r.reviews)
                   .HasForeignKey(f => f.CarRentalCompanyId)
                   .OnDelete(DeleteBehavior.SetNull);
 
             builder.HasOne(f => f.TourCompany)
-                  .WithMany(e => e.reviews)
+                  .WithMany(r => r.reviews)
                   .HasForeignKey(f => f.TourCompanyId)
                   .OnDelete(DeleteBehavior.SetNull);
 

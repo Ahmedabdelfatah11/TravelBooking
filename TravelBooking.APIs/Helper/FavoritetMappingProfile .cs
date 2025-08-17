@@ -29,9 +29,7 @@ namespace TravelBooking.APIs.Helper
             return favoritet.CompanyType.ToLower() switch
             {
                 "hotel" => favoritet.HotelCompany?.Name,
-                "flight" => favoritet.Flight?.FlightCompany?.Name,
-                "carrental" => favoritet.CarRentalCompany?.Name,
-                "tour" => favoritet.TourCompany?.Name,
+                "tour" => favoritet.Tour.TourCompany?.Name,
                 _ => null
             };
         }
@@ -40,10 +38,8 @@ namespace TravelBooking.APIs.Helper
         {
             return favoritet.CompanyType.ToLower() switch
             {
-                "hotel" => favoritet.HotelCompany?.Description,
-                "flight" => favoritet.Flight?.FlightCompany?.Description,
-                "carrental" => favoritet.CarRentalCompany?.description,
-                "tour" => favoritet.TourCompany?.Description,
+                "hotel" => favoritet.HotelCompany?.Description,       
+                "tour" => favoritet.Tour.TourCompany?.Description,
                 _ => null
             };
         }
@@ -53,9 +49,7 @@ namespace TravelBooking.APIs.Helper
             return favoritet.CompanyType.ToLower() switch
             {
                 "hotel" => favoritet.HotelCompany?.ImageUrl,
-                "flight" => favoritet.Flight?.FlightCompany?.ImageUrl,
-                "carrental" => favoritet.CarRentalCompany?.ImageUrl,
-                "tour" => favoritet.TourCompany?.ImageUrl,
+                "tour" => favoritet.Tour.TourCompany?.ImageUrl,
                 _ => null
             };
         }
@@ -65,9 +59,7 @@ namespace TravelBooking.APIs.Helper
             return favoritet.CompanyType.ToLower() switch
             {
                 "hotel" => favoritet.HotelCompany?.Location,
-                "flight" => favoritet.Flight?.FlightCompany?.Location,
-                "carrental" => favoritet.CarRentalCompany?.Location,
-                "tour" => favoritet.TourCompany?.Location,
+                "tour" => favoritet.Tour.TourCompany?.Location,
                 _ => null
             };
         }

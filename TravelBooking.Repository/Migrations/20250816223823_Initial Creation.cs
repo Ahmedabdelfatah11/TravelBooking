@@ -310,8 +310,6 @@ namespace TravelBooking.Repository.Migrations
                     Price = table.Column<decimal>(type: "decimal(18,2)", nullable: true),
                     Description = table.Column<string>(type: "nvarchar(1000)", maxLength: 1000, nullable: true),
                     IsAvailable = table.Column<bool>(type: "bit", nullable: false, defaultValue: true),
-                    DepartureTime = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    ArrivalTime = table.Column<DateTime>(type: "datetime2", nullable: false),
                     Location = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: true),
                     ImageUrl = table.Column<string>(type: "nvarchar(500)", maxLength: 500, nullable: true),
                     Capacity = table.Column<int>(type: "int", nullable: false, defaultValue: 5),
@@ -430,7 +428,7 @@ namespace TravelBooking.Repository.Migrations
                         column: x => x.HotelCompanyId,
                         principalTable: "HotelCompanies",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.SetNull);
+                        onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "FK_Reviews_TourCompanies_TourCompanyId",
                         column: x => x.TourCompanyId,
@@ -559,12 +557,11 @@ namespace TravelBooking.Repository.Migrations
                         .Annotation("SqlServer:Identity", "1, 1"),
                     UserId = table.Column<string>(type: "nvarchar(450)", nullable: false),
                     HotelCompanyId = table.Column<int>(type: "int", nullable: true),
-                    FlightCompanyId = table.Column<int>(type: "int", nullable: true),
-                    CarRentalCompanyId = table.Column<int>(type: "int", nullable: true),
                     TourCompanyId = table.Column<int>(type: "int", nullable: true),
-                    TourId = table.Column<int>(type: "int", maxLength: 50, nullable: false),
+                    TourId = table.Column<int>(type: "int", maxLength: 50, nullable: true),
                     CompanyType = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false)
+                    CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    FlightId = table.Column<int>(type: "int", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -576,17 +573,10 @@ namespace TravelBooking.Repository.Migrations
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_Favorites_CarRentalCompanies_CarRentalCompanyId",
-                        column: x => x.CarRentalCompanyId,
-                        principalTable: "CarRentalCompanies",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.SetNull);
-                    table.ForeignKey(
-                        name: "FK_Favorites_Flights_FlightCompanyId",
-                        column: x => x.FlightCompanyId,
+                        name: "FK_Favorites_Flights_FlightId",
+                        column: x => x.FlightId,
                         principalTable: "Flights",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.SetNull);
+                        principalColumn: "Id");
                     table.ForeignKey(
                         name: "FK_Favorites_HotelCompanies_HotelCompanyId",
                         column: x => x.HotelCompanyId,
@@ -603,8 +593,7 @@ namespace TravelBooking.Repository.Migrations
                         name: "FK_Favorites_Tours_TourId",
                         column: x => x.TourId,
                         principalTable: "Tours",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        principalColumn: "Id");
                 });
 
             migrationBuilder.CreateTable(
@@ -825,14 +814,9 @@ namespace TravelBooking.Repository.Migrations
                 column: "UserId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Favorites_CarRentalCompanyId",
+                name: "IX_Favorites_FlightId",
                 table: "Favorites",
-                column: "CarRentalCompanyId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Favorites_FlightCompanyId",
-                table: "Favorites",
-                column: "FlightCompanyId");
+                column: "FlightId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Favorites_HotelCompanyId",
@@ -850,17 +834,18 @@ namespace TravelBooking.Repository.Migrations
                 column: "TourId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Favorites_UserId_HotelCompanyId_FlightCompanyId_CarRentalCompanyId_TourCompanyId",
+                name: "IX_Favorites_UserId_HotelCompanyId_TourCompanyId",
                 table: "Favorites",
-                columns: new[] { "UserId", "HotelCompanyId", "FlightCompanyId", "CarRentalCompanyId", "TourCompanyId" },
+                columns: new[] { "UserId", "HotelCompanyId", "TourCompanyId" },
                 unique: true,
-                filter: "[HotelCompanyId] IS NOT NULL AND [FlightCompanyId] IS NOT NULL AND [CarRentalCompanyId] IS NOT NULL AND [TourCompanyId] IS NOT NULL");
+                filter: "[HotelCompanyId] IS NOT NULL AND [TourCompanyId] IS NOT NULL");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Favorites_UserId_TourId",
                 table: "Favorites",
                 columns: new[] { "UserId", "TourId" },
-                unique: true);
+                unique: true,
+                filter: "[TourId] IS NOT NULL");
 
             migrationBuilder.CreateIndex(
                 name: "IX_FlightCompanies_AdminId",

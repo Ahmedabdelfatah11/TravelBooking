@@ -71,8 +71,7 @@ namespace TravelBooking.Helper
                  .ForMember(dest => dest.Images, opt => opt.Ignore());
 
 
-            CreateMap<RoomUpdateDTO, Room>()
-                .ForMember(dest => dest.Images, opt => opt.MapFrom(src => src.RoomImages));
+           
 
             //  RoomImage Mappings
 
@@ -84,9 +83,8 @@ namespace TravelBooking.Helper
             //Car Mappings
             CreateMap<Car, CarDto>()
                 .ForMember(dest => dest.Name,
-               opt => opt.MapFrom(src => src.RentalCompany.Name))
-
-                .ReverseMap();
+               opt => opt.MapFrom(src => src.RentalCompany != null ? src.RentalCompany.Name : string.Empty));
+            CreateMap<CarDto, Car>();
             CreateMap<CarCreateUpdateDto, Car>();
               
             //CarRental
@@ -138,8 +136,9 @@ namespace TravelBooking.Helper
             CreateMap<Booking, CarBookingResultDto>()
                 .ForMember(dest => dest.Id, opt => opt.MapFrom(src => src.Id))
                 .ForMember(dest => dest.Status, opt => opt.MapFrom(src => src.Status.ToString()))
-                .ForMember(dest => dest.Price, opt => opt.MapFrom(src => src.Car != null ? src.Car.Price : 0))
                 .ForMember(dest => dest.CarId, opt => opt.MapFrom(src => src.CarId))
+                .ForMember(dest => dest.Price, opt => opt.MapFrom(src => src.TotalPrice))
+
                 .ForMember(dest => dest.CarModel, opt => opt.MapFrom(src => src.Car != null ? src.Car.Model : string.Empty));
 
 

@@ -6,8 +6,6 @@
         public string UserId { get; set; } = string.Empty;
         public string CompanyType { get; set; } = string.Empty;
         public int? HotelCompanyId { get; set; }
-        public int? FlightCompanyId { get; set; }
-        public int? CarRentalCompanyId { get; set; }
         public int? TourCompanyId { get; set; }
         public int? TourId { get; set; }
 

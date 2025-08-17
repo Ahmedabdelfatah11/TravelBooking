@@ -10,37 +10,28 @@ using TravelBooking.Core.Models;
 
 namespace TravelBooking.Repository.Data.Config
 {
-    public class FavoritetConfig: BaseEntityConfiguration<Favoritet>
+    public class FavoritetConfig : BaseEntityConfiguration<Favoritet>
     {
         public override void Configure(EntityTypeBuilder<Favoritet> builder)
         {
             base.Configure(builder);
 
             builder.HasOne(f => f.User)
-                            .WithMany(e=>e.favoritets)
+                            .WithMany(f => f.favoritets)
                             .HasForeignKey(f => f.UserId)
                             .OnDelete(DeleteBehavior.Cascade);
             builder.HasOne(f => f.HotelCompany)
-                .WithMany(e => e.favoritets)
+                .WithMany(f => f.favoritets)
                 .HasForeignKey(f => f.HotelCompanyId)
                 .OnDelete(DeleteBehavior.SetNull);
 
-            builder.HasOne(f => f.Flight)
-                  .WithMany(e => e.favoritets)
-                  .HasForeignKey(f => f.FlightCompanyId)
-                  .OnDelete(DeleteBehavior.SetNull);
-
-            builder.HasOne(f => f.CarRentalCompany)
-                  .WithMany(e => e.favoritets)
-                  .HasForeignKey(f => f.CarRentalCompanyId)
-                  .OnDelete(DeleteBehavior.SetNull);
 
             builder.HasOne(f => f.TourCompany)
-                  .WithMany(e => e.favoritets)
+                  .WithMany(f => f.favoritets)
                   .HasForeignKey(f => f.TourCompanyId)
                   .OnDelete(DeleteBehavior.SetNull);
 
-            builder.HasIndex(f => new { f.UserId, f.HotelCompanyId, f.FlightCompanyId, f.CarRentalCompanyId, f.TourCompanyId }).IsUnique();
+            builder.HasIndex(f => new { f.UserId, f.HotelCompanyId, f.TourCompanyId }).IsUnique();
             builder.HasIndex(f => new { f.UserId, f.TourId }).IsUnique();
 
         }

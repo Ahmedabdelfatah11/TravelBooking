@@ -50,7 +50,7 @@ namespace TravelBooking.Core.Specifications.CarSpecs
         public CarSpecifications(int id)
     : base(c => c.Id == id)
         {
-
+            AddInclude(c => c.RentalCompany);
         }
         
     }

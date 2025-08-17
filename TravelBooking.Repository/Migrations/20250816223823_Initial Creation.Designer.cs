@@ -12,7 +12,7 @@ using TravelBooking.Repository.Data;
 namespace TravelBooking.Repository.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20250816220641_Initial Creation")]
+    [Migration("20250816223823_Initial Creation")]
     partial class InitialCreation
     {
         /// <inheritdoc />
@@ -230,16 +230,10 @@ namespace TravelBooking.Repository.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<DateTime>("ArrivalTime")
-                        .HasColumnType("datetime2");
-
                     b.Property<int>("Capacity")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int")
                         .HasDefaultValue(5);
-
-                    b.Property<DateTime>("DepartureTime")
-                        .HasColumnType("datetime2");
 
                     b.Property<string>("Description")
                         .HasMaxLength(1000)
@@ -413,9 +407,6 @@ namespace TravelBooking.Repository.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<int?>("CarRentalCompanyId")
-                        .HasColumnType("int");
-
                     b.Property<string>("CompanyType")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -423,7 +414,7 @@ namespace TravelBooking.Repository.Migrations
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("datetime2");
 
-                    b.Property<int?>("FlightCompanyId")
+                    b.Property<int?>("FlightId")
                         .HasColumnType("int");
 
                     b.Property<int?>("HotelCompanyId")
@@ -432,7 +423,7 @@ namespace TravelBooking.Repository.Migrations
                     b.Property<int?>("TourCompanyId")
                         .HasColumnType("int");
 
-                    b.Property<int>("TourId")
+                    b.Property<int?>("TourId")
                         .HasMaxLength(50)
                         .HasColumnType("int");
 
@@ -442,9 +433,7 @@ namespace TravelBooking.Repository.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("CarRentalCompanyId");
-
-                    b.HasIndex("FlightCompanyId");
+                    b.HasIndex("FlightId");
 
                     b.HasIndex("HotelCompanyId");
 
@@ -453,11 +442,12 @@ namespace TravelBooking.Repository.Migrations
                     b.HasIndex("TourId");
 
                     b.HasIndex("UserId", "TourId")
-                        .IsUnique();
-
-                    b.HasIndex("UserId", "HotelCompanyId", "FlightCompanyId", "CarRentalCompanyId", "TourCompanyId")
                         .IsUnique()
-                        .HasFilter("[HotelCompanyId] IS NOT NULL AND [FlightCompanyId] IS NOT NULL AND [CarRentalCompanyId] IS NOT NULL AND [TourCompanyId] IS NOT NULL");
+                        .HasFilter("[TourId] IS NOT NULL");
+
+                    b.HasIndex("UserId", "HotelCompanyId", "TourCompanyId")
+                        .IsUnique()
+                        .HasFilter("[HotelCompanyId] IS NOT NULL AND [TourCompanyId] IS NOT NULL");
 
                     b.ToTable("Favorites");
                 });
@@ -1193,15 +1183,9 @@ namespace TravelBooking.Repository.Migrations
 
             modelBuilder.Entity("TravelBooking.Core.Models.Favoritet", b =>
                 {
-                    b.HasOne("TravelBooking.Core.Models.CarRentalCompany", "CarRentalCompany")
+                    b.HasOne("TravelBooking.Core.Models.Flight", null)
                         .WithMany("favoritets")
-                        .HasForeignKey("CarRentalCompanyId")
-                        .OnDelete(DeleteBehavior.SetNull);
-
-                    b.HasOne("TravelBooking.Core.Models.Flight", "Flight")
-                        .WithMany("favoritets")
-                        .HasForeignKey("FlightCompanyId")
-                        .OnDelete(DeleteBehavior.SetNull);
+                        .HasForeignKey("FlightId");
 
                     b.HasOne("TravelBooking.Core.Models.HotelCompany", "HotelCompany")
                         .WithMany("favoritets")
@@ -1215,19 +1199,13 @@ namespace TravelBooking.Repository.Migrations
 
                     b.HasOne("TravelBooking.Core.Models.Tour", "Tour")
                         .WithMany()
-                        .HasForeignKey("TourId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("TourId");
 
                     b.HasOne("TravelBooking.Models.ApplicationUser", "User")
                         .WithMany("favoritets")
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-
-                    b.Navigation("CarRentalCompany");
-
-                    b.Navigation("Flight");
 
                     b.Navigation("HotelCompany");
 
@@ -1295,7 +1273,7 @@ namespace TravelBooking.Repository.Migrations
                     b.HasOne("TravelBooking.Core.Models.HotelCompany", "HotelCompany")
                         .WithMany("reviews")
                         .HasForeignKey("HotelCompanyId")
-                        .OnDelete(DeleteBehavior.SetNull);
+                        .OnDelete(DeleteBehavior.Cascade);
 
                     b.HasOne("TravelBooking.Core.Models.TourCompany", "TourCompany")
                         .WithMany("reviews")
@@ -1422,8 +1400,6 @@ namespace TravelBooking.Repository.Migrations
             modelBuilder.Entity("TravelBooking.Core.Models.CarRentalCompany", b =>
                 {
                     b.Navigation("Cars");
-
-                    b.Navigation("favoritets");
 
                     b.Navigation("reviews");
                 });

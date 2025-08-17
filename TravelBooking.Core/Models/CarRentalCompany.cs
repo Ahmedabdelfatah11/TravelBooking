@@ -16,8 +16,6 @@ namespace TravelBooking.Core.Models
         public string? Rating { get; set; } // Rating out of 5 or a descriptive rating like "Excellent", "Good", etc.
         public ICollection<Car>? Cars { get; set; } // Navigation property for related cars
 
-        public ICollection<Favoritet> favoritets { get; set; } = new List<Favoritet>();
-
         public ICollection<Review> reviews { get; set; } = new List<Review>();
         public string? AdminId { get; set; } // FK to AspNetUsers
         public ApplicationUser? Admin { get; set; } // Navigation Property
