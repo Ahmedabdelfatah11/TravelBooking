@@ -10,5 +10,6 @@ namespace TravelBooking.APIs.DTOS.UserProfile
         public string? Address { get; set; }
         [AgeRange(16, 110)]
         public DateTime? DateOfBirth { get; set; }
+        public IFormFile? ProfilePicture { get; set; }
     }
 }

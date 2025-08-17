@@ -26,9 +26,9 @@ namespace TravelBooking.APIs.DTOS.Tours
         public int MaxGroupSize { get; set; }
 
         [Required(ErrorMessage = "Price is required.")]
-        public decimal Price { get; set; }
-
-        public string? ImageUrl { get; set; }
+        public decimal Price { get; set; } 
+        public IFormFile? Image { get; set; }  
+        public List<IFormFile>? GalleryImages { get; set; }   
 
         [EnumDataType(typeof(TourCategory), ErrorMessage = "Invalid category value.")]
         public TourCategory? Category { get; set; }
@@ -36,8 +36,7 @@ namespace TravelBooking.APIs.DTOS.Tours
         public string Languages { get; set; }
 
         [Required(ErrorMessage = "TourCompanyId is required.")]
-        public int? TourCompanyId { get; set; }
-        public List<string> ImageUrls { get; set; } = new();
+        public int? TourCompanyId { get; set; } 
 
         public List<TourTicketCreateDto>? Tickets { get; set; }
         public List<string> IncludedItems { get; set; } = new();

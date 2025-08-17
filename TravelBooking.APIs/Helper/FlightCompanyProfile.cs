@@ -37,8 +37,12 @@ namespace TravelBooking.APIs.Helper
                 .ForMember(dest => dest.Location, opt => opt.MapFrom(src => src.Location))
                 .ForMember(dest => dest.Rating, opt => opt.MapFrom(src => src.Rating))
                 .ForMember(dest => dest.Description, opt => opt.MapFrom(src => src.Description))
-                .ForMember(dest => dest.Flights, opt => opt.Ignore()) // Assuming Flights is managed separately
-                ;
+                .ForMember(dest => dest.Flights, opt => opt.Ignore()); // Assuming Flights is managed separately;
+            CreateMap<FlightCompanyCreateDto, FlightCompany>()
+                .ForMember(dest => dest.ImageUrl, opt => opt.Ignore());  
+            CreateMap<FlightCompanyUpdateDto, FlightCompany>()
+                .ForMember(dest => dest.ImageUrl, opt => opt.Ignore());
+            CreateMap<FlightCompany, FlightCompanyDTO>();
 
         }
     }

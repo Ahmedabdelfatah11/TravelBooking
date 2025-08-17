@@ -26,10 +26,14 @@ namespace TravelBooking.Helper
                      .ForMember(dest => dest.Tours, opt => opt.MapFrom(src => src.Tours));
             CreateMap<Tour, TourSummaryDto>()
                      .ForMember(dest => dest.Category, opt => opt.MapFrom(src => src.Category.ToString()));
-            CreateMap<TourCompanyCreateDto, TourCompany>();
-            CreateMap<TourCompanyUpdateDto, TourCompany>();
+            CreateMap<TourCompanyCreateDto, TourCompany>()
+                     .ForMember(dest => dest.ImageUrl, opt => opt.Ignore());
+
+            CreateMap<TourCompanyUpdateDto, TourCompany>()
+                     .ForMember(dest => dest.ImageUrl, opt => opt.Ignore());
+             
             CreateMap<Tour, TourSummaryDto>()
-          .ForMember(dest => dest.Category, opt => opt.MapFrom(src => src.Category.ToString()));
+                     .ForMember(dest => dest.Category, opt => opt.MapFrom(src => src.Category.ToString()));
 
             //Tour Mapping  
             CreateMap<TourImage, string>().ConvertUsing(src => src.ImageUrl);
@@ -40,8 +44,8 @@ namespace TravelBooking.Helper
                 .ForMember(dest => dest.IncludedItems, opt => opt.MapFrom(src => src.IncludedItems))
                 .ForMember(dest => dest.ExcludedItems, opt => opt.MapFrom(src => src.ExcludedItems))
                 .ForMember(dest => dest.Questions, opt => opt.MapFrom(src => src.Questions))
-                    .ForMember(dest => dest.Tickets, opt => opt.MapFrom(src => src.TourTickets));
-
+                .ForMember(dest => dest.Tickets, opt => opt.MapFrom(src => src.TourTickets))
+                .ForMember(d => d.ImageUrls, o => o.MapFrom(s => s.TourImages.Select(ti => ti.ImageUrl)));
             CreateMap<TourCreateDto, Tour>();
             CreateMap<TourUpdateDto, Tour>();
             CreateMap<TourQuestion, TourQuestionDto>().ReverseMap();
@@ -64,7 +68,8 @@ namespace TravelBooking.Helper
                    .ForMember(dest => dest.HotelCompanyId, opt => opt.MapFrom(src => src.HotelId))  
                   .ForMember(dest => dest.HotelCompanyName, opt => opt.MapFrom(src => src.Hotel.Name));
             CreateMap<RoomCreateDTO, Room>()
-                  .ForMember(dest => dest.Images, opt => opt.MapFrom(src => src.RoomImages));
+                 .ForMember(dest => dest.Images, opt => opt.Ignore());
+
 
            
 
@@ -86,11 +91,13 @@ namespace TravelBooking.Helper
             CreateMap<CarRentalCompany, CarRentalDto>()
                  .ForMember(dest => dest.Cars, opt => opt.MapFrom(src => src.Cars))
                      .ReverseMap();
+            CreateMap<SaveCarRentalDto, CarRentalCompany>()
+                 .ForMember(dest => dest.ImageUrl, opt => opt.Ignore());
+
 
             CreateMap<CarRentalCompany, CarRentalWithCarsDto>()
                 .ForMember(dest => dest.Cars, opt => opt.MapFrom(src => src.Cars));
-
-            CreateMap<SaveCarRentalDto, CarRentalCompany>();
+             
             CreateMap<CarCreateUpdateDto, CarRentalCompany>();
            
 

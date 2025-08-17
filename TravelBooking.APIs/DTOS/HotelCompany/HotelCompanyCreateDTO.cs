@@ -13,16 +13,13 @@
 
         [Required]
         public string Location { get; set; }
+         
+        [Required(ErrorMessage = "Image file is required.")]
+        public IFormFile Image { get; set; }
 
-        [Required]
-        [ValidImageUrl]
-        public string ImageUrl { get; set; }
-
-
-        [RatingRangeString] // custom validation
+        [RatingRangeString]
         public string Rating { get; set; }
 
-       
         public string? AdminId { get; set; }
     }
 }

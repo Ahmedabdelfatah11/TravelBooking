@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Identity;
+﻿using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Identity;
 using Org.BouncyCastle.Bcpg.OpenPgp;
 using System.ComponentModel.DataAnnotations;
 using TravelBooking.Core.Models;
@@ -11,6 +12,7 @@ namespace TravelBooking.Models
         public string FirstName { get; set; } = null!;
         [Required]
         public string LastName { get; set; } = null!;
+        public string? ProfilePictureUrl { get; set; }
         public string Address { get; set; } = null!;
 
         [DataType(DataType.Date)]

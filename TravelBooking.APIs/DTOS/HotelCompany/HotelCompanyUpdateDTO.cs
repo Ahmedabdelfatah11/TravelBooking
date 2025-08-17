@@ -17,10 +17,8 @@
 
         [Required]
         public string Location { get; set; }
-
-        [Required]
-        [ValidImageUrl]
-        public string ImageUrl { get; set; }
+         
+        public IFormFile? Image { get; set; }
 
         [Required]
         [RatingRangeString]

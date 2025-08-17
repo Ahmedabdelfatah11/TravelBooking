@@ -413,7 +413,7 @@
       "RentalCompanyId": 6
     },
     {
-     
+
       "Model": "Volkswagen Passat 2024",
       "Price": 900.00,
       "Description": "Executive sedan with superior comfort and advanced technology. Perfect for business travelers and long-distance journeys across Egypt.",
@@ -803,7 +803,7 @@
       "Capacity": 5,
       "RentalCompanyId": 3
     },
-   {
+    {
       "Model": "chevrolet avio 2024",
       "Price": 1400.00,
       "Description": "Swedish luxury SUV with advanced safety for family beach trips.",
@@ -893,8 +893,8 @@
       "Capacity": 5,
       "RentalCompanyId": 7
     },
-   
-    
+
+
     {
       "Model": "Renault Logan 2024",
       "Price": 450.00,
@@ -915,7 +915,7 @@
       "Capacity": 5,
       "RentalCompanyId": 11
     },
-   
+
 
     {
       "Model": "Toyota Corolla 2024",
@@ -939,7 +939,7 @@
       "Capacity": 7,
       "RentalCompanyId": 6
     },
-    
+
     {
       "Model": "GAC GS4 2024",
       "Price": 600.00,
@@ -973,4 +973,3 @@
 
   ]
 }
-

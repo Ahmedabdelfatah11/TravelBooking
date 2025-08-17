@@ -23,10 +23,13 @@ using TravelBooking.Repository;
 using TravelBooking.Repository.Data;
 
 using TravelBooking.Repository.Data.Seeds;
+using TravelBooking.Service.Services;
+
 
 using TravelBooking.Repository.Hubs;
 using TravelBooking.Service.Services;
 using TravelBooking.Service.Services.ChatBot;
+
 
 using TravelBooking.Service.Services.Dashboard;
 
@@ -144,7 +147,7 @@ namespace TravelBooking.APIs
             {
                 options.AddPolicy("AllowAngularApp", policy =>
                 {
-                    policy.WithOrigins("http://localhost:56292", "http://localhost:4200")
+                    policy.WithOrigins("http://localhost:53517", "http://localhost:4200")
                           .AllowAnyHeader()
                           .AllowAnyMethod()
                      .AllowCredentials();
@@ -220,6 +223,8 @@ namespace TravelBooking.APIs
             app.UseAuthorization();
             app.UseResponseCaching();
             app.MapControllers();
+            app.MapFallbackToFile("index.html"); // <--- this makes /users load Angular
+
             app.MapHub<ChatHub>("/chatHub");
             app.Run();
         }
