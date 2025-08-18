@@ -207,7 +207,10 @@ namespace TravelBooking.APIs.Controllers
                 if (userId == null) return Unauthorized("User not authenticated");
 
                 var review = await _context.Reviews
-                    .FirstOrDefaultAsync(r => r.Id == id && r.UserId == userId);
+               .FirstOrDefaultAsync(r => r.Id == id &&
+                     (User.IsInRole("SuperAdmin") || r.UserId == userId));
+                if (review == null)
+                    return NotFound("Review not found or you don't have permission to delete it");
 
                 if (review == null)
                     return NotFound("Review not found or you don't have permission to update it");
@@ -241,8 +244,11 @@ namespace TravelBooking.APIs.Controllers
                 var userId = GetUserId();
                 if (userId == null) return Unauthorized("User not authenticated");
 
-                var review = await _context.Reviews
-                    .FirstOrDefaultAsync(r => r.Id == id && r.UserId == userId);
+                   var review = await _context.Reviews
+                .FirstOrDefaultAsync(r => r.Id == id &&
+                      (User.IsInRole("SuperAdmin") || r.UserId == userId));
+                  if (review == null)
+                    return NotFound("Review not found or you don't have permission to delete it");
 
                 if (review == null)
                     return NotFound("Review not found or you don't have permission to delete it");

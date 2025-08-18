@@ -1,19 +1,20 @@
-using TravelBooking.Core.Models;
-using TravelBooking.Core.DTOS.CarRentalCompanies;
-using TravelBooking.Core.DTOS.Cars;
+using AutoMapper;
 using TravelBooking.APIs.DTOS.Booking;
-using TravelBooking.APIs.DTOS.Booking.RoomBooking;
 using TravelBooking.APIs.DTOS.Booking.CarBooking;
 using TravelBooking.APIs.DTOS.Booking.FlightBooking;
+using TravelBooking.APIs.DTOS.Booking.RoomBooking;
 using TravelBooking.APIs.DTOS.Booking.TourBooking;
-using AutoMapper;
-using TravelBooking.APIs.DTOS.Tours;
-using TravelBooking.APIs.DTOS.TourCompany;
-using TravelBooking.Core.Models;
-using TravelBooking.Models;
+using TravelBooking.APIs.DTOS.CarRentalCompanies;
 using TravelBooking.APIs.DTOS.HotelCompany;
 using TravelBooking.APIs.DTOS.Rooms;
+using TravelBooking.APIs.DTOS.TourCompany;
+using TravelBooking.APIs.DTOS.Tours;
 using TravelBooking.APIs.DTOS.TourTickets;
+using TravelBooking.Core.DTOS.CarRentalCompanies;
+using TravelBooking.Core.DTOS.Cars;
+using TravelBooking.Core.Models;
+using TravelBooking.Core.Models;
+using TravelBooking.Models;
 
 namespace TravelBooking.Helper
 {
@@ -93,7 +94,8 @@ namespace TravelBooking.Helper
                      .ReverseMap();
             CreateMap<SaveCarRentalDto, CarRentalCompany>()
                  .ForMember(dest => dest.ImageUrl, opt => opt.Ignore());
-
+            CreateMap<UpdateCarRentalDto, CarRentalCompany>()
+                    .ForMember(dest => dest.ImageUrl, opt => opt.Ignore());
 
             CreateMap<CarRentalCompany, CarRentalWithCarsDto>()
                 .ForMember(dest => dest.Cars, opt => opt.MapFrom(src => src.Cars));

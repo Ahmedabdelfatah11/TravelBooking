@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System.Security.Claims;
 using TravelBooking.APIs.DTOS.Admins;
+using TravelBooking.APIs.DTOS.CarRentalCompanies;
 using TravelBooking.APIs.DTOS.FlightCompany;
 using TravelBooking.APIs.DTOS.HotelCompany;
 using TravelBooking.APIs.DTOS.TourCompany;
@@ -230,12 +231,18 @@ namespace TravelBooking.APIs.Controllers
         }
 
         [HttpPut("car-rentals/{id}")]
-        public async Task<ActionResult> UpdateCarRental(int id, [FromForm] SaveCarRentalDto dto)
+        public async Task<ActionResult> UpdateCarRental(int id, [FromForm] UpdateCarRentalDto dto)
         {
             var company = await _carRentalRepo.GetAsync(id);
             if (company == null) return NotFound();
 
             _mapper.Map(dto, company);
+
+            // Handle AdminId update
+            if (!string.IsNullOrEmpty(dto.AdminId))
+            {
+                company.AdminId = dto.AdminId;
+            }
 
             if (dto.Image != null && dto.Image.Length > 0)
                 company.ImageUrl = await SaveCarRentalImageAsync(dto.Image);
