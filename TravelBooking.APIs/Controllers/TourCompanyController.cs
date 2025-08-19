@@ -4,10 +4,13 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
 using TravelBooking.APIs.DTOS.TourCompany;
+using TravelBooking.APIs.DTOS.Tours;
 using TravelBooking.Core.Models;
 using TravelBooking.Core.Repository.Contract;
 using TravelBooking.Core.Specifications;
 using TravelBooking.Core.Specifications.TourCompanySpecs;
+using TravelBooking.Core.Specifications.TourSpecs;
+using TravelBooking.Core.Specifications.TourSpescs;
 using TravelBooking.Errors;
 using TravelBooking.Helper;
 using TravelBooking.Repository.TourCompanySpecs;
@@ -24,13 +27,16 @@ namespace TravelBooking.APIs.Controllers
         private readonly IGenericRepository<TourCompany> _tourCompanyRepo;
         private readonly IMapper _mapper;
         private readonly ITourAdminDashboardService _dashboardService;
+        private readonly IGenericRepository<Tour> _tourRepo;
+
         public TourCompanyController(
             IGenericRepository<TourCompany> tourCompanyRepo,
-            IMapper mapper, ITourAdminDashboardService dashboardService)
+            IMapper mapper, ITourAdminDashboardService dashboardService,IGenericRepository<Tour> tourRepo)
         {
             _tourCompanyRepo = tourCompanyRepo;
             _mapper = mapper;
             _dashboardService = dashboardService;
+            _tourRepo = tourRepo;
         }
 
 
@@ -112,20 +118,20 @@ namespace TravelBooking.APIs.Controllers
 
 
         // Get Tours managed by current TourAdmin
-        [HttpGet("my-Tour")]
+        [HttpGet("my-tours")]
         [Authorize(Roles = "TourAdmin")]
-        public async Task<ActionResult<IEnumerable<TourCompanyReadDto>>> GetMyTours()
+        public async Task<ActionResult<IEnumerable<TourReadDto>>> GetMyTours()
         {
             var userId = User.FindFirst("uid")?.Value;
             if (string.IsNullOrEmpty(userId))
                 return Unauthorized();
 
-            var tours = await _tourCompanyRepo.GetTourByAdminIdAsync( userId);
-            var data = _mapper.Map<IReadOnlyList<TourCompanyReadDto>>(tours);
+            var spec = new ToursWithTourCompanyAdminSpec(userId);
+            var tours = await _tourRepo.GetAllWithSpecAsync(spec);
 
+            var data = _mapper.Map<IReadOnlyList<TourReadDto>>(tours);
             return Ok(data);
         }
-
 
         [HttpGet("dashboard")]
         [Authorize(Roles = "TourAdmin")]
@@ -137,6 +143,24 @@ namespace TravelBooking.APIs.Controllers
                 return Unauthorized("TourCompanyId not found in token.");
 
             var data = await _dashboardService.GetStatsForTourCompany(tourCompanyId);
+            return Ok(data);
+        }
+        [HttpGet("my-companies")]
+        [Authorize(Roles = "TourAdmin")]
+        public async Task<ActionResult<IEnumerable<TourCompanyReadDto>>> GetMyTourCompanies()
+        {
+            var userId = User.FindFirst("uid")?.Value;
+            if (string.IsNullOrEmpty(userId))
+                return Unauthorized();
+
+            // Get all TourCompanies where AdminId == current user ID
+            var spec = new TourCompanyWithAdminSpec(userId); // ← You need to create this spec
+            var companies = await _tourCompanyRepo.GetAllWithSpecAsync(spec);
+
+            if (!companies.Any())
+                return NotFound(new { message = "No tour companies found for this admin." });
+
+            var data = _mapper.Map<IEnumerable<TourCompanyReadDto>>(companies);
             return Ok(data);
         }
 

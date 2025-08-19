@@ -40,7 +40,7 @@ namespace TravelBooking.Helper
             CreateMap<Tour, TourReadDto>()
                 .ForMember(dest => dest.Category, opt => opt.MapFrom(src => src.Category.ToString()))
                 .ForMember(dest => dest.TourCompanyName, opt => opt.MapFrom(src => src.TourCompany.Name))
-                .ForMember(dest => dest.ImageUrls, opt => opt.MapFrom(src => src.TourImages))
+                //.ForMember(dest => dest.ImageUrls, opt => opt.MapFrom(src => src.TourImages))
                 .ForMember(dest => dest.IncludedItems, opt => opt.MapFrom(src => src.IncludedItems))
                 .ForMember(dest => dest.ExcludedItems, opt => opt.MapFrom(src => src.ExcludedItems))
                 .ForMember(dest => dest.Questions, opt => opt.MapFrom(src => src.Questions))

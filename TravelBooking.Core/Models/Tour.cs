@@ -37,7 +37,7 @@ namespace TravelBooking.Core.Models
 
         public TourCompany? TourCompany { get; set; } // Navigation property for the tour company
 
-        public ICollection<TourImage> TourImages { get; set; } = new List<TourImage>();
+        public ICollection<TourImage>? TourImages { get; set; } = new List<TourImage>();
         public ICollection<TourTicket> TourTickets { get; set; } = new List<TourTicket>();
         public List<string> IncludedItems { get; set; } = new();
         public List<string> ExcludedItems { get; set; } = new();

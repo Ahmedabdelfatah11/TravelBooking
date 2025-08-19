@@ -41,7 +41,7 @@ namespace TravelBooking.APIs.DTOS.Tours
         public List<TourTicketCreateDto>? Tickets { get; set; }
         public List<string> IncludedItems { get; set; } = new();
         public List<string> ExcludedItems { get; set; } = new();
-        public List<TourQuestionDto> Questions { get; set; } = new();
+        public List<TourQuestionDto>? Questions { get; set; } = new();
     }
 
 }
