@@ -1,7 +1,11 @@
-using AutoMapper;
+﻿using AutoMapper;
 using ContactUsAPI.Services;
+using Google;
 using Jwt.Helper;
 using Jwt.Settings;
+using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Authentication.Google;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.UI.Services;
@@ -9,6 +13,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
 using System.Reflection.PortableExecutable;
+using System.Security.Claims;
 using System.Text;
 using System.Text.Json.Serialization;
 using TravelBooking.Core.Interfaces_Or_Repository;
@@ -21,16 +26,11 @@ using TravelBooking.Helper;
 using TravelBooking.Models;
 using TravelBooking.Repository;
 using TravelBooking.Repository.Data;
-
 using TravelBooking.Repository.Data.Seeds;
-using TravelBooking.Service.Services;
-
-
 using TravelBooking.Repository.Hubs;
 using TravelBooking.Service.Services;
+
 using TravelBooking.Service.Services.ChatBot;
-
-
 using TravelBooking.Service.Services.Dashboard;
 
 
@@ -77,8 +77,10 @@ namespace TravelBooking.APIs
             webApplicationbuilder.Services.Configure<JWT>(webApplicationbuilder.Configuration.GetSection("JWT"));
 
             // Register Identity services
-            webApplicationbuilder.Services.AddIdentity<ApplicationUser, IdentityRole>()
-                 .AddEntityFrameworkStores<AppDbContext>()
+            webApplicationbuilder.Services.AddIdentity<ApplicationUser, IdentityRole>(options =>
+            {
+                options.SignIn.RequireConfirmedAccount = true; // Change if you want email confirmation
+            }).AddEntityFrameworkStores<AppDbContext>()
                  .AddDefaultTokenProviders();
             //adding Email service 
             webApplicationbuilder.Services.Configure<MailSettings>(webApplicationbuilder.Configuration.GetSection(nameof(MailSettings)));
@@ -90,25 +92,47 @@ namespace TravelBooking.APIs
             // Configure JWT authentication
             webApplicationbuilder.Services.AddAuthentication(options =>
             {
+                options.DefaultScheme = CookieAuthenticationDefaults.AuthenticationScheme;
+                options.DefaultChallengeScheme = GoogleDefaults.AuthenticationScheme;
                 options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
-                options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
             })
-                .AddJwtBearer(o =>
-                {
-                    o.RequireHttpsMetadata = false;
-                    o.SaveToken = false;
-                    o.TokenValidationParameters = new TokenValidationParameters
-                    {
-                        ValidateIssuerSigningKey = true,
-                        ValidateIssuer = true,
-                        ValidateAudience = true,
-                        ValidateLifetime = true,
-                        ValidIssuer = webApplicationbuilder.Configuration["JWT:Issuer"],
-                        ValidAudience = webApplicationbuilder.Configuration["JWT:Audience"],
-                        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(webApplicationbuilder.Configuration["JWT:Key"]))
-                    };
+             .AddCookie(options =>
+             {
+                 options.Cookie.SameSite = SameSiteMode.None;
+                 options.Cookie.SecurePolicy = CookieSecurePolicy.Always;
+             })
+             .AddGoogle(options =>
+             {
+                 options.ClientId = webApplicationbuilder.Configuration["Authentication:Google:ClientId"];
+                 options.ClientSecret = webApplicationbuilder.Configuration["Authentication:Google:ClientSecret"];
+                 // Add additional scopes to get more user information
+                 options.Scope.Add("profile");
+                 options.Scope.Add("email");
 
-                });
+                 options.SaveTokens = true;
+                 options.CallbackPath = "/signin-google"; // الافتراضي /signin-google
+                 // Map additional claims
+                 options.ClaimActions.MapJsonKey(ClaimTypes.GivenName, "given_name");
+                 options.ClaimActions.MapJsonKey(ClaimTypes.Surname, "family_name");
+                 options.ClaimActions.MapJsonKey("picture", "picture");
+             })
+             .AddJwtBearer(o =>
+             {
+                 o.RequireHttpsMetadata = false;
+                 o.SaveToken = true;
+                 o.TokenValidationParameters = new TokenValidationParameters
+                 {
+                     ValidateIssuerSigningKey = true,
+                     ValidateIssuer = true,
+                     ValidateAudience = true,
+                     ValidateLifetime = true,
+                     ValidIssuer = webApplicationbuilder.Configuration["JWT:Issuer"],
+                     ValidAudience = webApplicationbuilder.Configuration["JWT:Audience"],
+                     IssuerSigningKey = new SymmetricSecurityKey(
+                         Encoding.UTF8.GetBytes(webApplicationbuilder.Configuration["JWT:Key"]))
+                 };
+             });
+
             webApplicationbuilder.Services.Configure<IdentityOptions>(options =>
             {
                 // Password settings  
@@ -156,6 +180,7 @@ namespace TravelBooking.APIs
                     // .AllowAnyMethod();
                 });
             });
+            
             // Caching
             webApplicationbuilder.Services.AddMemoryCache();
             webApplicationbuilder.Services.AddResponseCaching();

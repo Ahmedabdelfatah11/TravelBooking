@@ -1,6 +1,11 @@
 ﻿
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using System.Globalization;
+using System.IdentityModel.Tokens.Jwt;
+using System.Security.Claims;
+using TravelBooking.Core.Models;
 using TravelBooking.Core.Services;
 using TravelBooking.Models;
 using TravelBooking.Models.ResetPassword;
@@ -13,11 +18,22 @@ namespace Jwt.Controllers
     {
         private readonly ILogger<AuthController> _logger;
         private readonly IAuthService _authService;
-        public AuthController(ILogger<AuthController> logger, IAuthService authService)
+        private readonly SignInManager<ApplicationUser> _signInManager;
+        private readonly UserManager<ApplicationUser> _userManager;
+
+
+        public AuthController(
+        ILogger<AuthController> logger,
+        IAuthService authService,
+        SignInManager<ApplicationUser> signInManager,
+        UserManager<ApplicationUser> userManager)
         {
             _logger = logger;
             _authService = authService;
+            _signInManager = signInManager;
+            _userManager = userManager;
         }
+
         [HttpPost("Register")]
         public async Task<IActionResult> Register([FromBody] RegisterModel model)
         {
@@ -54,18 +70,66 @@ namespace Jwt.Controllers
             if (result.IsAuthenticated)
             {
                 return Ok(result);
-                //return Ok(new
-                //{
-                //    token = result.Token,
-                //    message = result.Message,
-                //    expireOn = result.ExpireOn,
-                //    username = result.Username,
-                //    email = result.Email,
-                //    roles = result.Roles
-                //});
+               
             }
             return Unauthorized(new { message = "Invalid email or password" });
 
+        }
+        [HttpGet("ExternalLogin")]
+        public IActionResult ExternalLogin(string provider, string returnUrl = null)
+        {
+            var redirectUrl = Url.Action(nameof(ExternalLoginCallback), "Auth", new { returnUrl });
+            var properties = _signInManager.ConfigureExternalAuthenticationProperties(provider, redirectUrl);
+            _logger.LogInformation("Redirect URI: {RedirectUrl}", redirectUrl);
+            return Challenge(properties, provider);
+        }
+
+        [HttpGet("ExternalLoginCallback")]
+        public async Task<IActionResult> ExternalLoginCallback(string returnUrl = null, string remoteError = null)
+        {
+            if (remoteError != null)
+                return BadRequest($"Error from external provider: {remoteError}");
+
+            var info = await _signInManager.GetExternalLoginInfoAsync();
+            if (info == null)
+                return BadRequest("Error loading external login information.");
+
+            var email = info.Principal.FindFirstValue(ClaimTypes.Email);
+            if (string.IsNullOrEmpty(email))
+                return BadRequest("Email not provided by external provider.");
+            var firstName = ExtractFirstName(info.Principal);
+            var lastName = ExtractLastName(info.Principal);
+            var dateOfBirth = ExtractDateOfBirth(info.Principal);
+            // Check if user exists
+            var user = await _userManager.FindByEmailAsync(email);
+            if (user == null)
+            {
+                // Create new user
+                user = new ApplicationUser
+                {
+                    UserName = email,
+                    Email = email,
+                    EmailConfirmed = true,
+                    FirstName = firstName,
+                    LastName = lastName,
+                    DateOfBirth = dateOfBirth
+                };
+                var createResult = await _userManager.CreateAsync(user);
+                if (!createResult.Succeeded)
+                    return BadRequest(createResult.Errors);
+
+                await _userManager.AddLoginAsync(user, info);
+                await _userManager.AddToRoleAsync(user, Roles.User.ToString());
+            }
+
+            // Generate JWT using your AuthService pattern
+            var jwtToken = await _authService.CreateJwtToken(user);
+            var tokenString = new JwtSecurityTokenHandler().WriteToken(jwtToken);
+            var roles = await _userManager.GetRolesAsync(user);
+
+            // Redirect to Angular callback route
+            var frontendBaseUrl = "http://localhost:4200"; // Move to config in production
+            return Redirect($"{frontendBaseUrl}/google-callback?token={tokenString}&username={Uri.EscapeDataString(user.UserName)}&roles={Uri.EscapeDataString(string.Join(",", roles))}");
         }
 
         [HttpPost("AddRole")]
@@ -149,6 +213,89 @@ namespace Jwt.Controllers
                 });
             }
             return BadRequest(new { message = result.Message });
+        }
+        // Helper methods to extract user information
+        private string ExtractFirstName(ClaimsPrincipal principal)
+        {
+            // Try different claim types for first name
+            var firstName = principal.FindFirstValue(ClaimTypes.GivenName) ??
+                           principal.FindFirstValue("given_name") ??
+                           principal.FindFirstValue("http://schemas.xmlsoap.org/ws/2005/05/identity/claims/givenname");
+
+            // If no first name found, try to extract from full name
+            if (string.IsNullOrEmpty(firstName))
+            {
+                var fullName = principal.FindFirstValue(ClaimTypes.Name) ??
+                              principal.FindFirstValue("name");
+                if (!string.IsNullOrEmpty(fullName))
+                {
+                    var nameParts = fullName.Split(' ');
+                    firstName = nameParts.Length > 0 ? nameParts[0] : "";
+                }
+            }
+
+            return firstName ?? "User";
+        }
+
+        private string ExtractLastName(ClaimsPrincipal principal)
+        {
+            // Try different claim types for last name
+            var lastName = principal.FindFirstValue(ClaimTypes.Surname) ??
+                          principal.FindFirstValue("family_name") ??
+                          principal.FindFirstValue("http://schemas.xmlsoap.org/ws/2005/05/identity/claims/surname");
+
+            // If no last name found, try to extract from full name
+            if (string.IsNullOrEmpty(lastName))
+            {
+                var fullName = principal.FindFirstValue(ClaimTypes.Name) ??
+                              principal.FindFirstValue("name");
+                if (!string.IsNullOrEmpty(fullName))
+                {
+                    var nameParts = fullName.Split(' ');
+                    lastName = nameParts.Length > 1 ? string.Join(" ", nameParts.Skip(1)) : "";
+                }
+            }
+
+            return lastName ?? "";
+        }
+
+        private DateTime? ExtractDateOfBirth(ClaimsPrincipal principal)
+        {
+            // Try different claim types for date of birth
+            var dobString = principal.FindFirstValue(ClaimTypes.DateOfBirth) ??
+                           principal.FindFirstValue("birthdate") ??
+                           principal.FindFirstValue("birthday") ??
+                           principal.FindFirstValue("http://schemas.xmlsoap.org/ws/2005/05/identity/claims/dateofbirth");
+
+            if (!string.IsNullOrEmpty(dobString))
+            {
+                // Try different date formats
+                var dateFormats = new string[]
+                {
+            "yyyy-MM-dd",
+            "MM/dd/yyyy",
+            "dd/MM/yyyy",
+            "yyyy/MM/dd",
+            "MM-dd-yyyy",
+            "dd-MM-yyyy"
+                };
+
+                foreach (var format in dateFormats)
+                {
+                    if (DateTime.TryParseExact(dobString, format, null, DateTimeStyles.None, out DateTime parsedDate))
+                    {
+                        return parsedDate;
+                    }
+                }
+
+                // Try general parsing as fallback
+                if (DateTime.TryParse(dobString, out DateTime generalParsedDate))
+                {
+                    return generalParsedDate;
+                }
+            }
+
+            return null; // Return null if no date of birth found
         }
 
     }

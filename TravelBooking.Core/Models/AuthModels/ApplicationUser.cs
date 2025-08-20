@@ -13,10 +13,10 @@ namespace TravelBooking.Models
         [Required]
         public string LastName { get; set; } = null!;
         public string? ProfilePictureUrl { get; set; }
-        public string Address { get; set; } = null!;
+        public string? Address { get; set; } = null!;
 
         [DataType(DataType.Date)]
-        public DateTime DateOfBirth { get; set; }
+        public DateTime? DateOfBirth { get; set; }
         public ICollection<Booking> bookings { get; set; } = new List<Booking>();
 
 
