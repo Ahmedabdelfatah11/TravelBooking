@@ -1,28 +1,27 @@
 ﻿
+using AutoMapper;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using TravelBooking.APIs.DTOS.Booking;
-
-using TravelBooking.Core.Models;
-using TravelBooking.Repository.Data;
-
-using TravelBooking.Core.DTOS.Cars;
-
-using TravelBooking.Core.Repository.Contract;
-using AutoMapper;
-using TravelBooking.Core.Specifications.CarSpecs;
-using TravelBooking.Core.Specifications.RoomSpecs;
-using TravelBooking.Core.Specifications.FlightSpecs;
-using TravelBooking.Core.Specifications.TourSpecs;
 using TravelBooking.APIs.DTOS.Flight;
-using TravelBooking.APIs.DTOS.Tours;
 using TravelBooking.APIs.DTOS.Rooms;
+using TravelBooking.APIs.DTOS.Tours;
+using TravelBooking.Core.DTOS.Cars;
+using TravelBooking.Core.Models;
+using TravelBooking.Core.Repository.Contract;
+using TravelBooking.Core.Specifications.CarSpecs;
+using TravelBooking.Core.Specifications.FlightSpecs;
+using TravelBooking.Core.Specifications.RoomSpecs;
+using TravelBooking.Core.Specifications.TourSpecs;
+using TravelBooking.Repository.Data;
 
 
 namespace TravelBooking.APIs.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
+   // [Authorize(Roles = "SuperAdmin,User")]
     public class BookingController : ControllerBase
     {
         private readonly IGenericRepository<Booking> _bookingRepo;

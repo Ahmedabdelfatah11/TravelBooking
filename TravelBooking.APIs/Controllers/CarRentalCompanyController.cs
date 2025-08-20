@@ -41,7 +41,7 @@ namespace TravelBooking.APIs.Controllers
             var spec = new CarRentalCompanySpecifications(specParams);
             var rentals = await _carRentalRepo.GetAllWithSpecAsync(spec);
 
-            var data = _mapper.Map<IReadOnlyList<CarRentalCompany>, IReadOnlyList<CarRentalWithCarsDto>>(rentals);
+            var data = _mapper.Map<IReadOnlyList<CarRentalWithCarsDto>>(rentals);
 
             var countSpec = new CarRentalCompanyWithFilterForCountSpec(specParams);
             var count = await _carRentalRepo.GetCountAsync(countSpec);
