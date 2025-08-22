@@ -161,7 +161,7 @@ namespace TravelBooking.APIs.Controllers
 
             var room = _mapper.Map<Room>(roomDto);
             room.HotelId = roomDto.HotelCompanyId;
-             
+
             if (roomDto.RoomImages != null && roomDto.RoomImages.Any())
             {
                 var imageUrls = await SaveImagesAsync(roomDto.RoomImages);
@@ -211,12 +211,12 @@ namespace TravelBooking.APIs.Controllers
                 return BadRequest("Hotel company not found");
 
             _mapper.Map(roomDto, room);
-             
+
             if (roomDto.RoomImages != null && roomDto.RoomImages.Any())
             {
                 var newImageUrls = await SaveImagesAsync(roomDto.RoomImages);
 
-                room.Images.Clear();  
+                room.Images.Clear();
                 foreach (var url in newImageUrls)
                 {
                     room.Images.Add(new RoomImage { ImageUrl = url });
@@ -249,7 +249,7 @@ namespace TravelBooking.APIs.Controllers
 
             if (files == null || !files.Any())
                 return urls;
-             
+
             var folderPath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "images", "rooms");
             if (!Directory.Exists(folderPath))
                 Directory.CreateDirectory(folderPath);
@@ -275,7 +275,6 @@ namespace TravelBooking.APIs.Controllers
         }
     }
 }
-
 
 
 

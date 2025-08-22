@@ -12,7 +12,7 @@ using TravelBooking.Repository.Data;
 namespace TravelBooking.Repository.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20250818043346_new")]
+    [Migration("20250821172554_new")]
     partial class @new
     {
         /// <inheritdoc />

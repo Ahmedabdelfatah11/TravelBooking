@@ -37,9 +37,9 @@ namespace TravelBooking.APIs.Controllers
         {
             var spec = new CarSpecifications(specParams);
             var countCarSpec = new CarsWithFilterForCountSpecification(specParams);
-            
+
             var totalItems = await _carRepo.GetCountAsync(countCarSpec);
-           
+
             var cars = await _carRepo.GetAllWithSpecAsync(spec);
             var data = _mapper.Map<IReadOnlyList<Car>, IReadOnlyList<CarDto>>(cars);
 
@@ -55,7 +55,7 @@ namespace TravelBooking.APIs.Controllers
             var spec = new CarSpecifications(id);
             var car = await _carRepo.GetWithSpecAsync(spec);
 
-            if (car == null) 
+            if (car == null)
                 return NotFound(new ApiResponse(404));
 
             return Ok(_mapper.Map<Car, CarDto>(car));
@@ -149,7 +149,7 @@ namespace TravelBooking.APIs.Controllers
             var car = await _carRepo.GetAsync(id);
             if (car == null) return NotFound();
 
-           await _carRepo.Delete(car);
+            await _carRepo.Delete(car);
 
             return NoContent();
         }
@@ -172,4 +172,3 @@ namespace TravelBooking.APIs.Controllers
         }
     }
 }
-

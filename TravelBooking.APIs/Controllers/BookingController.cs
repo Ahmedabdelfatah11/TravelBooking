@@ -3,6 +3,7 @@ using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Stripe;
 using TravelBooking.APIs.DTOS.Booking;
 using TravelBooking.APIs.DTOS.Flight;
 using TravelBooking.APIs.DTOS.Rooms;
@@ -177,26 +178,123 @@ namespace TravelBooking.APIs.Controllers
             await _context.SaveChangesAsync();
             return Ok("Booking confirmed and tickets issued");
         }
+
         [HttpPost("cancel/{bookingId}")]
+        [Authorize(Roles = "SuperAdmin,User")]
         public async Task<IActionResult> CancelBooking(int bookingId)
         {
-            var booking = await _context.Bookings
-                .Include(b => b.BookingTickets)
-                .FirstOrDefaultAsync(b => b.Id == bookingId);
+            try
+            {
+                var userId = User.FindFirst("uid")?.Value;
+                if (string.IsNullOrEmpty(userId))
+                    return Unauthorized("User ID not found in token.");
 
-            if (booking == null || booking.Status != Status.Confirmed)
-                return BadRequest("Invalid booking");
+                // Get booking with all related data
+                var booking = await _context.Bookings
+                    .Include(b => b.BookingTickets)
+                    .ThenInclude(bt => bt.Ticket)
+                    .Include(b => b.Payment)
+                    .FirstOrDefaultAsync(b =>
+                        b.Id == bookingId &&
+                        (b.UserId == userId || User.IsInRole("SuperAdmin")));
 
-            booking.Status = Status.Cancelled;
+                if (booking == null)
+                    return NotFound("Booking not found or you don't have permission to cancel it.");
 
+                if (booking.Status != Status.Confirmed)
+                    return BadRequest("Only confirmed bookings can be cancelled.");
+
+                // Update booking status
+                booking.Status = Status.Cancelled;
+
+
+                // Handle different booking types
+                switch (booking.BookingType)
+                {
+                    case BookingType.Tour:
+                        await HandleTourCancellation(booking);
+                        break;
+                    case BookingType.Car:
+                        await HandleCarCancellation(booking);
+                        break;
+                    case BookingType.Flight:
+                        await HandleFlightCancellation(booking);
+                        break;
+                    case BookingType.Room:
+                        // Room becomes available automatically
+                        break;
+                }
+
+
+                await _bookingRepo.Update(booking);
+                await _context.SaveChangesAsync();
+
+                return Ok(new
+                {
+                    message = "Booking cancelled successfully",
+                    bookingId = booking.Id,
+                    status = booking.Status.ToString(),
+                    refundInfo = booking.Payment != null ?
+                        "Refund will be processed within 3-5 business days" :
+                        "No payment to refund"
+                });
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"Error cancelling booking: {ex.Message}");
+            }
+        }
+
+
+        private async Task HandleCarCancellation(Booking booking)
+        {
+            if (booking.CarId.HasValue)
+            {
+                var car = await _carRepo.GetAsync(booking.CarId.Value);
+                if (car != null)
+                {
+                    car.IsAvailable = true;
+                    await _carRepo.Update(car);
+                }
+            }
+        }
+
+        private async Task HandleFlightCancellation(Booking booking)
+        {
+            if (booking.FlightId.HasValue)
+            {
+                var flight = await _flightRepo.GetAsync(booking.FlightId.Value);
+                if (flight != null)
+                {
+                    switch (booking.SeatClass)
+                    {
+                        case SeatClass.Economy:
+                            flight.EconomySeats++;
+                            break;
+                        case SeatClass.Business:
+                            flight.BusinessSeats++;
+                            break;
+                        case SeatClass.FirstClass:
+                            flight.FirstClassSeats++;
+                            break;
+                    }
+                    await _flightRepo.Update(flight);
+                }
+            }
+        }
+        private async Task HandleTourCancellation(Booking booking)
+        {
             foreach (var bt in booking.BookingTickets)
             {
                 bt.IsIssued = false;
+                var ticket = bt.Ticket;
+                ticket.AvailableQuantity += bt.Quantity;
+                if (!ticket.IsActive && ticket.AvailableQuantity > 0)
+                    ticket.IsActive = true;
+                _context.TourTickets.Update(ticket);
             }
-
-            await _context.SaveChangesAsync();
-            return Ok("Booking canceled and tickets revoked");
         }
+
 
         [HttpGet("user/{userId}/tickets")]
         public async Task<IActionResult> GetUserTickets(string userId)
