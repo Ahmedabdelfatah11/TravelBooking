@@ -1,22 +1,20 @@
 ﻿
+using AutoMapper;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using TravelBooking.APIs.DTOS.Booking;
-
-using TravelBooking.Core.Models;
-using TravelBooking.Repository.Data;
-
-using TravelBooking.Core.DTOS.Cars;
-
-using TravelBooking.Core.Repository.Contract;
-using AutoMapper;
-using TravelBooking.Core.Specifications.CarSpecs;
-using TravelBooking.Core.Specifications.RoomSpecs;
-using TravelBooking.Core.Specifications.FlightSpecs;
-using TravelBooking.Core.Specifications.TourSpecs;
 using TravelBooking.APIs.DTOS.Flight;
-using TravelBooking.APIs.DTOS.Tours;
 using TravelBooking.APIs.DTOS.Rooms;
+using TravelBooking.APIs.DTOS.Tours;
+using TravelBooking.Core.DTOS.Cars;
+using TravelBooking.Core.Models;
+using TravelBooking.Core.Repository.Contract;
+using TravelBooking.Core.Specifications.CarSpecs;
+using TravelBooking.Core.Specifications.FlightSpecs;
+using TravelBooking.Core.Specifications.RoomSpecs;
+using TravelBooking.Core.Specifications.TourSpecs;
+using TravelBooking.Repository.Data;
 
 
 namespace TravelBooking.APIs.Controllers
@@ -210,5 +208,82 @@ namespace TravelBooking.APIs.Controllers
 
             return Ok(tickets);
         }
+
+
+
+        #region Car
+        // Add these endpoints to your existing BookingController.cs
+
+        [HttpGet("car-rental-company/{companyId}")]
+        [Authorize(Roles = "SuperAdmin,CarRentalAdmin")]
+        public async Task<ActionResult<IEnumerable<BookingDto>>> GetCarRentalCompanyBookings(int companyId)
+        {
+            var bookingSpec = new BookingSpecification();
+            var bookings = await _bookingRepo.GetAllWithSpecAsync(bookingSpec);
+
+            // Filter bookings for specific car rental company
+            var companyBookings = bookings.Where(b =>
+                b.BookingType == BookingType.Car &&
+                b.Car != null &&
+                b.Car.RentalCompanyId == companyId).ToList();
+
+            var dtoList = new List<BookingDto>();
+
+            foreach (var booking in companyBookings)
+            {
+                var dto = _mapper.Map<BookingDto>(booking);
+
+                // Load car details
+                if (booking.CarId.HasValue)
+                {
+                    var carSpec = new CarSpecifications(booking.CarId.Value);
+                    var car = await _carRepo.GetWithSpecAsync(carSpec);
+                    dto.AgencyDetails = _mapper.Map<CarDto>(car);
+                }
+
+                dtoList.Add(dto);
+            }
+
+            return Ok(dtoList);
+        }
+
+        [HttpGet("my-car-rental-bookings")]
+        [Authorize(Roles = "CarRentalAdmin")]
+        public async Task<ActionResult<IEnumerable<BookingDto>>> GetMyCarRentalBookings()
+        {
+            var rentalCompanyIdClaim = User.Claims.FirstOrDefault(c => c.Type == "CarRentalCompanyId")?.Value;
+
+            if (string.IsNullOrEmpty(rentalCompanyIdClaim) || !int.TryParse(rentalCompanyIdClaim, out int rentalCompanyId))
+                return Unauthorized("CarRentalCompanyId not found in token.");
+
+            var bookingSpec = new BookingSpecification();
+            var allBookings = await _bookingRepo.GetAllWithSpecAsync(bookingSpec);
+
+            // Filter bookings for the current car rental admin's company
+            var myCompanyBookings = allBookings.Where(b =>
+                b.BookingType == BookingType.Car &&
+                b.Car != null &&
+                b.Car.RentalCompanyId == rentalCompanyId).ToList();
+
+            var dtoList = new List<BookingDto>();
+
+            foreach (var booking in myCompanyBookings)
+            {
+                var dto = _mapper.Map<BookingDto>(booking);
+
+                // Load car details
+                if (booking.CarId.HasValue)
+                {
+                    var carSpec = new CarSpecifications(booking.CarId.Value);
+                    var car = await _carRepo.GetWithSpecAsync(carSpec);
+                    dto.AgencyDetails = _mapper.Map<CarDto>(car);
+                }
+
+                dtoList.Add(dto);
+            }
+
+            return Ok(dtoList);
+        }
+        #endregion
     }
 }
