@@ -209,5 +209,77 @@ namespace TravelBooking.APIs.Controllers
 
             return Ok(tickets);
         }
+        [HttpGet("flight-company/{flightCompanyId}")]
+        [Authorize(Roles = "SuperAdmin,FlightAdmin")]
+        public async Task<ActionResult<IEnumerable<BookingDto>>> GetFlightCompanyBookings(int flightCompanyId)
+        {
+            // Verify FlightAdmin can only access their own company's bookings
+            var userRole = User.FindFirst("role")?.Value;
+            if (userRole == "FlightAdmin")
+            {
+                var tokenFlightCompanyId = User.FindFirst("FlightCompanyId")?.Value;
+                if (string.IsNullOrEmpty(tokenFlightCompanyId) ||
+                    !int.TryParse(tokenFlightCompanyId, out int tokenCompanyId) ||
+                    tokenCompanyId != flightCompanyId)
+                {
+                    return Forbid("You can only access bookings for your own company.");
+                }
+            }
+
+            // Use the static factory method to get flight bookings for the specific company
+            var spec = BookingSpecification.ByFlightCompany(flightCompanyId);
+            var bookings = await _bookingRepo.GetAllWithSpecAsync(spec);
+
+            if (!bookings.Any())
+            {
+                return Ok(new List<BookingDto>()); // Return empty list instead of NotFound
+            }
+
+            var dtoList = new List<BookingDto>();
+
+            foreach (var booking in bookings)
+            {
+                var dto = _mapper.Map<BookingDto>(booking);
+
+                // The flight is already included via the specification
+                if (booking.Flight != null)
+                {
+                    dto.AgencyDetails = new
+                    {
+                        FlightId = booking.Flight.Id,
+                        DepartureAirport = booking.Flight.DepartureAirport,
+                        ArrivalAirport = booking.Flight.ArrivalAirport,
+                        DepartureTime = booking.Flight.DepartureTime,
+                        ArrivalTime = booking.Flight.ArrivalTime,
+                        AirlineName = booking.Flight.FlightCompany.Name,
+                        FlightCompanyId = booking.Flight.FlightCompanyId,
+                        SeatClass = booking.SeatClass,
+                        EconomyPrice = booking.Flight.EconomyPrice,
+                        BusinessPrice = booking.Flight.BusinessPrice,
+                        FirstClassPrice = booking.Flight.FirstClassPrice
+                    };
+                }
+
+                dtoList.Add(dto);
+            }
+
+            return Ok(dtoList);
+        }
+
+        [HttpGet("my-company-bookings")]
+        [Authorize(Roles = "FlightAdmin")]
+        public async Task<ActionResult<IEnumerable<BookingDto>>> GetMyCompanyBookings()
+        {
+            var flightCompanyIdClaim = User.FindFirst("FlightCompanyId")?.Value;
+
+            if (string.IsNullOrEmpty(flightCompanyIdClaim) ||
+                !int.TryParse(flightCompanyIdClaim, out int flightCompanyId))
+            {
+                return BadRequest("FlightCompanyId not found in token.");
+            }
+
+            return await GetFlightCompanyBookings(flightCompanyId);
+        }
+
     }
 }

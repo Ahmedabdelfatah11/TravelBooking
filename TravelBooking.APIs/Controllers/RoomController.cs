@@ -29,6 +29,8 @@ namespace TravelBooking.APIs.Controllers
         private readonly IGenericRepository<Booking> _bookingRepo;
         private readonly IMapper _mapper;
         private readonly IRoomService _roomService;
+        private readonly IHttpContextAccessor _httpContextAccessor;
+
         /// <summary>
         /// Initializes a new instance of the <see cref="RoomController"/> class.
         /// </summary>
@@ -41,7 +43,8 @@ namespace TravelBooking.APIs.Controllers
                               IGenericRepository<HotelCompany> hotelRepo,
                                 IGenericRepository<Booking> bookingRepo,
                               IMapper mapper,
-                              IRoomService roomService)
+                              IRoomService roomService,
+                              IHttpContextAccessor httpContextAccessor)
 
         {
             _roomRepo = roomRepo;
@@ -50,6 +53,7 @@ namespace TravelBooking.APIs.Controllers
             _bookingRepo = bookingRepo;
             _mapper = mapper;
             _roomService = roomService;
+            _httpContextAccessor = httpContextAccessor;
         }
 
         /// <summary>
@@ -176,22 +180,22 @@ namespace TravelBooking.APIs.Controllers
             var result = _mapper.Map<RoomToReturnDTO>(room);
             return CreatedAtAction(nameof(GetRoom), new { id = room.Id }, result);
         }
-        private async Task<string> SaveRoomImageAsync(IFormFile image)
-        {
-            var folderPath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "images", "rooms");
-            if (!Directory.Exists(folderPath))
-                Directory.CreateDirectory(folderPath);
+        //private async Task<string> SaveRoomImageAsync(IFormFile image)
+        //{
+        //    var folderPath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "images", "rooms");
+        //    if (!Directory.Exists(folderPath))
+        //        Directory.CreateDirectory(folderPath);
 
-            var fileName = $"{Guid.NewGuid()}{Path.GetExtension(image.FileName)}";
-            var filePath = Path.Combine(folderPath, fileName);
+        //    var fileName = $"{Guid.NewGuid()}{Path.GetExtension(image.FileName)}";
+        //    var filePath = Path.Combine(folderPath, fileName);
 
-            using (var stream = new FileStream(filePath, FileMode.Create))
-            {
-                await image.CopyToAsync(stream);
-            }
+        //    using (var stream = new FileStream(filePath, FileMode.Create))
+        //    {
+        //        await image.CopyToAsync(stream);
+        //    }
 
-            return $"/images/rooms/{fileName}";
-        }
+        //    return $"/images/rooms/{fileName}";
+        //}
         /// <summary>
         /// Update existing room
         /// </summary>
@@ -239,7 +243,7 @@ namespace TravelBooking.APIs.Controllers
             var room = await _roomRepo.GetAsync(id);
             if (room == null) return NotFound();
 
-            _roomRepo.Delete(room);
+            await _roomRepo.Delete(room);
             return NoContent();
         }
 
@@ -267,8 +271,10 @@ namespace TravelBooking.APIs.Controllers
 
                 await using var stream = new FileStream(filePath, FileMode.Create);
                 await file.CopyToAsync(stream);
-
-                urls.Add($"/images/rooms/{fileName}");
+                var request = _httpContextAccessor.HttpContext?.Request;
+                if (request == null)
+                    throw new InvalidOperationException("HttpContext is not available.");
+                urls.Add($"{request.Scheme}://{request.Host}/images/rooms/{fileName}");
             }
 
             return urls;

@@ -171,7 +171,7 @@ namespace TravelBooking.APIs
             {
                 options.AddPolicy("AllowAngularApp", policy =>
                 {
-                    policy.WithOrigins("http://localhost:53517", "http://localhost:4200")
+                    policy.WithOrigins("http://localhost:53517", "http://localhost:4200", "http://pyramigo.duckdns.org")
                           .AllowAnyHeader()
                           .AllowAnyMethod()
                      .AllowCredentials();
@@ -236,6 +236,13 @@ namespace TravelBooking.APIs
             if (app.Environment.IsDevelopment())
             {
                 app.UseSwaggerMiddlewares();
+                app.UseDeveloperExceptionPage();
+            }
+            else
+            {
+                // In production you can show a custom error page instead
+                app.UseExceptionHandler("/Home/Error");
+                app.UseHsts();
             }
             // Response Caching
 

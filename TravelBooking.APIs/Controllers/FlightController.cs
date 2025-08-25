@@ -147,12 +147,50 @@ namespace TravelBooking.APIs.Controllers
 
         [HttpPut("{id}")]
         [Authorize(Roles = "SuperAdmin,FlightAdmin")]
-        public async Task<ActionResult> UpdateFlight(int id, [FromBody] Flight flight)
+        public async Task<ActionResult> UpdateFlight(int id, [FromBody] Flight updatedFlight)
         {
-            if (flight.Id != id)
+            if (updatedFlight.Id != id)
                 return BadRequest("ID mismatch");
 
-            await _flightRepo.Update(flight);
+            // Get the existing flight from the database
+            var existingFlight = await _flightRepo.GetAsync(id);
+            if (existingFlight == null)
+                return NotFound($"Flight with ID {id} not found.");
+
+            // Get FlightCompanyId from token for FlightAdmin users
+            var userRole = User.FindFirst("role")?.Value;
+            var flightCompanyIdFromToken = User.FindFirst("FlightCompanyId")?.Value;
+
+            // For FlightAdmin, ensure they can only update flights from their company
+            if (userRole == "FlightAdmin")
+            {
+                if (string.IsNullOrEmpty(flightCompanyIdFromToken) ||
+                    !int.TryParse(flightCompanyIdFromToken, out int companyId) ||
+                    existingFlight.FlightCompanyId != companyId)
+                {
+                    return BadRequest("You can only update flights from your company.");
+                }
+            }
+
+            // Update only the fields that should be editable
+            existingFlight.DepartureAirport = updatedFlight.DepartureAirport;
+            existingFlight.ArrivalAirport = updatedFlight.ArrivalAirport;
+            existingFlight.DepartureTime = updatedFlight.DepartureTime;
+            existingFlight.ArrivalTime = updatedFlight.ArrivalTime;
+            existingFlight.EconomySeats = updatedFlight.EconomySeats;
+            existingFlight.BusinessSeats = updatedFlight.BusinessSeats;
+            existingFlight.FirstClassSeats = updatedFlight.FirstClassSeats;
+            existingFlight.EconomyPrice = updatedFlight.EconomyPrice;
+            existingFlight.BusinessPrice = updatedFlight.BusinessPrice;
+            existingFlight.FirstClassPrice = updatedFlight.FirstClassPrice;
+
+            // Preserve critical fields that shouldn't be changed
+            // existingFlight.FlightCompanyId remains the same
+            // existingFlight.Id remains the same
+            // existingFlight.AirlineName remains the same (unless you want to allow updates)
+            // existingFlight.ImageUrl remains the same (unless you want to allow updates)
+
+            await _flightRepo.Update(existingFlight);
 
             return NoContent();
         }

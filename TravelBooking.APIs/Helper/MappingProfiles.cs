@@ -112,6 +112,7 @@ namespace TravelBooking.Helper
             .ForMember(dest => dest.CustomerEmail, opt => opt.MapFrom(src => src.User.Email))
             .ForMember(dest => dest.PaymentStatus, opt => opt.MapFrom(src => src.Payment.PaymentStatus.ToString()))
             .ForMember(dest => dest.TotalPrice, opt => opt.MapFrom(src =>src.Payment.Amount))
+            .ForMember(dest => dest.Status, opt => opt.MapFrom(src => src.Status.ToString()));
             ;
 
 

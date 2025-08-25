@@ -20,18 +20,22 @@ namespace Jwt.Controllers
         private readonly IAuthService _authService;
         private readonly SignInManager<ApplicationUser> _signInManager;
         private readonly UserManager<ApplicationUser> _userManager;
+        private readonly IConfiguration _configuration;
+
 
 
         public AuthController(
         ILogger<AuthController> logger,
         IAuthService authService,
         SignInManager<ApplicationUser> signInManager,
-        UserManager<ApplicationUser> userManager)
+        UserManager<ApplicationUser> userManager,
+        IConfiguration configuration)
         {
             _logger = logger;
             _authService = authService;
             _signInManager = signInManager;
             _userManager = userManager;
+            _configuration = configuration;
         }
 
         [HttpPost("Register")]
@@ -128,8 +132,14 @@ namespace Jwt.Controllers
             var roles = await _userManager.GetRolesAsync(user);
 
             // Redirect to Angular callback route
-            var frontendBaseUrl = "http://localhost:4200"; // Move to config in production
-            return Redirect($"{frontendBaseUrl}/google-callback?token={tokenString}&username={Uri.EscapeDataString(user.UserName)}&roles={Uri.EscapeDataString(string.Join(",", roles))}");
+            var frontendBaseUrl = _configuration["Frontend:BaseUrl"];
+
+            var redirectUrl = $"{frontendBaseUrl}/google-callback" +
+                              $"?token={tokenString}" +
+                              $"&username={Uri.EscapeDataString(user.UserName)}" +
+                              $"&roles={Uri.EscapeDataString(string.Join(",", roles))}";
+
+            return Redirect(redirectUrl);
         }
 
         [HttpPost("AddRole")]
