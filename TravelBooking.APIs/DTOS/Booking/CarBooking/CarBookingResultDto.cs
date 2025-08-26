@@ -10,7 +10,7 @@
         public int CarId { get; set; }
         public string CarModel { get; set; }
         public decimal TotalPrice { get; set; }
-        // Or any other car info you want to return
+
     }
 
 }

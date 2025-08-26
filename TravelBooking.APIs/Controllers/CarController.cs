@@ -23,12 +23,14 @@ namespace TravelBooking.APIs.Controllers
         private readonly IGenericRepository<Car> _carRepo;
         private readonly IMapper _mapper;
         private readonly IGenericRepository<Booking> _bookingRepo;
+        private readonly IHttpContextAccessor _httpContextAccessor;
 
-        public CarController(IGenericRepository<Car> carRepo, IMapper mapper, IGenericRepository<Booking> bookingRepo)
+        public CarController(IGenericRepository<Car> carRepo, IMapper mapper, IGenericRepository<Booking> bookingRepo, IHttpContextAccessor httpContextAccessor)
         {
             _carRepo = carRepo;
             _mapper = mapper;
             _bookingRepo = bookingRepo;
+            _httpContextAccessor = httpContextAccessor;
         }
 
         [HttpGet]
@@ -37,9 +39,9 @@ namespace TravelBooking.APIs.Controllers
         {
             var spec = new CarSpecifications(specParams);
             var countCarSpec = new CarsWithFilterForCountSpecification(specParams);
-            
+
             var totalItems = await _carRepo.GetCountAsync(countCarSpec);
-           
+
             var cars = await _carRepo.GetAllWithSpecAsync(spec);
             var data = _mapper.Map<IReadOnlyList<Car>, IReadOnlyList<CarDto>>(cars);
 
@@ -55,7 +57,7 @@ namespace TravelBooking.APIs.Controllers
             var spec = new CarSpecifications(id);
             var car = await _carRepo.GetWithSpecAsync(spec);
 
-            if (car == null) 
+            if (car == null)
                 return NotFound(new ApiResponse(404));
 
             return Ok(_mapper.Map<Car, CarDto>(car));
@@ -149,11 +151,10 @@ namespace TravelBooking.APIs.Controllers
             var car = await _carRepo.GetAsync(id);
             if (car == null) return NotFound();
 
-           await _carRepo.Delete(car);
+            await _carRepo.Delete(car);
 
             return NoContent();
         }
-
         private async Task<string> SaveImageAsync(IFormFile image)
         {
             var folderPath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "images", "cars");
@@ -168,8 +169,12 @@ namespace TravelBooking.APIs.Controllers
                 await image.CopyToAsync(stream);
             }
 
-            return $"/images/cars/{fileName}";
+
+            var request = _httpContextAccessor.HttpContext.Request;
+            var baseUrl = $"{request.Scheme}://{request.Host}";
+
+            return $"{baseUrl}/images/cars/{fileName}";
         }
+
     }
 }
-

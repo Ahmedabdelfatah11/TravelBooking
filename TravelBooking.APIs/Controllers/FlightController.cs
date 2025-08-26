@@ -20,18 +20,18 @@ namespace TravelBooking.APIs.Controllers
         private readonly IGenericRepository<Flight> _flightRepo;
         private readonly IGenericRepository<Booking> _bookingRepo;
         private readonly IMapper _mapper;
- 
-        public FlightController(IGenericRepository<Flight> flightRepository , IMapper mapper, IGenericRepository<Booking> bookingRepo)
+
+        public FlightController(IGenericRepository<Flight> flightRepository, IMapper mapper, IGenericRepository<Booking> bookingRepo)
         {
             _flightRepo = flightRepository;
             _mapper = mapper;
             _bookingRepo = bookingRepo;
         }
-       
+
 
         [HttpGet]
         [AllowAnonymous]
-        public async Task<ActionResult<Pagination<FlightDTO>>> GetAllFlights( [FromQuery]FlightSpecParams specParams )
+        public async Task<ActionResult<Pagination<FlightDTO>>> GetAllFlights([FromQuery] FlightSpecParams specParams)
         {
             var spec = new FlightSpecs(specParams);
             var flights = await _flightRepo.GetAllWithSpecAsync(spec);
@@ -48,7 +48,7 @@ namespace TravelBooking.APIs.Controllers
 
         [HttpGet("{id}")]
         [AllowAnonymous]
-        public async Task<ActionResult<FlightDetialsDTO>> GetFlight( int id )
+        public async Task<ActionResult<FlightDetialsDTO>> GetFlight(int id)
         {
             var spec = new FlightSpecs(id);
 
@@ -89,21 +89,21 @@ namespace TravelBooking.APIs.Controllers
                 case SeatClass.Economy:
                     if (flight.EconomySeats <= 0)
                         return BadRequest(new ApiResponse(400, "No economy seats available."));
-                    
+
                     price = flight.EconomyPrice;
                     break;
 
                 case SeatClass.Business:
                     if (flight.BusinessSeats <= 0)
                         return BadRequest(new ApiResponse(400, "No business class seats available."));
-                    
+
                     price = flight.BusinessPrice;
                     break;
 
                 case SeatClass.FirstClass:
                     if (flight.FirstClassSeats <= 0)
                         return BadRequest(new ApiResponse(400, "No first class seats available."));
-                    
+
                     price = flight.FirstClassPrice;
                     break;
 
@@ -140,7 +140,7 @@ namespace TravelBooking.APIs.Controllers
         {
             var flightCreated = _mapper.Map<Flight>(dto);
             var newCompany = await _flightRepo.AddAsync(flightCreated);
-            var flight= _mapper.Map<FlightDetialsDTO>(newCompany);
+            var flight = _mapper.Map<FlightDetialsDTO>(newCompany);
             return CreatedAtAction(nameof(GetFlight), new { id = newCompany.Id }, newCompany);
         }
 

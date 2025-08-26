@@ -12,7 +12,7 @@ using TravelBooking.Repository.Data;
 namespace TravelBooking.Repository.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20250821001307_initial version")]
+    [Migration("20250825001555_initial version")]
     partial class initialversion
     {
         /// <inheritdoc />

@@ -36,6 +36,7 @@
 	</ItemGroup>
 	<ItemGroup>
 	  <Folder Include="wwwroot\images\hotels\" />
+	  <Folder Include="wwwroot\images\tours\" />
 	  <Folder Include="wwwroot\images\toursCompany\" />
 	</ItemGroup>
 </Project>
