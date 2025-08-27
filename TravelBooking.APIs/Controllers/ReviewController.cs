@@ -28,17 +28,19 @@ namespace TravelBooking.APIs.Controllers
         /// <summary>
         /// Get reviews for a specific company (public endpoint)
         /// </summary>
+        
+        
         [HttpGet("company")]
         [AllowAnonymous]
         public async Task<ActionResult<IEnumerable<ReviewDto>>> GetCompanyReviews(
-            [FromQuery] string companyType,
-            [FromQuery] int? hotelId = null,
-            [FromQuery] int? flightId = null,
-            [FromQuery] int? carRentalId = null,
-            [FromQuery] int? tourId = null,
-            [FromQuery] int page = 1,
-            [FromQuery] int pageSize = 10,
-            [FromQuery] string sortBy = "newest")
+       [FromQuery] string companyType,
+       [FromQuery] int? hotelId = null,
+       [FromQuery] int? flightId = null,
+       [FromQuery] int? carRentalId = null,
+       [FromQuery] int? tourId = null,
+       [FromQuery] int page = 1,
+       [FromQuery] int pageSize = 10,
+       [FromQuery] string sortBy = "newest")
         {
             try
             {
@@ -51,12 +53,17 @@ namespace TravelBooking.APIs.Controllers
                     .Include(r => r.FlightCompany)
                     .Include(r => r.CarRentalCompany)
                     .Include(r => r.TourCompany)
-                    .Where(r => r.CompanyType.ToLower() == companyType.ToLower() &&
-                        r.HotelCompanyId == hotelId &&
-                        r.FlightCompanyId == flightId &&
-                        r.CarRentalCompanyId == carRentalId &&
-                        r.TourCompanyId == tourId)
-                    .AsNoTracking();
+                    .Where(r => r.CompanyType.ToLower() == companyType.ToLower());
+
+                // ✅ Only filter by ID if value is provided
+                if (hotelId.HasValue)
+                    query = query.Where(r => r.HotelCompanyId == hotelId.Value);
+                if (flightId.HasValue)
+                    query = query.Where(r => r.FlightCompanyId == flightId.Value);
+                if (carRentalId.HasValue)
+                    query = query.Where(r => r.CarRentalCompanyId == carRentalId.Value);
+                if (tourId.HasValue)
+                    query = query.Where(r => r.TourCompanyId == tourId.Value);
 
                 // Apply sorting
                 query = sortBy.ToLower() switch
@@ -64,7 +71,7 @@ namespace TravelBooking.APIs.Controllers
                     "oldest" => query.OrderBy(r => r.CreatedAt),
                     "rating_high" => query.OrderByDescending(r => r.Rating).ThenByDescending(r => r.CreatedAt),
                     "rating_low" => query.OrderBy(r => r.Rating).ThenByDescending(r => r.CreatedAt),
-                    _ => query.OrderByDescending(r => r.CreatedAt) // newest (default)
+                    _ => query.OrderByDescending(r => r.CreatedAt)
                 };
 
                 var totalCount = await query.CountAsync();
@@ -207,7 +214,10 @@ namespace TravelBooking.APIs.Controllers
                 if (userId == null) return Unauthorized("User not authenticated");
 
                 var review = await _context.Reviews
-                    .FirstOrDefaultAsync(r => r.Id == id && r.UserId == userId);
+               .FirstOrDefaultAsync(r => r.Id == id &&
+                     (User.IsInRole("SuperAdmin") || r.UserId == userId));
+                if (review == null)
+                    return NotFound("Review not found or you don't have permission to delete it");
 
                 if (review == null)
                     return NotFound("Review not found or you don't have permission to update it");
@@ -241,8 +251,11 @@ namespace TravelBooking.APIs.Controllers
                 var userId = GetUserId();
                 if (userId == null) return Unauthorized("User not authenticated");
 
-                var review = await _context.Reviews
-                    .FirstOrDefaultAsync(r => r.Id == id && r.UserId == userId);
+                   var review = await _context.Reviews
+                .FirstOrDefaultAsync(r => r.Id == id &&
+                      (User.IsInRole("SuperAdmin") || r.UserId == userId));
+                  if (review == null)
+                    return NotFound("Review not found or you don't have permission to delete it");
 
                 if (review == null)
                     return NotFound("Review not found or you don't have permission to delete it");

@@ -204,37 +204,127 @@ namespace TravelBooking.APIs.Controllers
         }
 
 
-
-
         [HttpPut("{id}")]
         [Authorize(Roles = "SuperAdmin,TourAdmin")]
         public async Task<ActionResult> UpdateTour(int id, [FromForm] TourUpdateDto dto)
         {
-            var existing = await _tourRepo.GetWithSpecAsync(new ToursSpecification(id));
+            var spec = new ToursSpecification(id);
+            var existing = await _tourRepo.GetWithSpecAsync(spec);
             if (existing == null) return NotFound();
 
-            _mapper.Map(dto, existing);
+            // Validate TourCompanyId
+            if (!dto.TourCompanyId.HasValue)
+                return BadRequest(new { error = "TourCompanyId is required." });
 
-            // رفع صورة رئيسية جديدة
+            var companyExists = await _context.TourCompanies.AnyAsync(c => c.Id == dto.TourCompanyId.Value);
+            if (!companyExists)
+                return BadRequest(new { error = $"TourCompanyId {dto.TourCompanyId.Value} does not exist." });
+
+            // Update scalar fields
+            existing.Name = dto.Name;
+            existing.StartDate = dto.StartDate;
+            existing.EndDate = dto.EndDate;
+            existing.Description = dto.Description;
+            existing.Destination = dto.Destination;
+            existing.MaxGuests = dto.MaxGuests;
+            existing.MinGroupSize = dto.MinGroupSize;
+            existing.MaxGroupSize = dto.MaxGroupSize;
+            existing.Price = dto.Price;
+            existing.Category = dto.Category;
+            existing.Languages = dto.Languages;
+            existing.TourCompanyId = dto.TourCompanyId;
+
+            // Handle images (unchanged)
             if (dto.Image != null)
             {
+                var oldPath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", existing.ImageUrl?.TrimStart('/') ?? "");
+                if (!string.IsNullOrEmpty(existing.ImageUrl) && System.IO.File.Exists(oldPath))
+                    System.IO.File.Delete(oldPath);
                 existing.ImageUrl = await SaveImageAsync(dto.Image);
             }
 
-            // رفع صور إضافية جديدة
-            if (dto.GalleryImages != null && dto.GalleryImages.Any())
+            if (dto.GalleryImages?.Any() == true)
             {
-                var newImageUrls = await SaveImagesAsync(dto.GalleryImages);
-                foreach (var url in newImageUrls)
-                {
+                var newUrls = await SaveImagesAsync(dto.GalleryImages);
+                foreach (var url in newUrls)
                     existing.TourImages.Add(new TourImage { ImageUrl = url });
+            }
+
+            if (dto.DeletedImageUrls?.Any() == true)
+            {
+                var toDelete = existing.TourImages.Where(ti => dto.DeletedImageUrls.Contains(ti.ImageUrl)).ToList();
+                foreach (var img in toDelete)
+                {
+                    var path = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", img.ImageUrl.TrimStart('/'));
+                    if (System.IO.File.Exists(path)) System.IO.File.Delete(path);
+                    _context.TourImages.Remove(img);
                 }
             }
 
+            // ✅ Fix: Tickets
+            if (dto.Tickets != null)
+            {
+                var ticketIds = new List<int>();
+                foreach (var ticketDto in dto.Tickets)
+                {
+                    var ticket = existing.TourTickets.FirstOrDefault(t => t.Id == ticketDto.Id)
+                               ?? new TourTicket();
+
+                    _mapper.Map(ticketDto, ticket);
+                    ticket.TourId = existing.Id;
+
+                    if (ticket.Id == 0)
+                        _context.TourTickets.Add(ticket);
+                    else
+                        _context.TourTickets.Update(ticket);
+
+                    ticketIds.Add(ticket.Id);
+                }
+
+                var ticketsToRemove = _context.TourTickets.Where(t => t.TourId == existing.Id && !ticketIds.Contains(t.Id)).ToList();
+                _context.TourTickets.RemoveRange(ticketsToRemove);
+            }
+
+            // ✅ Fix: Questions
+            if (dto.Questions != null)
+            {
+                var questionIds = new List<int>();
+                foreach (var qDto in dto.Questions)
+                {
+                    var question = existing.Questions.FirstOrDefault(q => q.Id == qDto.Id)
+                                 ?? new TourQuestion();
+
+                    _mapper.Map(qDto, question);
+                    question.TourId = existing.Id;
+
+                    if (question.Id == 0)
+                        _context.TourQuestion.Add(question);
+                    else
+                        _context.TourQuestion.Update(question);
+
+                    questionIds.Add(question.Id);
+                }
+
+                var questionsToRemove = _context.TourQuestion.Where(q => q.TourId == existing.Id && !questionIds.Contains(q.Id)).ToList();
+                _context.TourQuestion.RemoveRange(questionsToRemove);
+            }
+
+            // Items
+            if (dto.IncludedItems != null)
+            {
+                existing.IncludedItems.Clear();
+                existing.IncludedItems.AddRange(dto.IncludedItems);
+            }
+            if (dto.ExcludedItems != null)
+            {
+                existing.ExcludedItems.Clear();
+                existing.ExcludedItems.AddRange(dto.ExcludedItems);
+            }
+
+            // ✅ Final Save
             await _tourRepo.Update(existing);
             return NoContent();
         }
-
         private async Task<string> SaveImageAsync(IFormFile file)
         {
             if (file == null || file.Length == 0)

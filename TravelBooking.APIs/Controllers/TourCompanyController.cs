@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
+using TravelBooking.APIs.DTOS.Booking;
 using TravelBooking.APIs.DTOS.TourCompany;
 using TravelBooking.APIs.DTOS.Tours;
 using TravelBooking.Core.Models;
@@ -28,15 +29,17 @@ namespace TravelBooking.APIs.Controllers
         private readonly IMapper _mapper;
         private readonly ITourAdminDashboardService _dashboardService;
         private readonly IGenericRepository<Tour> _tourRepo;
+        private readonly IGenericRepository<Booking> _bookingRepo;
 
         public TourCompanyController(
             IGenericRepository<TourCompany> tourCompanyRepo,
-            IMapper mapper, ITourAdminDashboardService dashboardService,IGenericRepository<Tour> tourRepo)
+            IMapper mapper, ITourAdminDashboardService dashboardService,IGenericRepository<Tour> tourRepo,IGenericRepository<Booking> bookingRepo)
         {
             _tourCompanyRepo = tourCompanyRepo;
             _mapper = mapper;
             _dashboardService = dashboardService;
             _tourRepo = tourRepo;
+            _bookingRepo = bookingRepo;
         }
 
 
@@ -164,5 +167,53 @@ namespace TravelBooking.APIs.Controllers
             return Ok(data);
         }
 
+
+        // GET: api/TourCompany/5/bookings
+        [HttpGet("{id}/bookings")]
+        [Authorize(Roles = "TourAdmin")]
+        public async Task<ActionResult<IEnumerable<BookingDto>>> GetBookingsByTourCompany(int id)
+        {
+            Console.WriteLine($"🎯 GetBookingsByTourCompany called with company ID: {id}");
+
+            if (!IsTourAdminAuthorizedForCompany(id))
+                return Forbid();
+
+            // ✅ Fix: Use the companyId overload
+            var tourSpec = new ToursSpecification(companyId: id);
+            var tours = await _tourRepo.GetAllWithSpecAsync(tourSpec);
+
+            var tourIds = tours.Select(t => t.Id).ToList();
+            if (!tourIds.Any())
+            {
+                Console.WriteLine("❌ No tours found for this company");
+                return Ok(new List<BookingDto>());
+            }
+
+            Console.WriteLine($"✅ Found tours: {string.Join(", ", tourIds)}");
+
+            var bookingSpec = new BookingSpecification();
+            var allBookings = await _bookingRepo.GetAllWithSpecAsync(bookingSpec);
+
+            var companyBookings = allBookings
+                .Where(b => b.BookingType == BookingType.Tour &&
+                            b.TourId.HasValue &&
+                            tourIds.Contains(b.TourId.Value))
+                .ToList();
+
+            var dtoList = new List<BookingDto>();
+            foreach (var booking in companyBookings)
+            {
+                var dto = _mapper.Map<BookingDto>(booking);
+                var tour = tours.FirstOrDefault(t => t.Id == booking.TourId);
+                if (tour != null)
+                {
+                    dto.AgencyDetails = _mapper.Map<TourReadDto>(tour);
+                }
+                dtoList.Add(dto);
+            }
+
+            Console.WriteLine($"✅ Returning {dtoList.Count} bookings");
+            return Ok(dtoList);
+        }
     }
 }

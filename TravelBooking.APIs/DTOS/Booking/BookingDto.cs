@@ -14,6 +14,7 @@ namespace TravelBooking.APIs.DTOS.Booking
 
         //[JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
         public decimal? TotalPrice { get; set; }
+        public string Status { get; set; }
         public object? AgencyDetails { get; set; }
         public string? PaymentIntentId { get; set; }
         public string? ClientSecret { get; set; }

@@ -34,7 +34,10 @@ namespace TravelBooking.Repository
         {
             return await _dbContext.Set<T>().FindAsync(id);
         }
-
+        public IQueryable<T> GetQueryable()
+        {
+            return _dbContext.Set<T>();
+        }
         public async Task<IReadOnlyList<T>> GetAllWithSpecAsync(ISpecifications<T> spec)
         {
             return await ApplySpecifications(spec).AsNoTracking().ToListAsync();

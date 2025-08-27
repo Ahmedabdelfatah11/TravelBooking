@@ -190,8 +190,15 @@ namespace TravelBooking.APIs.Controllers
                 var userId = GetUserId();
                 if (userId == null) return Unauthorized("User not authenticated");
 
-                var favorite = await _context.Favorites
-                    .FirstOrDefaultAsync(f => f.Id == id && f.UserId == userId);
+
+
+                    var favorite = await _context.Favorites
+                        .FirstOrDefaultAsync(r => r.Id == id &&
+                     (User.IsInRole("SuperAdmin") || r.UserId == userId));
+                     if (favorite == null)
+                        return NotFound("Review not found or you don't have permission to delete it");
+
+
 
                 if (favorite == null)
                     return NotFound("Favorite not found or you don't have permission to delete it");

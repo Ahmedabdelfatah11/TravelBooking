@@ -34,6 +34,8 @@ namespace TravelBooking.Core.Repository.Contract
         public Task<IReadOnlyList<FlightCompany>> GetFlighByAdminIdAsync(string adminId);
         public Task<IReadOnlyList<TourCompany>> GetTourByAdminIdAsync(string adminId);
         Task<T?> FindAsync(Expression<Func<T, bool>> predicate);
+
+        IQueryable<T> GetQueryable();
     }
 
 }

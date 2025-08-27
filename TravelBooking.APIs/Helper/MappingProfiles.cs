@@ -1,19 +1,20 @@
-using TravelBooking.Core.Models;
-using TravelBooking.Core.DTOS.CarRentalCompanies;
-using TravelBooking.Core.DTOS.Cars;
+using AutoMapper;
 using TravelBooking.APIs.DTOS.Booking;
-using TravelBooking.APIs.DTOS.Booking.RoomBooking;
 using TravelBooking.APIs.DTOS.Booking.CarBooking;
 using TravelBooking.APIs.DTOS.Booking.FlightBooking;
+using TravelBooking.APIs.DTOS.Booking.RoomBooking;
 using TravelBooking.APIs.DTOS.Booking.TourBooking;
-using AutoMapper;
-using TravelBooking.APIs.DTOS.Tours;
-using TravelBooking.APIs.DTOS.TourCompany;
-using TravelBooking.Core.Models;
-using TravelBooking.Models;
+using TravelBooking.APIs.DTOS.CarRentalCompanies;
 using TravelBooking.APIs.DTOS.HotelCompany;
 using TravelBooking.APIs.DTOS.Rooms;
+using TravelBooking.APIs.DTOS.TourCompany;
+using TravelBooking.APIs.DTOS.Tours;
 using TravelBooking.APIs.DTOS.TourTickets;
+using TravelBooking.Core.DTOS.CarRentalCompanies;
+using TravelBooking.Core.DTOS.Cars;
+using TravelBooking.Core.Models;
+using TravelBooking.Core.Models;
+using TravelBooking.Models;
 
 namespace TravelBooking.Helper
 {
@@ -31,23 +32,40 @@ namespace TravelBooking.Helper
 
             CreateMap<TourCompanyUpdateDto, TourCompany>()
                      .ForMember(dest => dest.ImageUrl, opt => opt.Ignore());
-             
+
             CreateMap<Tour, TourSummaryDto>()
                      .ForMember(dest => dest.Category, opt => opt.MapFrom(src => src.Category.ToString()));
 
             //Tour Mapping  
             CreateMap<TourImage, string>().ConvertUsing(src => src.ImageUrl);
             CreateMap<Tour, TourReadDto>()
-                .ForMember(dest => dest.Category, opt => opt.MapFrom(src => src.Category.ToString()))
-                .ForMember(dest => dest.TourCompanyName, opt => opt.MapFrom(src => src.TourCompany.Name))
-                //.ForMember(dest => dest.ImageUrls, opt => opt.MapFrom(src => src.TourImages))
-                .ForMember(dest => dest.IncludedItems, opt => opt.MapFrom(src => src.IncludedItems))
-                .ForMember(dest => dest.ExcludedItems, opt => opt.MapFrom(src => src.ExcludedItems))
-                .ForMember(dest => dest.Questions, opt => opt.MapFrom(src => src.Questions))
-                .ForMember(dest => dest.Tickets, opt => opt.MapFrom(src => src.TourTickets))
-                .ForMember(d => d.ImageUrls, o => o.MapFrom(s => s.TourImages.Select(ti => ti.ImageUrl)));
+            .ForMember(dest => dest.Category, opt => opt.MapFrom(src => src.Category.ToString()))
+            .ForMember(dest => dest.TourCompanyName, opt => opt.MapFrom(src => src.TourCompany.Name))
+            .ForMember(dest => dest.IncludedItems, opt => opt.MapFrom(src => src.IncludedItems))
+            .ForMember(dest => dest.ExcludedItems, opt => opt.MapFrom(src => src.ExcludedItems))
+            .ForMember(dest => dest.Questions, opt => opt.MapFrom(src => src.Questions))
+            .ForMember(dest => dest.Tickets, opt => opt.MapFrom(src => src.TourTickets))
+            .ForMember(d => d.ImageUrls, o => o.MapFrom(s => s.TourImages.Select(ti => ti.ImageUrl)));
+
             CreateMap<TourCreateDto, Tour>();
-            CreateMap<TourUpdateDto, Tour>();
+
+            CreateMap<TourUpdateDto, Tour>()
+                .ForMember(dest => dest.Id, opt => opt.Ignore())
+                .ForMember(dest => dest.ImageUrl, opt => opt.Condition(src => src.Image != null))
+                .ForMember(dest => dest.TourCompany, opt => opt.Ignore())
+                .ForMember(dest => dest.TourImages, opt => opt.Ignore())
+                .ForMember(dest => dest.TourTickets, opt => opt.Ignore())
+                .ForMember(dest => dest.Questions, opt => opt.Ignore())
+                .ForMember(dest => dest.IncludedItems, opt => opt.Ignore())
+                .ForMember(dest => dest.ExcludedItems, opt => opt.Ignore())
+                .ForAllMembers(opt =>
+                {
+                    opt.Condition((source, destination, sourceValue, destValue) =>
+                    {
+                        // Only set if source value is non-null
+                        return sourceValue != null;
+                    });
+                });
             CreateMap<TourQuestion, TourQuestionDto>().ReverseMap();
 
             //  HotelCompany
@@ -93,7 +111,8 @@ namespace TravelBooking.Helper
                      .ReverseMap();
             CreateMap<SaveCarRentalDto, CarRentalCompany>()
                  .ForMember(dest => dest.ImageUrl, opt => opt.Ignore());
-
+            CreateMap<UpdateCarRentalDto, CarRentalCompany>()
+                    .ForMember(dest => dest.ImageUrl, opt => opt.Ignore());
 
             CreateMap<CarRentalCompany, CarRentalWithCarsDto>()
                 .ForMember(dest => dest.Cars, opt => opt.MapFrom(src => src.Cars));
@@ -108,6 +127,7 @@ namespace TravelBooking.Helper
             CreateMap<ApplicationUser, UserDto>();
             CreateMap<Booking, BookingDto>()
             .ForMember(dest => dest.CustomerEmail, opt => opt.MapFrom(src => src.User.Email))
+             .ForMember(dest => dest.Status, opt => opt.MapFrom(src => src.Status.ToString()))
             .ForMember(dest => dest.PaymentStatus, opt => opt.MapFrom(src => src.Payment.PaymentStatus.ToString()))
             .ForMember(dest => dest.TotalPrice, opt => opt.MapFrom(src =>src.Payment.Amount))
             ;

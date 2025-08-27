@@ -48,6 +48,7 @@ namespace TravelBooking.Repository.Data
         public DbSet<Favoritet> Favorites { get; set; }
         public DbSet<Review> Reviews { get; set; }
         public DbSet<TourTicket> TourTickets { get; set; }
+        public DbSet<TourQuestion> TourQuestion { get; set; }
         public DbSet<TourBookingTicket> TourBookingTickets { get; set; }
         public DbSet<ContactMessage> ContactMessages { get; set; }
 

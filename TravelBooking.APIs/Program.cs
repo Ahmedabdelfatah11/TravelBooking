@@ -147,7 +147,7 @@ namespace TravelBooking.APIs
             {
                 options.AddPolicy("AllowAngularApp", policy =>
                 {
-                    policy.WithOrigins("http://localhost:50198", "http://localhost:4200")
+                    policy.WithOrigins("http://localhost:53384", "http://localhost:4200")
                           .AllowAnyHeader()
                           .AllowAnyMethod()
                      .AllowCredentials();

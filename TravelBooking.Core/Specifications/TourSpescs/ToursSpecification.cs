@@ -62,5 +62,13 @@ namespace TravelBooking.Core.Specifications.TourSpecs
             Includes.Add(x => x.Questions);
 
         }
+        public ToursSpecification(int? companyId)
+            : base(t => !companyId.HasValue || t.TourCompanyId == companyId)
+        {
+            Includes.Add(t => t.TourCompany);
+            Includes.Add(t => t.TourImages);
+            Includes.Add(t => t.TourTickets);
+            Includes.Add(t => t.Questions);
+        }
     }
 }
