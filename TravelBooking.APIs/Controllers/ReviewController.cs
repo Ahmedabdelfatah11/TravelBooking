@@ -143,7 +143,7 @@ namespace TravelBooking.APIs.Controllers
         /// </summary>
         [HttpPost]
         //[Authorize]
-        [Authorize(Roles = "SuperAdmin,User")]
+        [Authorize(Roles = "SuperAdmin,User,CarRentalCompany")]
         public async Task<ActionResult<ReviewDto>> CreateReview([FromBody] CreateReviewDto createDto)
         {
             try
@@ -202,7 +202,7 @@ namespace TravelBooking.APIs.Controllers
         /// </summary>
         [HttpPut("{id}")]
         // [Authorize]
-        [Authorize(Roles = "SuperAdmin,User")]
+        [Authorize(Roles = "SuperAdmin,User,CarRentalCompany")]
         public async Task<IActionResult> UpdateReview(int id, [FromBody] UpdateReviewDto updateDto)
         {
             try
@@ -243,7 +243,7 @@ namespace TravelBooking.APIs.Controllers
         /// </summary>
         [HttpDelete("{id}")]
       //  [Authorize]
-        [Authorize(Roles = "SuperAdmin,User")]
+        [Authorize(Roles = "SuperAdmin,User,CarRentalCompany")]
         public async Task<IActionResult> DeleteReview(int id)
         {
             try
@@ -405,7 +405,7 @@ namespace TravelBooking.APIs.Controllers
         /// </summary>
         [HttpPost("check")]
         //   [Authorize]
-        [Authorize(Roles = "SuperAdmin,User")]
+        [Authorize(Roles = "SuperAdmin,User,CarRentalCompany")]
         public async Task<ActionResult<bool>> CheckUserReview([FromBody] CreateReviewDto checkDto)
         {
             try

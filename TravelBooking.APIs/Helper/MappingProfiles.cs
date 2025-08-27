@@ -87,7 +87,13 @@ namespace TravelBooking.Helper
                   .ForMember(dest => dest.HotelCompanyName, opt => opt.MapFrom(src => src.Hotel.Name));
             CreateMap<RoomCreateDTO, Room>()
                  .ForMember(dest => dest.Images, opt => opt.Ignore());
-
+            CreateMap<RoomUpdateDTO, Room>()
+                .ForMember(dest => dest.RoomType, opt => opt.MapFrom(src => src.RoomType.ToString()))
+                .ForMember(dest => dest.HotelId, opt => opt.MapFrom(src => src.HotelCompanyId.ToString()))
+                .ForMember(dest => dest.IsAvailable, opt => opt.MapFrom(src => src.IsAvailable.ToString()))
+                .ForMember(dest => dest.Images, opt => opt.MapFrom(src => src.RoomImages.ToString()))
+                .ForMember(dest => dest.Price, opt => opt.MapFrom(src => src.Price.ToString()))
+                ;
 
            
 
@@ -130,6 +136,7 @@ namespace TravelBooking.Helper
              .ForMember(dest => dest.Status, opt => opt.MapFrom(src => src.Status.ToString()))
             .ForMember(dest => dest.PaymentStatus, opt => opt.MapFrom(src => src.Payment.PaymentStatus.ToString()))
             .ForMember(dest => dest.TotalPrice, opt => opt.MapFrom(src =>src.Payment.Amount))
+            .ForMember(dest => dest.Status, opt => opt.MapFrom(src => src.Status.ToString()));
             ;
 
 
@@ -145,6 +152,9 @@ namespace TravelBooking.Helper
                 .ForMember(dest => dest.Price, opt => opt.MapFrom(src => src.Room != null ? src.Room.Price : 0))
                 .ForMember(dest => dest.RoomId, opt => opt.MapFrom(src => src.RoomId))
                 .ForMember(dest => dest.RoomType, opt => opt.MapFrom(src => src.Room.RoomType.ToString()))
+                .ForMember(dest => dest.TotalPrice, opt => opt.MapFrom(src => src.TotalPrice))
+                ;
+            CreateMap<RoomBookingResultDto, Booking>()
                 .ForMember(dest => dest.TotalPrice, opt => opt.MapFrom(src => src.TotalPrice))
                 ;
 
@@ -177,7 +187,6 @@ namespace TravelBooking.Helper
                 .ForMember(dest => dest.DepartureAirport, opt => opt.MapFrom(src => src.Flight.DepartureAirport))
                 .ForMember(dest => dest.ArrivalAirport, opt => opt.MapFrom(src => src.Flight.ArrivalAirport))
                 .ForMember(dest => dest.FlightId, opt => opt.MapFrom(src => src.FlightId)) 
-
                 .ForMember(dest => dest.SeatClass, opt => opt.MapFrom(src => src.SeatClass)) 
                 .ForMember(dest => dest.Price, opt => opt.MapFrom(src => src.TotalPrice))
                 ;

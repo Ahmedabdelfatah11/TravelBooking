@@ -130,7 +130,7 @@ public class PaymentController : ControllerBase
 
                         await _flightRepo.Update(flight);
                     }
-                    if(booking.RoomId != null)
+                    if (booking.RoomId != null)
                     {
                         var overlappingConfirmed = await _bookingRepo.GetAllAsync(b =>
                     b.RoomId == booking.RoomId &&

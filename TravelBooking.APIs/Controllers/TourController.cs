@@ -89,7 +89,7 @@ namespace TravelBooking.APIs.Controllers
 
             if (dto.Image != null)
             {
-                entity.ImageUrl = await SaveImageAsync(dto.Image); 
+                entity.ImageUrl = await SaveImageAsync(dto.Image);
             }
 
             if (dto.GalleryImages != null && dto.GalleryImages.Any())
@@ -144,7 +144,7 @@ namespace TravelBooking.APIs.Controllers
             //);
             //if (existingBookings.Any())
             //    return BadRequest("Tour already booked in selected time frame.");
-          
+
             decimal totalPrice = 0;
             var bookingTickets = new List<TourBookingTicket>();
 
@@ -189,7 +189,7 @@ namespace TravelBooking.APIs.Controllers
             };
 
             await _bookingRepo.AddAsync(booking);
-            await _context.SaveChangesAsync(); 
+            await _context.SaveChangesAsync();
 
             var fullBooking = await _context.Bookings
                 .Include(b => b.BookingTickets)

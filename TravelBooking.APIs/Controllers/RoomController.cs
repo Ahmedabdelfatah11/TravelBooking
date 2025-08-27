@@ -29,6 +29,8 @@ namespace TravelBooking.APIs.Controllers
         private readonly IGenericRepository<Booking> _bookingRepo;
         private readonly IMapper _mapper;
         private readonly IRoomService _roomService;
+        private readonly IHttpContextAccessor _httpContextAccessor;
+
         /// <summary>
         /// Initializes a new instance of the <see cref="RoomController"/> class.
         /// </summary>
@@ -41,7 +43,8 @@ namespace TravelBooking.APIs.Controllers
                               IGenericRepository<HotelCompany> hotelRepo,
                                 IGenericRepository<Booking> bookingRepo,
                               IMapper mapper,
-                              IRoomService roomService)
+                              IRoomService roomService,
+                              IHttpContextAccessor httpContextAccessor)
 
         {
             _roomRepo = roomRepo;
@@ -50,6 +53,7 @@ namespace TravelBooking.APIs.Controllers
             _bookingRepo = bookingRepo;
             _mapper = mapper;
             _roomService = roomService;
+            _httpContextAccessor = httpContextAccessor;
         }
 
         /// <summary>
@@ -123,8 +127,6 @@ namespace TravelBooking.APIs.Controllers
                 b.StartDate < dto.EndDate &&
                 dto.StartDate < b.EndDate
             );
-
-
             if (overlapping.Any())
                 return BadRequest("Room already booked for selected dates.");
 
@@ -161,7 +163,7 @@ namespace TravelBooking.APIs.Controllers
 
             var room = _mapper.Map<Room>(roomDto);
             room.HotelId = roomDto.HotelCompanyId;
-             
+
             if (roomDto.RoomImages != null && roomDto.RoomImages.Any())
             {
                 var imageUrls = await SaveImagesAsync(roomDto.RoomImages);
@@ -176,22 +178,22 @@ namespace TravelBooking.APIs.Controllers
             var result = _mapper.Map<RoomToReturnDTO>(room);
             return CreatedAtAction(nameof(GetRoom), new { id = room.Id }, result);
         }
-        private async Task<string> SaveRoomImageAsync(IFormFile image)
-        {
-            var folderPath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "images", "rooms");
-            if (!Directory.Exists(folderPath))
-                Directory.CreateDirectory(folderPath);
+        //private async Task<string> SaveRoomImageAsync(IFormFile image)
+        //{
+        //    var folderPath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "images", "rooms");
+        //    if (!Directory.Exists(folderPath))
+        //        Directory.CreateDirectory(folderPath);
 
-            var fileName = $"{Guid.NewGuid()}{Path.GetExtension(image.FileName)}";
-            var filePath = Path.Combine(folderPath, fileName);
+        //    var fileName = $"{Guid.NewGuid()}{Path.GetExtension(image.FileName)}";
+        //    var filePath = Path.Combine(folderPath, fileName);
 
-            using (var stream = new FileStream(filePath, FileMode.Create))
-            {
-                await image.CopyToAsync(stream);
-            }
+        //    using (var stream = new FileStream(filePath, FileMode.Create))
+        //    {
+        //        await image.CopyToAsync(stream);
+        //    }
 
-            return $"/images/rooms/{fileName}";
-        }
+        //    return $"/images/rooms/{fileName}";
+        //}
         /// <summary>
         /// Update existing room
         /// </summary>
@@ -199,31 +201,64 @@ namespace TravelBooking.APIs.Controllers
         /// <param name="roomDto">Room update data</param>
         /// <returns>No content</returns>
 
+        // UpdateRoom method in RoomController.cs
+        // Replace your existing UpdateRoom method with this:
+
         [HttpPut("{id}")]
         [Authorize(Roles = "SuperAdmin,HotelAdmin")]
         public async Task<ActionResult> UpdateRoom(int id, [FromForm] RoomUpdateDTO roomDto)
         {
             var room = await _roomRepo.GetAsync(id);
-            if (room == null) return NotFound();
+            if (room == null) return NotFound(new ApiResponse(404, "Room not found"));
 
-            var hotel = await _hotelRepo.GetAsync(roomDto.HotelCompanyId);
-            if (hotel == null)
-                return BadRequest("Hotel company not found");
+            // Validate hotel exists
+            if (roomDto.HotelCompanyId.HasValue)
+            {
+                var hotel = await _hotelRepo.GetAsync(roomDto.HotelCompanyId.Value);
+                if (hotel == null)
+                    return BadRequest(new ApiResponse(400, "Hotel company not found"));
+            }
 
-            _mapper.Map(roomDto, room);
-             
+            // Update room properties
+            if (!string.IsNullOrEmpty(roomDto.RoomType))
+                // Replace this block in UpdateRoom method:
+                // if (!string.IsNullOrEmpty(roomDto.RoomType))
+                //     room.RoomType = roomDto.RoomType;
+
+                // With this:
+                if (!string.IsNullOrEmpty(roomDto.RoomType))
+                {
+                    if (Enum.TryParse<RoomType>(roomDto.RoomType, true, out var parsedRoomType))
+                        room.RoomType = parsedRoomType;
+                    else
+                        return BadRequest(new ApiResponse(400, $"Invalid RoomType: {roomDto.RoomType}"));
+                }
+                //room.RoomType = roomDto.RoomType;
+
+            if (roomDto.Price > 0)
+                room.Price = roomDto.Price;
+
+            if (roomDto.IsAvailable.HasValue)
+                room.IsAvailable = roomDto.IsAvailable.Value;
+
+            if (roomDto.HotelCompanyId.HasValue)
+                room.HotelId = roomDto.HotelCompanyId.Value;
+
+            // Handle image updates if new images are provided
             if (roomDto.RoomImages != null && roomDto.RoomImages.Any())
             {
                 var newImageUrls = await SaveImagesAsync(roomDto.RoomImages);
 
-                room.Images.Clear();  
+                // Clear existing images and add new ones
+                room.Images.Clear();
                 foreach (var url in newImageUrls)
                 {
-                    room.Images.Add(new RoomImage { ImageUrl = url });
+                    room.Images.Add(new RoomImage { ImageUrl = url, RoomId = room.Id });
                 }
             }
 
             await _roomRepo.Update(room);
+
             return NoContent();
         }
 
@@ -239,7 +274,7 @@ namespace TravelBooking.APIs.Controllers
             var room = await _roomRepo.GetAsync(id);
             if (room == null) return NotFound();
 
-            _roomRepo.Delete(room);
+            await _roomRepo.Delete(room);
             return NoContent();
         }
 
@@ -249,7 +284,7 @@ namespace TravelBooking.APIs.Controllers
 
             if (files == null || !files.Any())
                 return urls;
-             
+
             var folderPath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "images", "rooms");
             if (!Directory.Exists(folderPath))
                 Directory.CreateDirectory(folderPath);
@@ -267,15 +302,16 @@ namespace TravelBooking.APIs.Controllers
 
                 await using var stream = new FileStream(filePath, FileMode.Create);
                 await file.CopyToAsync(stream);
-
-                urls.Add($"/images/rooms/{fileName}");
+                var request = _httpContextAccessor.HttpContext?.Request;
+                if (request == null)
+                    throw new InvalidOperationException("HttpContext is not available.");
+                urls.Add($"{request.Scheme}://{request.Host}/images/rooms/{fileName}");
             }
 
             return urls;
         }
     }
 }
-
 
 
 

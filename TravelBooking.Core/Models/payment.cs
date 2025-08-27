@@ -4,9 +4,9 @@ namespace TravelBooking.Core.Models
 {
     public enum PaymentStatus
     {
-        Pending ,
-        Paid ,
-        Failed
+        Pending,
+        Paid,
+        Failed,
     }
     public class Payment : BaseEntity
     {
@@ -15,7 +15,6 @@ namespace TravelBooking.Core.Models
         public string PaymentMethod { get; set; } = string.Empty;
         public string TransactionId { get; set; } = string.Empty;
         public PaymentStatus PaymentStatus { get; set; }
-
         // Navigation
         public int BookingId { get; set; }
         public Booking Booking { get; set; }

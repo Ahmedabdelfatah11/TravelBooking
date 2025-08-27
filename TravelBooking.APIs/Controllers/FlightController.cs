@@ -20,18 +20,18 @@ namespace TravelBooking.APIs.Controllers
         private readonly IGenericRepository<Flight> _flightRepo;
         private readonly IGenericRepository<Booking> _bookingRepo;
         private readonly IMapper _mapper;
- 
-        public FlightController(IGenericRepository<Flight> flightRepository , IMapper mapper, IGenericRepository<Booking> bookingRepo)
+
+        public FlightController(IGenericRepository<Flight> flightRepository, IMapper mapper, IGenericRepository<Booking> bookingRepo)
         {
             _flightRepo = flightRepository;
             _mapper = mapper;
             _bookingRepo = bookingRepo;
         }
-       
+
 
         [HttpGet]
         [AllowAnonymous]
-        public async Task<ActionResult<Pagination<FlightDTO>>> GetAllFlights( [FromQuery]FlightSpecParams specParams )
+        public async Task<ActionResult<Pagination<FlightDTO>>> GetAllFlights([FromQuery] FlightSpecParams specParams)
         {
             var spec = new FlightSpecs(specParams);
             var flights = await _flightRepo.GetAllWithSpecAsync(spec);
@@ -48,7 +48,7 @@ namespace TravelBooking.APIs.Controllers
 
         [HttpGet("{id}")]
         [AllowAnonymous]
-        public async Task<ActionResult<FlightDetialsDTO>> GetFlight( int id )
+        public async Task<ActionResult<FlightDetialsDTO>> GetFlight(int id)
         {
             var spec = new FlightSpecs(id);
 
@@ -89,21 +89,21 @@ namespace TravelBooking.APIs.Controllers
                 case SeatClass.Economy:
                     if (flight.EconomySeats <= 0)
                         return BadRequest(new ApiResponse(400, "No economy seats available."));
-                    
+
                     price = flight.EconomyPrice;
                     break;
 
                 case SeatClass.Business:
                     if (flight.BusinessSeats <= 0)
                         return BadRequest(new ApiResponse(400, "No business class seats available."));
-                    
+
                     price = flight.BusinessPrice;
                     break;
 
                 case SeatClass.FirstClass:
                     if (flight.FirstClassSeats <= 0)
                         return BadRequest(new ApiResponse(400, "No first class seats available."));
-                    
+
                     price = flight.FirstClassPrice;
                     break;
 
@@ -140,19 +140,57 @@ namespace TravelBooking.APIs.Controllers
         {
             var flightCreated = _mapper.Map<Flight>(dto);
             var newCompany = await _flightRepo.AddAsync(flightCreated);
-            var flight= _mapper.Map<FlightDetialsDTO>(newCompany);
+            var flight = _mapper.Map<FlightDetialsDTO>(newCompany);
             return CreatedAtAction(nameof(GetFlight), new { id = newCompany.Id }, newCompany);
         }
 
 
         [HttpPut("{id}")]
         [Authorize(Roles = "SuperAdmin,FlightAdmin")]
-        public async Task<ActionResult> UpdateFlight(int id, [FromBody] Flight flight)
+        public async Task<ActionResult> UpdateFlight(int id, [FromBody] Flight updatedFlight)
         {
-            if (flight.Id != id)
+            if (updatedFlight.Id != id)
                 return BadRequest("ID mismatch");
 
-            await _flightRepo.Update(flight);
+            // Get the existing flight from the database
+            var existingFlight = await _flightRepo.GetAsync(id);
+            if (existingFlight == null)
+                return NotFound($"Flight with ID {id} not found.");
+
+            // Get FlightCompanyId from token for FlightAdmin users
+            var userRole = User.FindFirst("role")?.Value;
+            var flightCompanyIdFromToken = User.FindFirst("FlightCompanyId")?.Value;
+
+            // For FlightAdmin, ensure they can only update flights from their company
+            if (userRole == "FlightAdmin")
+            {
+                if (string.IsNullOrEmpty(flightCompanyIdFromToken) ||
+                    !int.TryParse(flightCompanyIdFromToken, out int companyId) ||
+                    existingFlight.FlightCompanyId != companyId)
+                {
+                    return BadRequest("You can only update flights from your company.");
+                }
+            }
+
+            // Update only the fields that should be editable
+            existingFlight.DepartureAirport = updatedFlight.DepartureAirport;
+            existingFlight.ArrivalAirport = updatedFlight.ArrivalAirport;
+            existingFlight.DepartureTime = updatedFlight.DepartureTime;
+            existingFlight.ArrivalTime = updatedFlight.ArrivalTime;
+            existingFlight.EconomySeats = updatedFlight.EconomySeats;
+            existingFlight.BusinessSeats = updatedFlight.BusinessSeats;
+            existingFlight.FirstClassSeats = updatedFlight.FirstClassSeats;
+            existingFlight.EconomyPrice = updatedFlight.EconomyPrice;
+            existingFlight.BusinessPrice = updatedFlight.BusinessPrice;
+            existingFlight.FirstClassPrice = updatedFlight.FirstClassPrice;
+
+            // Preserve critical fields that shouldn't be changed
+            // existingFlight.FlightCompanyId remains the same
+            // existingFlight.Id remains the same
+            // existingFlight.AirlineName remains the same (unless you want to allow updates)
+            // existingFlight.ImageUrl remains the same (unless you want to allow updates)
+
+            await _flightRepo.Update(existingFlight);
 
             return NoContent();
         }

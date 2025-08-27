@@ -8,13 +8,14 @@ namespace TravelBooking.APIs.DTOS.Booking
     {
         public int Id { get; set; }
         public string CustomerEmail { get; set; }
+
+        public string? Status { get; set; }
         public BookingType BookingType { get; set; }
         public DateTime StartDate { get; set; }
         public DateTime EndDate { get; set; }
 
         //[JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
         public decimal? TotalPrice { get; set; }
-        public string Status { get; set; }
         public object? AgencyDetails { get; set; }
         public string? PaymentIntentId { get; set; }
         public string? ClientSecret { get; set; }

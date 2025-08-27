@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.WebUtilities;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
@@ -38,6 +39,7 @@ namespace TravelBooking.Core.Models.Services
         private readonly JWT _jwt;
         private readonly IHttpContextAccessor _httpAccessor;
         private readonly IEmailSender _emailSender;
+        private readonly IConfiguration _config;
 
 
 
@@ -53,7 +55,8 @@ namespace TravelBooking.Core.Models.Services
                 IGenericRepository<HotelCompany> hotelCompanyRepo,
                 IGenericRepository<FlightCompany> flightCompanyRepo,
                 IGenericRepository<CarRentalCompany> carRentalCompanyRepo,
-                IGenericRepository<TourCompany> tourCompanyRepo
+                IGenericRepository<TourCompany> tourCompanyRepo,
+                IConfiguration configuration
 
              )
         {
@@ -65,7 +68,7 @@ namespace TravelBooking.Core.Models.Services
             _signInManager = signInManager;
             _httpAccessor = httpAccessor;
             _emailSender = emailSender;
-
+            _config = configuration;
             _hotelCompanyRepo = hotelCompanyRepo;
             _flightCompanyRepo = flightCompanyRepo;
             _carRentalCompanyRepo = carRentalCompanyRepo;
@@ -281,9 +284,11 @@ namespace TravelBooking.Core.Models.Services
         }
         private async Task SendConfirmationEmail(ApplicationUser user, string code)
         {
+            var baseUrl = _config["Frontend:BaseUrl"];
+
             var request = _httpAccessor.HttpContext?.Request;
             var origin = $"{request?.Scheme}://{request?.Host}";// Get the origin URL from the request  //GET from frontend 
-            var confirmUrl = $"http://localhost:4200/confirm-email?userId={user.Id}&code={code}";
+            var confirmUrl = $"{baseUrl}/confirm-email?userId={user.Id}&code={code}";
 
             var emailBody = EmailBodyBuilder.BuildEmailBody("EmailConfirmation",
                 new Dictionary<string, string>
@@ -299,7 +304,8 @@ namespace TravelBooking.Core.Models.Services
         }
         private async Task SendResetPasswordEmail(ApplicationUser user, string token)
         {
-            var resetUrl = $"http://localhost:4200/reset?email={user.Email}&token={token}";
+            var baseUrl = _config["Frontend:BaseUrl"];
+            var resetUrl = $"{baseUrl}/reset?email={Uri.EscapeDataString(user.Email!)}&token={Uri.EscapeDataString(token)}";
             var emailBody = EmailBodyBuilder.BuildEmailBody("ResetPassword",
                 new Dictionary<string, string>
                 {

@@ -118,17 +118,17 @@
     {
       "id": 1,
       "name": "Pyramids & Great Sphinx Half‑Day Tour with Camel Ride",
-      "StartDate": "2025-08-10T08:00:00",
-      "EndDate": "2025-08-10T12:00:00",
+      "StartDate": "2025-08-20T08:00:00",
+      "EndDate": "2025-08-26T12:00:00",
       "Description": "Visit the Pyramids of Giza and the Great Sphinx, enjoy a camel ride at sunrise with a licensed Egyptologist guide.",
       "Destination": "Giza",
       "MaxGuests": 25,
-      "MinGroupSize":6,
-      "MaxGroupSize":8,
+      "MinGroupSize": 6,
+      "MaxGroupSize": 8,
       "price": 1200.00,
       "ImageUrl": "https://media.tacdn.com/media/attractions-splice-spp-674x446/0f/03/5f/fc.jpg",
       "Category": "Historical",
-      "Languages":"English",
+      "Languages": "English",
       "TourCompanyId": 1,
       "TourImages": [
         {
@@ -145,20 +145,17 @@
           "id": 3,
           "ImageUrl": "https://c4.wallpaperflare.com/wallpaper/777/970/539/great-sphinx-giza-egypt-hd-pyramid-and-sphinx-building-wallpaper-preview.jpg",
           "TourId": 1
-        }
-        ,
+        },
         {
           "id": 4,
           "ImageUrl": "https://www.tripsofourlife.com/wp-content/uploads/2018/01/exofyllo-1.jpg",
           "TourId": 1
-        }
-        ,
+        },
         {
           "id": 5,
           "ImageUrl": "https://liveandletsfly.com/wp-content/uploads/2023/03/How-Much-Time-To-Visit-Pyramids-Of-Egpyt-24-1024x768.jpeg",
           "TourId": 1
-        }
-        ,
+        },
         {
           "id": 6,
           "ImageUrl": "https://st2.depositphotos.com/32224188/43286/i/450/depositphotos_432862054-stock-photo-the-great-sphinx-of-giza.jpg",
@@ -166,41 +163,62 @@
         }
       ],
       "TourTickets": [
-  { "Type": "Adult", "Price": 1200.00, "AvailableQuantity": 15, "IsActive": true },
-  { "Type": "Child", "Price": 600.00, "AvailableQuantity": 5, "IsActive": true },
-  { "Type": "VIP", "Price": 2000.00, "AvailableQuantity": 5, "IsActive": true }
-],
-"IncludedItems": [
-  "Licensed Egyptologist guide",
-  "Camel ride",
-  "Entrance fees to Pyramids & Sphinx",
-  "Hotel pickup and drop-off"
-],
-"ExcludedItems": [
-  "Gratuities",
-  "Personal expenses",
-  "Lunch"
-],
-"Questions": [
-  { "Question": "Is the camel ride optional?", "Answer": "Yes, you can opt out and walk instead." },
-  { "Question": "Are entrance fees included?", "Answer": "Yes, all site entry fees are covered." }
-]
+        {
+          "Type": "Adult",
+          "Price": 1200.00,
+          "AvailableQuantity": 15,
+          "IsActive": true
+        },
+        {
+          "Type": "Child",
+          "Price": 600.00,
+          "AvailableQuantity": 5,
+          "IsActive": true
+        },
+        {
+          "Type": "VIP",
+          "Price": 2000.00,
+          "AvailableQuantity": 5,
+          "IsActive": true
+        }
+      ],
+      "IncludedItems": [
+        "Licensed Egyptologist guide",
+        "Camel ride",
+        "Entrance fees to Pyramids & Sphinx",
+        "Hotel pickup and drop-off"
+      ],
+      "ExcludedItems": [
+        "Gratuities",
+        "Personal expenses",
+        "Lunch"
+      ],
+      "Questions": [
+        {
+          "Question": "Is the camel ride optional?",
+          "Answer": "Yes, you can opt out and walk instead."
+        },
+        {
+          "Question": "Are entrance fees included?",
+          "Answer": "Yes, all site entry fees are covered."
+        }
+      ]
 
     },
     {
       "id": 2,
       "name": "Cairo Museum, Citadel & Old Cairo Walking Tour",
-      "StartDate": "2025-08-11T09:00:00",
-      "EndDate": "2025-08-11T17:00:00",
+      "StartDate": "2025-08-20T08:00:00",
+      "EndDate": "2025-08-26T12:00:00",
       "Description": "Explore the Egyptian Museum, the Citadel of Saladin, and historic Old Cairo including Khan El Khalili.",
       "Destination": "Cairo",
       "MaxGuests": 50,
-       "MinGroupSize":6,
-      "MaxGroupSize":8,
+      "MinGroupSize": 6,
+      "MaxGroupSize": 8,
       "price": 1750.00,
       "ImageUrl": "https://www.kemetexperience.com/wp-content/uploads/2019/08/Cairo-Citadel-in-old-Cairo.jpg",
       "Category": "Cultural",
-      "Languages":"English",
+      "Languages": "English",
       "TourCompanyId": 2,
       "TourImages": [
         {
@@ -212,26 +230,22 @@
           "id": 8,
           "ImageUrl": "https://img.freepik.com/premium-photo/mosque-muhammad-ali-is-located-cairo-capital-egypt_556412-1115.jpg",
           "TourId": 2
-        }
-        ,
+        },
         {
           "id": 9,
           "ImageUrl": "https://egyptmagictours.com/wp-content/uploads/2021/07/img_8864-870x500.jpg",
           "TourId": 2
-        }
-        ,
+        },
         {
           "id": 10,
           "ImageUrl": "https://images.tripadeal.com.au/cdn-cgi/image/format=auto,width=800/https://cstad.s3.ap-southeast-2.amazonaws.com/4502_Cairo_Markets.jpg",
           "TourId": 2
-        }
-        ,
+        },
         {
           "id": 11,
           "ImageUrl": "https://www.tripsinegypt.co.uk/wp-content/uploads/2020/04/Khan-El-Khalili-at-Night-Things-to-Do-in-Cairo-at-Night-Trips-in-Egypt.jpg",
           "TourId": 2
-        }
-        ,
+        },
         {
           "id": 12,
           "ImageUrl": "https://media1.thrillophilia.com/filestore/s83bjbhcglrkdxmvmuichjylqi95_1613995810_shutterstock_1174403305.jpg?w=753&h=450&dpr=2.0",
@@ -239,24 +253,40 @@
         }
       ],
       "TourTickets": [
-  { "Type": "Adult", "Price": 1750.00, "AvailableQuantity": 10, "IsActive": true },
-  { "Type": "Student", "Price": 1200.00, "AvailableQuantity": 40, "IsActive": true }
-],
-"IncludedItems": [
-  "Museum entry ticket",
-  "Citadel access",
-  "Walking tour of Old Cairo",
-  "Licensed guide"
-],
-"ExcludedItems": [
-  "Meals",
-  "Shopping expenses",
-  "Tips"
-],
-"Questions": [
-  { "Question": "Is this a private tour?", "Answer": "No, it's a small group tour." },
-  { "Question": "Can I join midway?", "Answer": "No, all guests must start together." }
-]
+        {
+          "Type": "Adult",
+          "Price": 1750.00,
+          "AvailableQuantity": 10,
+          "IsActive": true
+        },
+        {
+          "Type": "Student",
+          "Price": 1200.00,
+          "AvailableQuantity": 40,
+          "IsActive": true
+        }
+      ],
+      "IncludedItems": [
+        "Museum entry ticket",
+        "Citadel access",
+        "Walking tour of Old Cairo",
+        "Licensed guide"
+      ],
+      "ExcludedItems": [
+        "Meals",
+        "Shopping expenses",
+        "Tips"
+      ],
+      "Questions": [
+        {
+          "Question": "Is this a private tour?",
+          "Answer": "No, it's a small group tour."
+        },
+        {
+          "Question": "Can I join midway?",
+          "Answer": "No, all guests must start together."
+        }
+      ]
 
     },
     {
@@ -608,8 +638,8 @@
     {
       "id": 8,
       "name": "Full‑Day Bahariya Oasis Desert Safari from Cairo",
-      "StartDate": "2025-08-17T07:00:00",
-      "EndDate": "2025-08-17T19:00:00",
+      "StartDate": "2025-08-20T07:00:00",
+      "EndDate": "2025-08-21T09:00:00",
       "Description": "Includes 4×4 across White Desert, Magic Crystal Mountain, with Bedouin Lunch and hot springs dip.",
       "Destination": "Bahariya Oasis",
       "MaxGuests": 60,
@@ -681,8 +711,8 @@
     {
       "id": 9,
       "name": "Nile Dinner Cruise in Cairo",
-      "StartDate": "2025-08-18T19:00:00",
-      "EndDate": "2025-08-18T22:00:00",
+      "StartDate": "2025-08-20T09:00:00",
+      "EndDate": "2025-08-22T12:00:00",
       "Description": "Dinner cruise on the Nile with live music, belly dance show, and illuminated Cairo skyline views.",
       "Destination": "Cairo",
       "MaxGuests": 50,
@@ -822,7 +852,7 @@
       "id": 11,
       "name": "Hot Air Balloon Flight over Luxor Temples",
       "StartDate": "2025-08-22T05:00:00",
-      "EndDate": "2025-08-22T07:00:00",
+      "EndDate": "2025-08-24T07:00:00",
       "Description": "Experience sunrise from a hot air balloon floating over the Valley of the Kings and Nile Valley.",
       "Destination": "Luxor",
        "Languages":"English",
@@ -892,7 +922,7 @@
     {
       "id": 12,
       "name": "Sharm El‑Sheikh Snorkeling & Desert Experience",
-      "StartDate": "2025-08-24T09:00:00",
+      "StartDate": "2025-08-20T09:00:00",
       "EndDate": "2025-08-24T17:00:00",
       "Description": "Morning snorkeling at Ras Mohamed National Park, followed by ATV desert safari and BBQ lunch.",
       "Destination": "Sharm El Sheikh",
