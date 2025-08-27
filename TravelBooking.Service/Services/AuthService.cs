@@ -40,9 +40,9 @@ namespace TravelBooking.Core.Models.Services
         private readonly IHttpContextAccessor _httpAccessor;
         private readonly IEmailSender _emailSender;
         private readonly IConfiguration _config;
-
-
-
+        private readonly IGenericRepository<Booking> _bookingRepo;
+        private readonly IGenericRepository<Favoritet> _favoritesRepo;
+        private readonly IGenericRepository<Review> _reviewRepo;
         private readonly IGenericRepository<HotelCompany> _hotelCompanyRepo;
         private readonly IGenericRepository<FlightCompany> _flightCompanyRepo;
         private readonly IGenericRepository<CarRentalCompany> _carRentalCompanyRepo;
@@ -56,7 +56,10 @@ namespace TravelBooking.Core.Models.Services
                 IGenericRepository<FlightCompany> flightCompanyRepo,
                 IGenericRepository<CarRentalCompany> carRentalCompanyRepo,
                 IGenericRepository<TourCompany> tourCompanyRepo,
-                IConfiguration configuration
+                IConfiguration configuration,
+                IGenericRepository<Booking> bookingRepo,
+                IGenericRepository<Favoritet> favoritesRepo,
+                IGenericRepository<Review> reviewRepo
 
              )
         {
@@ -73,6 +76,9 @@ namespace TravelBooking.Core.Models.Services
             _flightCompanyRepo = flightCompanyRepo;
             _carRentalCompanyRepo = carRentalCompanyRepo;
             _tourCompanyRepo = tourCompanyRepo;
+            _bookingRepo = bookingRepo;
+            _favoritesRepo = favoritesRepo;
+            _reviewRepo = reviewRepo;
         }
 
         public async Task<string> AddRole(AddRole role)
@@ -655,24 +661,155 @@ namespace TravelBooking.Core.Models.Services
 
         public async Task<string> DeleteUserAsync(string userId)
         {
-            var user = await _userManager.FindByIdAsync(userId);
-            if (user == null)
-                return "User not found";
-
-            var roles = await _userManager.GetRolesAsync(user);
-
-            // Remove all roles
-            var removeRolesResult = await _userManager.RemoveFromRolesAsync(user, roles);
-            if (!removeRolesResult.Succeeded)
+            try
             {
-                return "Failed to remove user roles: " + string.Join(", ", removeRolesResult.Errors.Select(e => e.Description));
+                var user = await _userManager.FindByIdAsync(userId);
+                if (user == null)
+                    return "User not found";
+
+                _logger.LogInformation("Starting deletion process for user {UserId} ({Email})", userId, user.Email);
+
+                // Step 1: Get user roles to determine what companies need to be unlinked
+                var roles = await _userManager.GetRolesAsync(user);
+
+                // Step 2: Remove AdminId from companies BEFORE deleting user
+                foreach (var role in roles)
+                {
+                    switch (role)
+                    {
+                        case "HotelAdmin":
+                            var hotelCompanies = await _hotelCompanyRepo.GetAllAsync(h => h.AdminId == userId);
+                            foreach (var hotel in hotelCompanies)
+                            {
+                                hotel.AdminId = null; // Unlink the admin
+                                await _hotelCompanyRepo.Update(hotel);
+                                _logger.LogInformation("Unlinked user {UserId} from hotel company {CompanyId}", userId, hotel.Id);
+                            }
+                            break;
+
+                        case "FlightAdmin":
+                            var flightCompanies = await _flightCompanyRepo.GetAllAsync(f => f.AdminId == userId);
+                            foreach (var flight in flightCompanies)
+                            {
+                                flight.AdminId = null; // Unlink the admin
+                                await _flightCompanyRepo.Update(flight);
+                                _logger.LogInformation("Unlinked user {UserId} from flight company {CompanyId}", userId, flight.Id);
+                            }
+                            break;
+
+                        case "CarRentalAdmin":
+                            var carCompanies = await _carRentalCompanyRepo.GetAllAsync(c => c.AdminId == userId);
+                            foreach (var car in carCompanies)
+                            {
+                                car.AdminId = null; // Unlink the admin
+                                await _carRentalCompanyRepo.Update(car);
+                                _logger.LogInformation("Unlinked user {UserId} from car rental company {CompanyId}", userId, car.Id);
+                            }
+                            break;
+
+                        case "TourAdmin":
+                            var tourCompanies = await _tourCompanyRepo.GetAllAsync(t => t.AdminId == userId);
+                            foreach (var tour in tourCompanies)
+                            {
+                                tour.AdminId = null; // Unlink the admin
+                                await _tourCompanyRepo.Update(tour);
+                                _logger.LogInformation("Unlinked user {UserId} from tour company {CompanyId}", userId, tour.Id);
+                            }
+                            break;
+                    }
+                }
+
+                // Step 3: Handle related data cleanup
+                // Note: You'll need to inject these repositories into your AuthService constructor
+
+                // Option A: Delete related records (if you want to remove user's data)
+                
+                // Delete user's bookings
+                var userBookings = await _bookingRepo.GetAllAsync(b => b.UserId == userId);
+                foreach (var booking in userBookings)
+                {
+                    await _bookingRepo.Delete(booking);
+                }
+
+                // Delete user's favorites
+                var userFavorites = await _favoritesRepo.GetAllAsync(f => f.UserId == userId);
+                foreach (var favorite in userFavorites)
+                {
+                    await _favoritesRepo.Delete(favorite);
+                }
+
+                // Delete user's reviews
+                var userReviews = await _reviewRepo.GetAllAsync(r => r.UserId == userId);
+                foreach (var review in userReviews)
+                {
+                    await _reviewRepo.Delete(review);
+                }
+                
+
+                // Option B: Set foreign keys to null (if you want to keep the data but unlink it)
+                // This requires your database schema to allow NULL values for these foreign keys
+
+                // You would need to execute raw SQL or use a context directly for this approach:
+                /*
+                await _context.Database.ExecuteSqlRawAsync(
+                    "UPDATE Bookings SET UserId = NULL WHERE UserId = {0}", userId);
+                await _context.Database.ExecuteSqlRawAsync(
+                    "UPDATE Favoritets SET UserId = NULL WHERE UserId = {0}", userId);
+                await _context.Database.ExecuteSqlRawAsync(
+                    "UPDATE Reviews SET UserId = NULL WHERE UserId = {0}", userId);
+                */
+
+                // Step 4: Remove all roles from user
+                if (roles.Count > 0)
+                {
+                    var removeRolesResult = await _userManager.RemoveFromRolesAsync(user, roles);
+                    if (!removeRolesResult.Succeeded)
+                    {
+                        _logger.LogError("Failed to remove roles for user {UserId}: {Errors}",
+                            userId, string.Join(", ", removeRolesResult.Errors.Select(e => e.Description)));
+                        return "Failed to remove user roles: " + string.Join(", ", removeRolesResult.Errors.Select(e => e.Description));
+                    }
+                    _logger.LogInformation("Removed all roles from user {UserId}", userId);
+                }
+
+                // Step 5: Remove external logins
+                var logins = await _userManager.GetLoginsAsync(user);
+                foreach (var login in logins)
+                {
+                    await _userManager.RemoveLoginAsync(user, login.LoginProvider, login.ProviderKey);
+                }
+
+                // Step 6: Remove user claims
+                var claims = await _userManager.GetClaimsAsync(user);
+                if (claims.Count > 0)
+                {
+                    await _userManager.RemoveClaimsAsync(user, claims);
+                }
+
+                // Step 7: Finally delete the user
+                var result = await _userManager.DeleteAsync(user);
+                if (result.Succeeded)
+                {
+                    _logger.LogInformation("User {UserId} deleted successfully", userId);
+                    return "User deleted successfully";
+                }
+
+                _logger.LogError("Failed to delete user {UserId}: {Errors}",
+                    userId, string.Join(", ", result.Errors.Select(e => e.Description)));
+                return "Failed to delete user: " + string.Join(", ", result.Errors.Select(e => e.Description));
             }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Exception occurred while deleting user {UserId}: {Message}", userId, ex.Message);
 
-            var result = await _userManager.DeleteAsync(user);
-            if (result.Succeeded)
-                return "User deleted successfully";
+                // Log inner exception details for debugging
+                if (ex.InnerException != null)
+                {
+                    _logger.LogError("Inner exception: {InnerMessage}", ex.InnerException.Message);
+                }
 
-            return string.Join(", ", result.Errors.Select(e => e.Description));
+                return "An error occurred while deleting the user: " + ex.Message;
+            }
         }
 
     }

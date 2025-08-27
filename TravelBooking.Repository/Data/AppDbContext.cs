@@ -28,6 +28,23 @@ namespace TravelBooking.Repository.Data
                .WithMany()
                .HasForeignKey(cm => cm.UserId)
                .OnDelete(DeleteBehavior.Cascade);
+            modelBuilder.Entity<Booking>()
+              .HasOne<ApplicationUser>()
+              .WithMany(u => u.bookings)
+              .HasForeignKey(b => b.UserId)
+              .OnDelete(DeleteBehavior.Cascade);
+
+            modelBuilder.Entity<Favoritet>()
+                .HasOne<ApplicationUser>()
+                .WithMany(u => u.favoritets)
+                .HasForeignKey(f => f.UserId)
+                .OnDelete(DeleteBehavior.Cascade);
+
+            modelBuilder.Entity<Review>()
+                .HasOne<ApplicationUser>()
+                .WithMany(u => u.reviews)
+                .HasForeignKey(r => r.UserId)
+                .OnDelete(DeleteBehavior.Cascade);
             // Apply configurations for entities
             modelBuilder.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly());
         }

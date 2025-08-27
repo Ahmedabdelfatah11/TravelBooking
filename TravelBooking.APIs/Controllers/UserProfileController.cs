@@ -126,6 +126,71 @@ namespace TravelBooking.APIs.Controllers
         }
 
         [Authorize]
+        [HttpPost("ChangePassword")]
+        public async Task<IActionResult> ChangePassword([FromBody] ChangePasswordDto dto)
+        {
+            // Log the incoming request for debugging
+            Console.WriteLine($"Received ChangePassword request: CurrentPassword={(dto?.CurrentPassword?.Length ?? 0)} chars, NewPassword={(dto?.NewPassword?.Length ?? 0)} chars");
+
+            // Validate the DTO
+            if (dto == null)
+            {
+                Console.WriteLine("DTO is null");
+                return BadRequest("Invalid request data.");
+            }
+
+            if (string.IsNullOrEmpty(dto.CurrentPassword))
+            {
+                Console.WriteLine("CurrentPassword is null or empty");
+                return BadRequest("Current password is required.");
+            }
+
+            if (string.IsNullOrEmpty(dto.NewPassword))
+            {
+                Console.WriteLine("NewPassword is null or empty");
+                return BadRequest("New password is required.");
+            }
+
+            if (dto.NewPassword.Length < 6)
+            {
+                Console.WriteLine($"NewPassword too short: {dto.NewPassword.Length} characters");
+                return BadRequest("New password must be at least 6 characters long.");
+            }
+
+            var email = User.FindFirstValue(ClaimTypes.Email);
+            if (string.IsNullOrEmpty(email))
+            {
+                Console.WriteLine("User email claim not found");
+                return Unauthorized("User not authenticated.");
+            }
+
+            Console.WriteLine($"Found user email: {email}");
+
+            var user = await _userManager.FindByEmailAsync(email);
+            if (user == null)
+            {
+                Console.WriteLine($"User not found for email: {email}");
+                return NotFound("User not found.");
+            }
+
+            Console.WriteLine($"Found user: {user.UserName}");
+
+            var result = await _userManager.ChangePasswordAsync(user, dto.CurrentPassword, dto.NewPassword);
+            if (!result.Succeeded)
+            {
+                Console.WriteLine($"Password change failed: {string.Join(", ", result.Errors.Select(e => e.Description))}");
+                return BadRequest(new
+                {
+                    message = "Password change failed.",
+                    errors = result.Errors.Select(e => e.Description).ToArray()
+                });
+            }
+
+            Console.WriteLine("Password changed successfully");
+            return Ok(new { message = "Password changed successfully." });
+        }
+
+        [Authorize(Roles = "SuperAdmin")]
         [HttpDelete("DeleteUserProfile")]
         public async Task<IActionResult> DeleteUserProfile()
         {

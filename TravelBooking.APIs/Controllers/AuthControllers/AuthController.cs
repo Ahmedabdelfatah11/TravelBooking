@@ -1,10 +1,12 @@
 ﻿
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using System.Globalization;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
+using TravelBooking.APIs.DTOS.UserProfile;
 using TravelBooking.Core.Models;
 using TravelBooking.Core.Services;
 using TravelBooking.Models;
@@ -224,6 +226,64 @@ namespace Jwt.Controllers
             }
             return BadRequest(new { message = result.Message });
         }
+        [Authorize(Roles = "SuperAdmin")]
+        [HttpDelete("delete-user/{userId}")]
+        public async Task<IActionResult> DeleteUser(string userId)
+        {
+            try
+            {
+                _logger.LogInformation("DeleteUser called with userId: {UserId}", userId);
+
+                if (string.IsNullOrEmpty(userId))
+                {
+                    _logger.LogWarning("DeleteUser called with null or empty userId");
+                    return BadRequest("User ID is required");
+                }
+
+                // Check if user exists first
+                var user = await _userManager.FindByIdAsync(userId);
+                if (user == null)
+                {
+                    _logger.LogWarning("User not found for userId: {UserId}", userId);
+                    return NotFound(new { message = "User not found" });
+                }
+
+                _logger.LogInformation("Found user: {UserEmail}, attempting deletion", user.Email);
+
+                var result = await _authService.DeleteUserAsync(userId);
+
+                _logger.LogInformation("DeleteUserAsync result: {Result}", result);
+
+                if (result == "User deleted successfully")
+                {
+                    _logger.LogInformation("User {UserId} deleted successfully by SuperAdmin {AdminId}",
+                        userId, User.FindFirst("uid")?.Value);
+                    return Ok(new { message = result });
+                }
+
+                if (result == "User not found")
+                {
+                    _logger.LogWarning("AuthService returned 'User not found' for userId: {UserId}", userId);
+                    return NotFound(new { message = result });
+                }
+
+                _logger.LogError("DeleteUser failed with result: {Result}", result);
+                return BadRequest(new { message = result });
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Unhandled exception in DeleteUser for userId: {UserId}. Exception details: {ExceptionMessage}",
+                    userId, ex.Message);
+                return StatusCode(500, new
+                {
+                    message = "Internal server error",
+                    details = ex.Message  // Remove this in production
+                });
+            }
+        }
+
+
+
         // Helper methods to extract user information
         private string ExtractFirstName(ClaimsPrincipal principal)
         {
