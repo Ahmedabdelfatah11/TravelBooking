@@ -1,4 +1,4 @@
-# 🏝️ TravelBooking Platform
+#  TravelBooking Platform
 
 ![.NET 9](https://img.shields.io/badge/.NET%209-512BD4)
 ![C#](https://img.shields.io/badge/C%23-239120)
